@@ -72,9 +72,7 @@ public class MainPanelController implements Initializable {
 
 
     public void initData(User user) {
-//        this.currentUser = user;
         idLogin.setText(user.toString());
-        // Xử lí thông tin người dùng ở đây
     }
 
     public MainPanelController() {

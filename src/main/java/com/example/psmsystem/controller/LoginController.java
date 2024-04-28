@@ -31,8 +31,6 @@ import javafx.fxml.FXMLLoader;
 public class LoginController implements Initializable{
     private static IUserDao<User> userDao;
 
-//    private final Connection con;
-
     @FXML
     private Button loginButton;
 
@@ -80,7 +78,6 @@ public class LoginController implements Initializable{
                         controller.initData(user);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        // Xử lý lỗi ở đây
                     }
             }
             else{

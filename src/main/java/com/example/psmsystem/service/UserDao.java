@@ -4,8 +4,6 @@ import com.example.psmsystem.model.IUserDao;
 import com.example.psmsystem.model.User;
 import java.sql.*;
 
-import java.util.List;
-
 public class UserDao implements IUserDao<User> {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/quanlytunhan";
     private static final String DB_USER = "root";

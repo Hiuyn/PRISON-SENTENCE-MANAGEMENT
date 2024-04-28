@@ -30,8 +30,6 @@ public class RegisterController implements Initializable{
 
     private static IUserDao<User> userDao;
 
-//    private final Connection con;
-
     @FXML
     private TextField firstName;
 
@@ -63,8 +61,6 @@ public class RegisterController implements Initializable{
     }
 
     public RegisterController() {
-//        DbConnection dbc = DbConnection.getDatabaseConnection();
-//        con = dbc.getConnection();
         userDao = new UserDao();
     }
 
@@ -81,25 +77,7 @@ public class RegisterController implements Initializable{
     }
 
     private boolean isAlreadyRegistered() {
-
         return userDao.checkUsername(username.getText());
-
-//        PreparedStatement ps;
-//        ResultSet rs;
-//        boolean usernameExist = false;
-//
-//        String query = "select * from users WHERE user_name = ?";
-//        try {
-//            ps = con.prepareStatement(query);
-//            ps.setString(1, username.getText());
-//            rs = ps.executeQuery();
-//            if (rs.next()) {
-//                usernameExist = true;
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println(ex);
-//        }
-//        return usernameExist;
     }
 
     private boolean isValidated() {
