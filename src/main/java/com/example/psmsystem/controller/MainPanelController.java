@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 public class MainPanelController implements Initializable {
-    private Connection con;
     @FXML
     private Button addPurchase;
 
@@ -71,7 +70,6 @@ public class MainPanelController implements Initializable {
 
     }
 
-    private User currentUser;
 
     public void initData(User user) {
 //        this.currentUser = user;
@@ -79,14 +77,7 @@ public class MainPanelController implements Initializable {
         // Xử lí thông tin người dùng ở đây
     }
 
-    public MainPanelController() throws IOException {
-//        DbConnection dbc = DbConnection.getDatabaseConnection();
-//        con = dbc.getConnection();
-//
-//        PreparedStatement ps;
-//        ResultSet rs;
-//
-//        String query = "select * from users WHERE user_name = ? and password = ?";
+    public MainPanelController() {
     }
 
     @FXML

@@ -10,6 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+
+import com.example.psmsystem.model.IUserDao;
+import com.example.psmsystem.model.User;
+import com.example.psmsystem.service.UserDao;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +28,9 @@ import javafx.stage.Window;
 
 public class RegisterController implements Initializable{
 
-    private final Connection con;
+    private static IUserDao<User> userDao;
+
+//    private final Connection con;
 
     @FXML
     private TextField firstName;
@@ -57,58 +63,43 @@ public class RegisterController implements Initializable{
     }
 
     public RegisterController() {
-        DbConnection dbc = DbConnection.getDatabaseConnection();
-        con = dbc.getConnection();
+//        DbConnection dbc = DbConnection.getDatabaseConnection();
+//        con = dbc.getConnection();
+        userDao = new UserDao();
     }
 
     @FXML
     private void register() {
         window = registerButton.getScene().getWindow();
         if (this.isValidated()) {
-            Statement stmt;
-            try {
-                PreparedStatement ps;
-                stmt = con.createStatement();
-                String query = "insert into users (first_name,last_name,email,user_name,password)values (?,?,?,?,?)";
-                ps = con.prepareStatement(query);
-                ps.setString(1, firstName.getText());
-                ps.setString(2, lastName.getText());
-                ps.setString(3, email.getText());
-                ps.setString(4, username.getText());
-                ps.setString(5, password.getText());
-                if (ps.executeUpdate() > 0) {
-                    this.clearForm();
-                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Information",
+            User user = new User(firstName.getText(), lastName.getText(), email.getText(), username.getText(), password.getText());
+            userDao.addUser(user);
+            this.clearForm();
+            AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Information",
                             "You have registered successfully.");
-                } else {
-                    AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                            "Something went wrong.");
-                }
-
-            } catch (SQLException ex) {
-                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                        "Something went wrong.");
-            }
         }
     }
 
     private boolean isAlreadyRegistered() {
-        PreparedStatement ps;
-        ResultSet rs;
-        boolean usernameExist = false;
 
-        String query = "select * from users WHERE user_name = ?";
-        try {
-            ps = con.prepareStatement(query);
-            ps.setString(1, username.getText());
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                usernameExist = true;
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-        return usernameExist;
+        return userDao.checkUsername(username.getText());
+
+//        PreparedStatement ps;
+//        ResultSet rs;
+//        boolean usernameExist = false;
+//
+//        String query = "select * from users WHERE user_name = ?";
+//        try {
+//            ps = con.prepareStatement(query);
+//            ps.setString(1, username.getText());
+//            rs = ps.executeQuery();
+//            if (rs.next()) {
+//                usernameExist = true;
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println(ex);
+//        }
+//        return usernameExist;
     }
 
     private boolean isValidated() {
