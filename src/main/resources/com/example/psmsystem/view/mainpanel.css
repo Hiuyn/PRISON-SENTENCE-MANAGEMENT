@@ -14,10 +14,63 @@ and open the template in the editor.
     -fx-background-color: gray
 }
 .bt {
-    -fx-background-color: #404040;
+    -fx-text-fill: #fff;
 }
 .bt:hover {
-    -fx-background-color: #303030; 
+    -fx-background-color: #e1f3ff;
+    -fx-text-fill: #000;
 }
-.box {   
+.bt.selected {
+    -fx-background-color: #e1f3ff;
+    -fx-text-fill: #000;
+}
+.card {
+    -fx-background-color: #fff;
+    -fx-background-radius: 10px;
+    -fx-border-color: #ccc;
+    -fx-border-width: .5px;
+    -fx-padding: 10px;
+}
+.btn{
+    -fx-cursor: HAND;
+}
+.btn.success{
+    -fx-border-color: #28c76f;
+    -fx-border-width: 2px;
+    -fx-text-fill: #28c76f;
+    -fx-background-color: #fff;
+}
+.btn.warning{
+    -fx-border-color: #ea5455;
+    -fx-border-width: 2px;
+    -fx-text-fill: #ea5455;
+    -fx-background-color: #fff;
+}
+.btn.danger{
+    -fx-border-color: #ff9f43;
+    -fx-border-width: 2px;
+    -fx-text-fill: #ff9f43;
+    -fx-background-color: #fff;
+}
+.btn.infor{
+    -fx-border-color: #00cfe8;
+    -fx-border-width: 2px;
+    -fx-text-fill: #00cfe8;
+    -fx-background-color: #fff;
+}
+.btn.success:hover{
+    -fx-background-color: #28c76f;
+    -fx-text-fill: #fff;
+}
+.btn.warning:hover{
+    -fx-background-color: #ea5455;
+    -fx-text-fill: #fff;
+}
+.btn.danger:hover{
+    -fx-background-color: #ff9f43;
+    -fx-text-fill: #fff;
+}
+.btn.infor:hover{
+    -fx-background-color: #00cfe8;
+    -fx-text-fill: #fff;
 }

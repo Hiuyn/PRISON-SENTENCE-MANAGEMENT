@@ -1,19 +1,13 @@
 package com.example.psmsystem.controller;
 
-import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.helper.AlertHelper;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 
-import com.example.psmsystem.model.IUserDao;
-import com.example.psmsystem.model.User;
-import com.example.psmsystem.service.UserDao;
+import com.example.psmsystem.model.user.IUserDao;
+import com.example.psmsystem.model.user.User;
+import com.example.psmsystem.service.userDao.UserDao;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -57,7 +51,6 @@ public class RegisterController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
     }
 
     public RegisterController() {

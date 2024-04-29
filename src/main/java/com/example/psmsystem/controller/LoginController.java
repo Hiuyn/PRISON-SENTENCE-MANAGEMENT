@@ -1,10 +1,9 @@
 package com.example.psmsystem.controller;
 
-import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.helper.AlertHelper;
-import com.example.psmsystem.model.IUserDao;
-import com.example.psmsystem.model.User;
-import com.example.psmsystem.service.UserDao;
+import com.example.psmsystem.model.user.IUserDao;
+import com.example.psmsystem.model.user.User;
+import com.example.psmsystem.service.userDao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,17 +14,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
+
 import javafx.fxml.FXMLLoader;
 
 public class LoginController implements Initializable{

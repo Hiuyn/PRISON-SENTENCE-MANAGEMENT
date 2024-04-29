@@ -1,156 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1350.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.MainPanelController">
-   <left>
-      <VBox prefHeight="601.0" prefWidth="160.0" style="-fx-background-color: #404040;" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="addPurchase" mnemonicParsing="false" onAction="#loadHomeView" prefHeight="30.0" prefWidth="189.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" textAlignment="JUSTIFY" visible="false">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="purchaseDetail" mnemonicParsing="false" onAction="#loadHomeView" prefHeight="30.0" prefWidth="185.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" textAlignment="JUSTIFY" visible="false">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="home" mnemonicParsing="false" onAction="#loadHomeView" prefHeight="30.0" prefWidth="173.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Home" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page01" mnemonicParsing="false" onAction="#loadPage01View" prefHeight="30.0" prefWidth="172.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 01" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page02" mnemonicParsing="false" onAction="#loadPage02View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 02" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page03" mnemonicParsing="false" onAction="#loadPage03View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 03" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page04" mnemonicParsing="false" onAction="#loadPage04View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 04" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page05" mnemonicParsing="false" onAction="#loadPage05View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 05" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page06" mnemonicParsing="false" onAction="#loadPage06View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 06" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page07" mnemonicParsing="false" onAction="#loadPage07View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 07" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page08" mnemonicParsing="false" onAction="#loadPage08View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 08" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page09" mnemonicParsing="false" onAction="#loadPage09View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 09" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="page10" mnemonicParsing="false" onAction="#loadPage10View" prefHeight="30.0" prefWidth="168.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Page 10" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-         </children>
-      </VBox>
-   </left>
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1350.0" style="-fx-background-color: #eff3f6;" stylesheets="@mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.MainPanelController">
    <top>
-      <HBox alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="1360.0" style="-fx-background-color: #2b2a26;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="60.0" style="-fx-background-color: #fff;" BorderPane.alignment="CENTER">
          <children>
-            <Text fx:id="idLogin" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="82.13671875">
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin>
-            </Text>
-            <Button fx:id="logout" mnemonicParsing="false" onAction="#close" prefHeight="18.0" prefWidth="74.0" style="-fx-text-fill: #f0f0f0;" styleClass="bt" stylesheets="@mainpanel.css" text="Log Out" textAlignment="JUSTIFY">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <HBox.margin>
-                  <Insets right="4.0" />
-               </HBox.margin>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
+            <AnchorPane prefHeight="60.0" prefWidth="160.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="60.0" prefWidth="162.0" style="-fx-background-color: linear-gradient(to bottom right, #188ba7, #306090);" text="PSMSystem" textFill="WHITE" />
+               </children>
+            </AnchorPane>
+            <Label fx:id="component" layoutX="210.0" prefHeight="60.0" prefWidth="160.0" text="Dashboard" />
          </children>
-         <BorderPane.margin>
-            <Insets right="5.0" />
-         </BorderPane.margin></HBox>
+      </AnchorPane>
    </top>
-   <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+   <left>
+      <AnchorPane prefWidth="160.0" style="-fx-background-color: linear-gradient(to bottom right, #188ba7, #306090);" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="108.0" prefWidth="1190.0" />
-            <HBox prefHeight="244.0" prefWidth="1190.0" />
-            <HBox prefHeight="254.0" prefWidth="1190.0" />
+            <AnchorPane prefHeight="132.0" prefWidth="160.0" style="-fx-border-width: .5px 0 .4px 0;">
+               <children>
+                  <ImageView fitHeight="64.0" fitWidth="150.0" layoutX="48.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/user.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER_RIGHT" layoutY="100.0" prefHeight="36.0" prefWidth="60.0" text="User:" textFill="WHITE" />
+                  <Label fx:id="idLogin" alignment="CENTER" layoutX="62.0" layoutY="100.0" prefHeight="36.0" prefWidth="100.0" text="Label" textFill="WHITE" />
+                  <Separator layoutX="11.0" layoutY="135.0" prefWidth="140.0" />
+               </children>
+            </AnchorPane>
+            <VBox layoutY="137.0" prefWidth="160.0" spacing="10.0">
+               <children>
+                  <Label fx:id="dashboard" alignment="CENTER" onMouseClicked="#loadDashboardView" prefHeight="40.0" prefWidth="160.0" text="Dashboard">
+                     <styleClass>
+                        <String fx:value="bt" />
+                        <String fx:value="selected" />
+                     </styleClass>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <Label fx:id="prisoner" alignment="CENTER" onMouseClicked="#loadPrisonerView" prefHeight="40.0" prefWidth="160.0" styleClass="bt" text="Prisoner" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Label>
+                  <Label fx:id="manageVisits" alignment="CENTER" onMouseClicked="#loadManageVisitsView" prefHeight="40.0" prefWidth="160.0" styleClass="bt" text="Manage Visits" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Label>
+                  <Label fx:id="health" alignment="CENTER" onMouseClicked="#loadHealthView" prefHeight="40.0" prefWidth="160.0" styleClass="bt" text="Health" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Label>
+                  <Label fx:id="assess" alignment="CENTER" onMouseClicked="#loadAssessView" prefHeight="40.0" prefWidth="160.0" styleClass="bt" text="Assess" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Label>
+                  <Label fx:id="report" alignment="CENTER" onMouseClicked="#loadReportView" prefHeight="40.0" prefWidth="160.0" styleClass="bt" text="Report" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Label>
+                  <Label fx:id="logout" alignment="CENTER" onMouseClicked="#close" prefHeight="40.0" prefWidth="160.0" styleClass="bt" text="Log out" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Label>
+               </children>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </VBox>
          </children>
-      </VBox>
-   </center>
+      </AnchorPane>
+   </left>
 </BorderPane>

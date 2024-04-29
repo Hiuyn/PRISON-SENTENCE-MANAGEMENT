@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  *
@@ -22,10 +23,9 @@ public class MainPanel extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-
         Parent root = FXMLLoader.load(getClass().getResource("view/LoginView.fxml"));
         Scene scene = new Scene(root);
-
+        stage.setMaximized(false);
         stage.setTitle("User Login");
         stage.setScene(scene);
         stage.getIcons().add(new Image("file: /com/example/psmsystem/assets/icon.png"));

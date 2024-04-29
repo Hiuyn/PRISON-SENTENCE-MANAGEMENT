@@ -9,9 +9,11 @@ module com.example.psmsystem {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires java.sql;
+    requires MaterialFX;
 
     opens com.example.psmsystem to javafx.fxml;
     exports com.example.psmsystem;
     exports com.example.psmsystem.controller;
     opens com.example.psmsystem.controller to javafx.fxml;
+    opens com.example.psmsystem.model.prisoner to javafx.base;
 }
