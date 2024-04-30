@@ -43,7 +43,7 @@ public class MainPanelController implements Initializable {
     private Label manageVisits;
 
     @FXML
-    private  Label component;
+    private  Label nameView;
 
     @FXML
     private Label report;
@@ -63,6 +63,7 @@ public class MainPanelController implements Initializable {
 
     private void loadFXML(String fileName) {
         try {
+            nameView.setText(fileName);
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath + "view/" + fileName + "View.fxml"));
             borderPane.setCenter(root);
             dashboard.getScene().getWindow();

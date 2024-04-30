@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>-->
+
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import java.lang.String?>
@@ -11,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="957.0" prefWidth="1760.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.PrisonerController">
+<AnchorPane prefHeight="957.0" prefWidth="1760.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.PrisonerController">
    <children>
       <VBox prefHeight="957.0" prefWidth="1760.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -21,7 +23,7 @@
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <MFXTextField floatMode="ABOVE" floatingText="Ma tu nhan" prefHeight="49.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
+                              <MFXTextField fx:id="maTN" floatMode="ABOVE" floatingText="Ma tu nhan" prefHeight="49.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
                               <MFXTextField floatMode="ABOVE" floatingText="Ma tu nhan" prefHeight="49.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
                               <MFXTextField floatMode="ABOVE" floatingText="Ma tu nhan" prefHeight="49.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
                               <MFXTextField floatMode="ABOVE" floatingText="Ma tu nhan" prefHeight="49.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
@@ -52,7 +54,7 @@
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="ALWAYS">
                            <children>
                               <MFXButton onAction="#isSearch" prefHeight="40.0" prefWidth="100.0" stylesheets="@mainpanel.css" text="Search">
                                  <styleClass>
@@ -63,14 +65,11 @@
                                     <Font size="16.0" />
                                  </font>
                               </MFXButton>
-                              <MFXButton onAction="#isCreate" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #fff;" stylesheets="@mainpanel.css" text="Create">
+                              <MFXButton onAction="#isClearn" prefHeight="40.0" prefWidth="100.0" stylesheets="@mainpanel.css" text="Clear">
                                  <styleClass>
                                     <String fx:value="btn" />
-                                    <String fx:value="success" />
+                                    <String fx:value="clear" />
                                  </styleClass>
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
                               </MFXButton>
                            </children>
                            <padding>
@@ -83,13 +82,26 @@
             </AnchorPane>
             <AnchorPane prefHeight="560.0" prefWidth="1712.0" styleClass="card" stylesheets="@mainpanel.css">
                <children>
-                  <TableView fx:id="dataTablePrisoner" prefHeight="547.0" prefWidth="1712.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <columns>
-                      <TableColumn fx:id="maTNColumn" prefWidth="192.0" text="Ma tu nhan" />
-                        <TableColumn fx:id="nameTNColumn" prefWidth="75.0" text="Name" />
-<!--                        <TableColumn fx:id="actionButton" prefWidth="75.0" text="Action" />-->
-                    </columns>
-                  </TableView>
+                  <VBox alignment="CENTER_RIGHT" prefHeight="547.0" prefWidth="1712.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <MFXButton onAction="#isCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@mainpanel.css" text="Create">
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="success" />
+                           </styleClass>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </MFXButton>
+                        <TableView fx:id="dataTablePrisoner" prefHeight="475.0">
+                          <columns>
+                            <TableColumn fx:id="maTNColumn" prefWidth="192.0" text="Ma tu nhan" />
+                              <TableColumn fx:id="nameTNColumn" prefWidth="75.0" text="Name" />
+                              <TableColumn fx:id="actionColumn" prefWidth="163.0" text="Action" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
                </children></AnchorPane>
          </children>
          <padding>

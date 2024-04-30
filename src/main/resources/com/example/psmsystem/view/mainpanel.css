@@ -33,44 +33,62 @@ and open the template in the editor.
 }
 .btn{
     -fx-cursor: HAND;
+    -fx-font-size: 16px;
 }
 .btn.success{
-    -fx-border-color: #28c76f;
-    -fx-border-width: 2px;
-    -fx-text-fill: #28c76f;
-    -fx-background-color: #fff;
+    -fx-text-fill: #fff;
+    -fx-background-color: #28c76f;
 }
 .btn.warning{
-    -fx-border-color: #ea5455;
-    -fx-border-width: 2px;
-    -fx-text-fill: #ea5455;
-    -fx-background-color: #fff;
+    -fx-text-fill: #fff;
+    -fx-background-color: #ea5455;
 }
 .btn.danger{
-    -fx-border-color: #ff9f43;
-    -fx-border-width: 2px;
-    -fx-text-fill: #ff9f43;
-    -fx-background-color: #fff;
+    -fx-text-fill: #fff;
+    -fx-background-color: #ff9f43;
 }
 .btn.infor{
+    -fx-text-fill: #fff;
+    -fx-background-color: #00cfe8;
+}
+.btn.clear{
     -fx-border-color: #00cfe8;
     -fx-border-width: 2px;
     -fx-text-fill: #00cfe8;
     -fx-background-color: #fff;
 }
 .btn.success:hover{
-    -fx-background-color: #28c76f;
-    -fx-text-fill: #fff;
+    -fx-background-color: #33d67c;
 }
 .btn.warning:hover{
-    -fx-background-color: #ea5455;
-    -fx-text-fill: #fff;
+    -fx-background-color: #ed6b6c;
 }
 .btn.danger:hover{
-    -fx-background-color: #ff9f43;
-    -fx-text-fill: #fff;
+    -fx-background-color: #ffac5d;
 }
 .btn.infor:hover{
-    -fx-background-color: #00cfe8;
-    -fx-text-fill: #fff;
+    -fx-background-color: #03e4ff;
+}
+.btn.clear:hover{
+    -fx-background-color: rgba(0,207,232,.04);
+}
+
+.btn.success:hover .icon,
+.btn.warning:hover .icon,
+.btn.danger:hover .icon,
+.btn.infor:hover .icon{
+    -fx-fill: #fff;
+}
+
+.icon.success{
+    -fx-fill: #28c76f;
+}
+.icon.warning{
+    -fx-fill: #ea5455;
+}
+.icon.danger{
+    -fx-fill: #ff9f43;
+}
+.icon.infor{
+    -fx-fill: #00cfe8;
 }

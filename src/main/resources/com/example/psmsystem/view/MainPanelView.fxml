@@ -20,7 +20,7 @@
                   <Label alignment="CENTER" prefHeight="60.0" prefWidth="162.0" style="-fx-background-color: linear-gradient(to bottom right, #188ba7, #306090);" text="PSMSystem" textFill="WHITE" />
                </children>
             </AnchorPane>
-            <Label fx:id="component" layoutX="210.0" prefHeight="60.0" prefWidth="160.0" text="Dashboard" />
+            <Label fx:id="nameView" layoutX="210.0" prefHeight="60.0" prefWidth="160.0" text="Dashboard" />
          </children>
       </AnchorPane>
    </top>

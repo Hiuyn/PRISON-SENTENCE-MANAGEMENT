@@ -16,4 +16,6 @@ module com.example.psmsystem {
     exports com.example.psmsystem.controller;
     opens com.example.psmsystem.controller to javafx.fxml;
     opens com.example.psmsystem.model.prisoner to javafx.base;
+    exports com.example.psmsystem.controller.prisoner;
+    opens com.example.psmsystem.controller.prisoner to javafx.fxml;
 }
