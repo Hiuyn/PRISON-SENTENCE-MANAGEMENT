@@ -13,11 +13,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -45,6 +48,11 @@ public class PrisonerController implements Initializable {
     @FXML
     private MFXTextField maTN;
 
+    @FXML
+    private Pagination pagination;
+
+    private final int itemsPerPage = 5;
+
     ObservableList<Prisoner> listTable = FXCollections.observableArrayList();
 
     String fxmlPath = "/com/example/psmsystem/";
@@ -55,6 +63,8 @@ public class PrisonerController implements Initializable {
         listTable.addAll(prisonerDao.getAllPrisoner());
 
         loadDataTable();
+
+        setupPagination();
     }
 
     private void loadDataTable() {
@@ -68,15 +78,21 @@ public class PrisonerController implements Initializable {
             @Override
             public TableCell<Prisoner, Void> call(final TableColumn<Prisoner, Void> param) {
                 final TableCell<Prisoner, Void> cell = new TableCell<>() {
-                    private final Button editButton = new Button("Edit");
-                    private final Button deleteButton = new Button("Delete");
+                    private final Button editButton = new Button("");
+                    private final Button deleteButton = new Button("");
 
 //                    FontAwesomeIconView deleteIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
 //                    FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.PENCIL_SQUARE);
 
                     {
+//                        editButton.setPrefSize(22, 22);
                         editButton.getStyleClass().addAll("btn", "infor");
-//                        editButton.setGraphic(editIcon);
+                        Image editImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/edit.png"));
+                        ImageView editImageView = new ImageView(editImage);
+                        editImageView.setFitWidth(22); // Đặt độ rộng là 22
+                        editImageView.setFitHeight(22); // Đặt chiều cao là 22
+                        editButton.setGraphic(editImageView);
+//                        editButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/edit.png"))));
                         editButton.setOnAction((ActionEvent event) -> {
                             Prisoner prisoner = getTableView().getItems().get(getIndex());
                             // Handle edit action here
@@ -96,8 +112,14 @@ public class PrisonerController implements Initializable {
                             }
                         });
 
+                        deleteButton.setPrefSize(22, 22);
                         deleteButton.getStyleClass().addAll("btn", "danger");
-//                        deleteButton.setGraphic(deleteIcon);
+                        Image deleteImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/delete.png"));
+                        ImageView deleteImageView = new ImageView(deleteImage);
+                        deleteImageView.setFitWidth(22); // Đặt độ rộng là 22
+                        deleteImageView.setFitHeight(22); // Đặt chiều cao là 22
+                        deleteButton.setGraphic(deleteImageView);
+//                        deleteButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/delete.png"))));
                         deleteButton.setOnAction((ActionEvent event) -> {
                             Prisoner prisoner = getTableView().getItems().get(getIndex());
                             // Handle delete action here
@@ -149,6 +171,19 @@ public class PrisonerController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
         dataTablePrisoner.setItems(listTable);
         dataTablePrisoner.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+
+    private void setupPagination() {
+        int pageCount = (int) Math.ceil((double) listTable.size() / itemsPerPage);
+        pagination.setPageCount(pageCount);
+        pagination.setPageFactory(this::createPage);
+    }
+
+    private Node createPage(int pageIndex) {
+        int fromIndex = pageIndex * itemsPerPage;
+        int toIndex = Math.min(fromIndex + itemsPerPage, listTable.size());
+        dataTablePrisoner.setItems(FXCollections.observableArrayList(listTable.subList(fromIndex, toIndex)));
+        return new BorderPane(dataTablePrisoner);
     }
 
     @FXML

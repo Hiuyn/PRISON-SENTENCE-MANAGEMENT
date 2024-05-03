@@ -6,6 +6,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -82,7 +83,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="560.0" prefWidth="1712.0" styleClass="card" stylesheets="@mainpanel.css">
                <children>
-                  <VBox alignment="CENTER_RIGHT" prefHeight="547.0" prefWidth="1712.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <MFXButton onAction="#isCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@mainpanel.css" text="Create">
                            <styleClass>
@@ -93,13 +94,18 @@
                               <Font size="16.0" />
                            </font>
                         </MFXButton>
-                        <TableView fx:id="dataTablePrisoner" prefHeight="475.0">
+                        <TableView fx:id="dataTablePrisoner" maxHeight="1.7976931348623157E308">
                           <columns>
                             <TableColumn fx:id="maTNColumn" prefWidth="192.0" text="Ma tu nhan" />
                               <TableColumn fx:id="nameTNColumn" prefWidth="75.0" text="Name" />
                               <TableColumn fx:id="actionColumn" prefWidth="163.0" text="Action" />
                           </columns>
                         </TableView>
+                        <Pagination fx:id="pagination" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Pagination>
                      </children>
                   </VBox>
                </children></AnchorPane>

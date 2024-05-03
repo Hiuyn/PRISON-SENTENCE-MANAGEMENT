@@ -41,11 +41,11 @@ and open the template in the editor.
 }
 .btn.warning{
     -fx-text-fill: #fff;
-    -fx-background-color: #ea5455;
+    -fx-background-color: #ff9f43;
 }
 .btn.danger{
     -fx-text-fill: #fff;
-    -fx-background-color: #ff9f43;
+    -fx-background-color: #ea5455;
 }
 .btn.infor{
     -fx-text-fill: #fff;
@@ -61,10 +61,10 @@ and open the template in the editor.
     -fx-background-color: #33d67c;
 }
 .btn.warning:hover{
-    -fx-background-color: #ed6b6c;
+    -fx-background-color: #ffac5d;
 }
 .btn.danger:hover{
-    -fx-background-color: #ffac5d;
+    -fx-background-color: #ed6b6c;
 }
 .btn.infor:hover{
     -fx-background-color: #03e4ff;
@@ -84,10 +84,10 @@ and open the template in the editor.
     -fx-fill: #28c76f;
 }
 .icon.warning{
-    -fx-fill: #ea5455;
+    -fx-fill: #ff9f43;
 }
 .icon.danger{
-    -fx-fill: #ff9f43;
+    -fx-fill: #ea5455;
 }
 .icon.infor{
     -fx-fill: #00cfe8;
