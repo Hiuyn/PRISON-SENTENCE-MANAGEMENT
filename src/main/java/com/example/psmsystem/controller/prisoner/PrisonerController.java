@@ -51,7 +51,7 @@ public class PrisonerController implements Initializable {
     @FXML
     private Pagination pagination;
 
-    private final int itemsPerPage = 5;
+    private final int itemsPerPage = 8;
 
     ObservableList<Prisoner> listTable = FXCollections.observableArrayList();
 
@@ -87,7 +87,7 @@ public class PrisonerController implements Initializable {
                     {
 //                        editButton.setPrefSize(22, 22);
                         editButton.getStyleClass().addAll("btn", "infor");
-                        Image editImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/edit.png"));
+                        Image editImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/edit-white.png"));
                         ImageView editImageView = new ImageView(editImage);
                         editImageView.setFitWidth(22); // Đặt độ rộng là 22
                         editImageView.setFitHeight(22); // Đặt chiều cao là 22
@@ -114,7 +114,7 @@ public class PrisonerController implements Initializable {
 
                         deleteButton.setPrefSize(22, 22);
                         deleteButton.getStyleClass().addAll("btn", "danger");
-                        Image deleteImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/delete.png"));
+                        Image deleteImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/delete-white.png"));
                         ImageView deleteImageView = new ImageView(deleteImage);
                         deleteImageView.setFitWidth(22); // Đặt độ rộng là 22
                         deleteImageView.setFitHeight(22); // Đặt chiều cao là 22
