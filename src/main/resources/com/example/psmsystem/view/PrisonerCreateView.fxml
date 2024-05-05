@@ -42,13 +42,13 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="100.0" spacing="10.0">
                <children>
-                  <MFXButton onAction="#isCancel" prefHeight="40.0" prefWidth="100.0" stylesheets="@mainpanel.css" text="Cancel">
+                  <MFXButton onAction="#isCancel" prefHeight="40.0" prefWidth="100.0" stylesheets="@../css/mainpanel.css" text="Cancel">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="clear" />
                      </styleClass>
                   </MFXButton>
-                  <MFXButton onAction="#isAdd" prefHeight="40.0" prefWidth="100.0" stylesheets="@mainpanel.css" text="Add">
+                  <MFXButton onAction="#isAdd" prefHeight="40.0" prefWidth="100.0" stylesheets="@../css/mainpanel.css" text="Add">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="success" />

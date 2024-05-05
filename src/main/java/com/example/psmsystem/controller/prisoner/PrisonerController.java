@@ -8,6 +8,7 @@ import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,7 +52,7 @@ public class PrisonerController implements Initializable {
     @FXML
     private Pagination pagination;
 
-    private final int itemsPerPage = 8;
+    private final int itemsPerPage = 9;
 
     ObservableList<Prisoner> listTable = FXCollections.observableArrayList();
 
@@ -87,10 +88,10 @@ public class PrisonerController implements Initializable {
                     {
 //                        editButton.setPrefSize(22, 22);
                         editButton.getStyleClass().addAll("btn", "infor");
-                        Image editImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/edit-white.png"));
+                        Image editImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/assets/images/edit-white.png"));
                         ImageView editImageView = new ImageView(editImage);
-                        editImageView.setFitWidth(22); // Đặt độ rộng là 22
-                        editImageView.setFitHeight(22); // Đặt chiều cao là 22
+//                        editImageView.setFitWidth(22); // Đặt độ rộng là 22
+//                        editImageView.setFitHeight(22); // Đặt chiều cao là 22
                         editButton.setGraphic(editImageView);
 //                        editButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/edit.png"))));
                         editButton.setOnAction((ActionEvent event) -> {
@@ -112,12 +113,12 @@ public class PrisonerController implements Initializable {
                             }
                         });
 
-                        deleteButton.setPrefSize(22, 22);
+//                        deleteButton.setPrefSize(22, 22);
                         deleteButton.getStyleClass().addAll("btn", "danger");
-                        Image deleteImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/delete-white.png"));
+                        Image deleteImage = new Image(getClass().getResourceAsStream("/com/example/psmsystem/assets/images/delete-white.png"));
                         ImageView deleteImageView = new ImageView(deleteImage);
-                        deleteImageView.setFitWidth(22); // Đặt độ rộng là 22
-                        deleteImageView.setFitHeight(22); // Đặt chiều cao là 22
+//                        deleteImageView.setFitWidth(22); // Đặt độ rộng là 22
+//                        deleteImageView.setFitHeight(22); // Đặt chiều cao là 22
                         deleteButton.setGraphic(deleteImageView);
 //                        deleteButton.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/example/psmsystem/view/images/delete.png"))));
                         deleteButton.setOnAction((ActionEvent event) -> {
@@ -157,8 +158,8 @@ public class PrisonerController implements Initializable {
                         } else {
                             HBox managebtn = new HBox(editButton, deleteButton);
                             managebtn.setStyle("-fx-alignment:center");
-                            HBox.setMargin(deleteButton, new Insets(2, 2, 0, 3));
-                            HBox.setMargin(editButton, new Insets(2, 3, 0, 2));
+                            HBox.setMargin(deleteButton, new Insets(.45, 3, .45, 0));
+                            HBox.setMargin(editButton, new Insets(.45, 3, .45, 0));
                             setGraphic(managebtn);
 
                         }
@@ -206,7 +207,19 @@ public class PrisonerController implements Initializable {
 
     @FXML
     void isSearch(ActionEvent event) {
+        // Get the keywords from the text fields
+        String maTNKeyword = maTN.getText().trim().toLowerCase();
 
+        // Create a filtered list and predicate
+        FilteredList<Prisoner> filteredData = new FilteredList<>(listTable);
+        filteredData.setPredicate(prisoner -> {
+            boolean maTNContainsKeyword = maTNKeyword.isEmpty() || prisoner.getMaTN().toLowerCase().contains(maTNKeyword);
+//            boolean nameTNContainsKeyword = nameTNKeyword.isEmpty() || prisoner.getNameTN().toLowerCase().contains(nameTNKeyword);
+            return maTNContainsKeyword;
+        });
+
+        // Set the filtered data to the table
+        dataTablePrisoner.setItems(filteredData);
     }
 
     @FXML
