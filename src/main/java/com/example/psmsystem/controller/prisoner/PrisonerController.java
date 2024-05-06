@@ -69,8 +69,8 @@ public class PrisonerController implements Initializable {
     }
 
     private void loadDataTable() {
-        maTNColumn.setCellValueFactory(new PropertyValueFactory<>("maTN"));
-        nameTNColumn.setCellValueFactory(new PropertyValueFactory<>("nameTN"));
+        maTNColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerId"));
+        nameTNColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerName"));
 
         maTNColumn.setStyle("-fx-alignment: CENTER;");
         nameTNColumn.setStyle("-fx-alignment: CENTER;");
@@ -213,7 +213,7 @@ public class PrisonerController implements Initializable {
         // Create a filtered list and predicate
         FilteredList<Prisoner> filteredData = new FilteredList<>(listTable);
         filteredData.setPredicate(prisoner -> {
-            boolean maTNContainsKeyword = maTNKeyword.isEmpty() || prisoner.getMaTN().toLowerCase().contains(maTNKeyword);
+            boolean maTNContainsKeyword = maTNKeyword.isEmpty() || prisoner.getPrisonerId().toLowerCase().contains(maTNKeyword);
 //            boolean nameTNContainsKeyword = nameTNKeyword.isEmpty() || prisoner.getNameTN().toLowerCase().contains(nameTNKeyword);
             return maTNContainsKeyword;
         });

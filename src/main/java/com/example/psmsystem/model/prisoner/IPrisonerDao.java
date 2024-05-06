@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface IPrisonerDao<T> {
     List<T> getAllPrisoner();
+    List<Prisoner>getPrisonerInItem();
 }

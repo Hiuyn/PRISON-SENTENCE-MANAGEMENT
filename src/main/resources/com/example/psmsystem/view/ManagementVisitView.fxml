@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="957.0" prefWidth="1760.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.DashboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="957.0" prefWidth="1760.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.managementVisit.ManagementVisitViewController">
    <children>
       <ScrollPane prefHeight="957.0" prefWidth="1760.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
@@ -25,7 +25,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="234.0" prefWidth="1692.0" spacing="10.0" styleClass="bgAnchorPane" stylesheets="@../css/ManagementVisit.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="276.0" styleClass="card" stylesheets="@../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
+                                    <AnchorPane fx:id="newPrisonerFun" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="276.0" styleClass="card" stylesheets="@../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
                                        <children>
                                           <ImageView fitHeight="146.0" fitWidth="121.0" layoutX="141.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -38,7 +38,7 @@
                                              </font></Label>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane prefHeight="243.0" prefWidth="191.0" styleClass="card" stylesheets="@../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
+                                    <AnchorPane fx:id="viewAllFun" prefHeight="243.0" prefWidth="191.0" styleClass="card" stylesheets="@../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
                                        <children>
                                           <ImageView fitHeight="115.0" fitWidth="141.0" layoutX="180.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -52,7 +52,7 @@
                                           </Label>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane styleClass="card" stylesheets="@../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
+                                    <AnchorPane fx:id="printFun" styleClass="card" stylesheets="@../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
                                        <children>
                                           <ImageView fitHeight="130.0" fitWidth="119.0" layoutX="160.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -87,11 +87,9 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="0.0" prefWidth="1692.0" stylesheets="@../css/ManagementVisit.css" />
                         <AnchorPane prefHeight="648.0" prefWidth="1692.0" styleClass="bgAnchorPane" stylesheets="@../css/ManagementVisit.css">
-                           <children>
-                              <TextField layoutX="1307.0" layoutY="14.0" prefHeight="25.0" prefWidth="307.0" promptText="Type into search" />
-                              <Button layoutX="1629.0" layoutY="14.0" mnemonicParsing="false" styleClass="btnSearch" stylesheets="@../css/ManagementVisit.css" text="search" />
-                              <Pagination layoutY="56.0" prefHeight="580.0" prefWidth="1693.0" styleClass="btnSearch" stylesheets="@../css/ManagementVisit.css" />
-                           </children>
+                           <TextField fx:id="txtSearch" layoutX="1307.0" layoutY="14.0" prefHeight="25.0" prefWidth="307.0" promptText="Type into search" />
+                           <Button fx:id="btnSearch" layoutX="1629.0" layoutY="14.0" mnemonicParsing="false" styleClass="btnSearch" stylesheets="@../css/ManagementVisit.css" text="search" />
+                           <Pagination fx:id="pgPagination" layoutY="56.0" prefHeight="580.0" prefWidth="1693.0" styleClass="btnSearch" stylesheets="@../css/ManagementVisit.css" />
                         </AnchorPane>
                      </children>
                      <padding>

@@ -18,3 +18,12 @@
     -fx-border-width: .5px;
     -fx-padding: 10px;
 }
+.itemBackground
+{
+    -fx-background-color: white;
+    -fx-max-width: 200px;
+    -fx-max-height: 150px;
+    -fx-border-color: blue;
+    /*-fx-pref-width: 100px;*/
+    /*-fx-pref-height: 80px;*/
+}
