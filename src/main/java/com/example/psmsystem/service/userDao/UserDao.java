@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao implements IUserDao<User> {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/quanlytunhan";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/quanlitunhan";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "12345678";
-
+//    private static final String DB_PASSWORD = "12345678";
+    private static final String DB_PASSWORD = "1234";
     private static final String INSERT_QUERY = "INSERT INTO users (first_name, last_name, email, user_name, password) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE user_name = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
@@ -76,7 +76,7 @@ public class UserDao implements IUserDao<User> {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println(ex);
+            System.out.println(ex.getMessage());
         }
         return false;
     }
@@ -103,5 +103,4 @@ public class UserDao implements IUserDao<User> {
         }
         return userList;
     }
-
 }

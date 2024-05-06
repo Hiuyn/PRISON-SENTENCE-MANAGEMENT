@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +65,7 @@ public class MainPanelController implements Initializable {
     private void loadFXML(String fileName) {
         try {
             nameView.setText(fileName);
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath + "view/" + fileName + "View.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/" + fileName + "View.fxml")));
             borderPane.setCenter(root);
             dashboard.getScene().getWindow();
 
@@ -111,7 +112,7 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadManageVisitsView(MouseEvent event) {
-        loadFXML("Dashboard");
+        loadFXML("ManagementVisit");
         setButtonStyle(manageVisits);
     }
 

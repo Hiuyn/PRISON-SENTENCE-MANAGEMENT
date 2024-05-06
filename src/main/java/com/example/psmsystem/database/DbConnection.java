@@ -20,9 +20,10 @@ public class DbConnection {
 
     private DbConnection() {
         try {
-            String url = "jdbc:mysql://localhost:3306/quanlytunhan";
+            String url = "jdbc:mysql://localhost:3306/quanlitunhan";
             String username = "root";
-            String password = "12345678";
+//            String password = "12345678";
+            String password = "1234";
             con = DriverManager.getConnection(url, username, password);
         } catch (SQLException ex) {
             Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);
