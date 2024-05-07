@@ -1,6 +1,7 @@
 .bgAnchorPane
 {
     -fx-background-color: #c1bcbc;
+    -fx-background-radius: 5px;
 }
 .btnSearch
 {
