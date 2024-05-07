@@ -1,20 +1,33 @@
 package com.example.psmsystem.model.user;
 
 public class User {
-    private String first_name;
-    private String last_name;
-    private String email;
-    private String user_name;
+    private String fullName;
+    private String username;
     private String password;
 
-    public User(){}
 
-    public User(String first_name, String last_name, String email, String user_name, String password) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.email = email;
-        this.user_name = user_name;
+    public User() {}
+
+    public User(String fullName, String username, String password) {
+        this.fullName = fullName;
+        this.username = username;
         this.password = password;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -23,42 +36,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getUserName() {
-        return user_name;
-    }
-
-    public void setUserName(String user_name) {
-        this.user_name = user_name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLastName() {
-        return last_name;
-    }
-
-    public void setLastName(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getFirstName() {
-        return first_name;
-    }
-
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
-    }
-
-    @Override
-    public String toString() {
-        return first_name + " - " + last_name;
     }
 }

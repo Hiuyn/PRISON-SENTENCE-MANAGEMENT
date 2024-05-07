@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrisonerDAO implements IPrisonerDao<Prisoner> {
-    private static final String INSERT_QUERY = "INSERT INTO prisoner (prisonerId, prisonerName, imagePath) VALUES (?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_full_name, image_path) VALUES (?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
-    private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoner";
+    private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners";
 //    private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoner";
 ////    private static final String INSERT_INTO_PRISONER_QUERY = "INSERT INTO  prisoner VALUES (prisonerId = ?)";
 
@@ -47,9 +47,9 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
-                prisoner.setPrisonerId(String.valueOf(rs.getInt("prisonerId")));
-                prisoner.setPrisonerName(rs.getString("prisonerName"));
-                prisoner.setImagePath(rs.getString("imagePath"));
+                prisoner.setPrisonerId(String.valueOf(rs.getInt("prisoner_id")));
+                prisoner.setPrisonerName(rs.getString("prisoner_full_name"));
+                prisoner.setImagePath(rs.getString("image_path"));
                 PrisonerList.add(prisoner);
             }
         } catch (SQLException e) {
