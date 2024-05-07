@@ -17,7 +17,7 @@ public class UserDao implements IUserDao<User> {
 //    private static final String DB_PASSWORD = "";
     private static final String INSERT_QUERY = "INSERT INTO users (name, username, hash_password) VALUES (?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and hash_password = ?";
-    private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
+    private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE username = ?";
     private static final String SELECT_BY_USER_QUERY = "SELECT * FROM users";
 
     @Override
@@ -50,12 +50,15 @@ public class UserDao implements IUserDao<User> {
         try {
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_USERNAME_PASSWORD_QUERY);
+
+            String hashPassword = hashPassword(password);
+
             stmt.setString(1, username);
-            stmt.setString(2, password);
+            stmt.setString(2, hashPassword);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     user = new User();
-                    user.setFullName(rs.getString("last_name"));
+                    user.setFullName(rs.getString("name"));
                     user.setUsername(rs.getString("username"));
                     user.setPassword(rs.getString("hash_password"));
                 }
@@ -93,7 +96,7 @@ public class UserDao implements IUserDao<User> {
 
             while (rs.next()) {
                 User user = new User();
-                user.setFullName(rs.getString("last_name"));
+                user.setFullName(rs.getString("name"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("hash_password"));
                 userList.add(user);
@@ -103,23 +106,18 @@ public class UserDao implements IUserDao<User> {
         }
         return userList;
     }
-    public String hashPassword(String password) {
+    private String hashPassword(String password) {
         try {
-            // Tạo đối tượng MessageDigest với thuật toán SHA-256
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-            // Chuyển đổi mật khẩu thành mảng byte
             byte[] hash = digest.digest(password.getBytes());
 
-            // Chuyển đổi mảng byte thành chuỗi hex
             StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
                 String hex = Integer.toHexString(0xff & b);
                 if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
             }
-
-            System.out.println("Hashed Password: " + hexString);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

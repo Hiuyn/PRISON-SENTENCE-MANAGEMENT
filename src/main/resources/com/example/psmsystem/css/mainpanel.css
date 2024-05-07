@@ -86,3 +86,11 @@ and open the template in the editor.
 .icon.infor{
     -fx-fill: #00cfe8;
 }
+
+.card {
+    -fx-background-color: #fff;
+    -fx-background-radius: 10px;
+    -fx-border-color: #ccc;
+    -fx-border-width: .5px;
+    -fx-padding: 10px;
+}

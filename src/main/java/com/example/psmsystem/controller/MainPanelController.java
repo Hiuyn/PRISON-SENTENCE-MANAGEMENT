@@ -58,14 +58,22 @@ public class MainPanelController implements Initializable {
 
 
     public void initData(User user) {
-        idLogin.setText(user.toString());
+        idLogin.setText(user.getFullName());
         loadFXML("Dashboard");
     }
 
     private void loadFXML(String fileName) {
         try {
             nameView.setText(fileName);
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/" + fileName + "View.fxml")));
+            String pathFileNmae;
+            if (fileName.equals("Dashboard")){
+                pathFileNmae = fxmlPath + "view/" + fileName + "View.fxml";
+            }
+            else{
+                pathFileNmae = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
+            }
+            System.out.println(pathFileNmae);
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pathFileNmae)));
             borderPane.setCenter(root);
             dashboard.getScene().getWindow();
 
