@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
-import java.util.Objects;
 
 
 public class ItemPrisonerViewController {
@@ -33,24 +32,29 @@ public class ItemPrisonerViewController {
     @FXML
     private Label prisonerName;
 
-    public void setPrisoner(Prisoner prisoner) {
+    public void setPrisonerItem(Prisoner prisoner) {
 
         String defaultPath = "/com/example/psmsystem/assets/imagesPrisoner/default.png";
         String id = prisoner.getPrisonerId();
         String name = prisoner.getPrisonerName();
-        String  imagePath = prisoner.getImagePrisonerPath();
+        String imagePath = prisoner.getImagePath();
 
-        prisonerId.setText(id);
-        prisonerName.setText(name);
-//        testImage.setText(imagePath);
+        try {
+            File imageFile;
+            if (imagePath != null && !imagePath.isEmpty()) {
+                imageFile = new File(imagePath);
+            } else {
+                imageFile = new File(defaultPath);
+            }
 
-        File imageFile = new File(imagePath);
-        File imageDefault = new File(defaultPath);
-        if (imageFile.exists()) {
-            imagePrisoner.setImage(new Image(imageFile.toURI().toString()));
-        } else {
-            imagePrisoner.setImage(new Image(imageDefault.toURI().toString()));
+            Image image = new Image(imageFile.toURI().toString());
+            prisonerId.setText(id);
+            prisonerName.setText(name);
+            imagePrisoner.setImage(image);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
+
     }
 
     public void btnEditOnAction(ActionEvent actionEvent) {}

@@ -3,14 +3,14 @@ package com.example.psmsystem.model.prisoner;
 public class Prisoner {
     private String prisonerId;
     private String prisonerName;
-    private String imagePrisonerPath;
+    private String imagePath;
 
     public Prisoner(){}
 
-    public Prisoner(String prisonerId, String prisonerName, String imagePrisoner) {
+    public Prisoner(String prisonerId, String prisonerName, String imagePath) {
         this.prisonerId = prisonerId;
         this.prisonerName = prisonerName;
-        this.imagePrisonerPath = imagePrisoner;
+        this.imagePath = imagePath;
     }
 
     public String getPrisonerName() {
@@ -29,11 +29,11 @@ public class Prisoner {
         this.prisonerId = prisonerId;
     }
 
-    public String getImagePrisonerPath() {
-        return imagePrisonerPath;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImagePrisonerPath(String imagePrisonerPath) {
-        this.imagePrisonerPath = imagePrisonerPath;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

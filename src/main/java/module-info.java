@@ -10,6 +10,7 @@ module com.example.psmsystem {
     requires eu.hansolo.tilesfx;
     requires java.sql;
     requires MaterialFX;
+    requires java.sql.rowset;
 
     opens com.example.psmsystem to javafx.fxml;
     exports com.example.psmsystem;

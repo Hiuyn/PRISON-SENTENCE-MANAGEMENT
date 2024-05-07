@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao implements IUserDao<User> {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/quanlitunhan";
-    private static final String DB_USER = "root";
-//    private static final String DB_PASSWORD = "12345678";
-    private static final String DB_PASSWORD = "1234";
+//    private static final String DB_URL = "jdbc:mysql://localhost:3306/prisonerms";
+//    private static final String DB_USER = "root";
+////    private static final String DB_PASSWORD = "12345678";
+//    private static final String DB_PASSWORD = "";
     private static final String INSERT_QUERY = "INSERT INTO users (first_name, last_name, email, user_name, password) VALUES (?, ?, ?, ?, ?)";
-    private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE user_name = ? and password = ?";
+    private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
-    private static final String SELECT_BY_USER_QUERY = "SELECT * FROM user";
+    private static final String SELECT_BY_USER_QUERY = "SELECT * FROM users";
 
     @Override
     public void addUser(User user) {
@@ -54,7 +54,7 @@ public class UserDao implements IUserDao<User> {
                     user.setFirstName(rs.getString("first_name"));
                     user.setLastName(rs.getString("last_name"));
                     user.setEmail(rs.getString("email"));
-                    user.setUserName(rs.getString("user_name"));
+                    user.setUserName(rs.getString("username"));
                     user.setPassword(rs.getString("password"));
                 }
             }
