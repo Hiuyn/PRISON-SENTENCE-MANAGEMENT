@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -65,7 +66,7 @@ public class ManagementVisitViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        assert pgPagination != null : "fx:id=\"pgPagination\" was not injected: check your FXML file 'YourFXMLFileName.fxml'.";
+//        assert pgPagination != null : "fx:id=\"pgPagination\" was not injected: check your FXML file 'YourFXMLFileName.fxml'.";
         setupPagination();
     }
     private void setupPagination() {
@@ -74,8 +75,8 @@ public class ManagementVisitViewController implements Initializable {
         pgPagination.setPageFactory(this::createPage);
     }
 
-    private VBox createPage(int pageIndex) {
-        VBox pageBox = new VBox();
+    private HBox createPage(int pageIndex) {
+        HBox pageBox = new HBox();
         int startIndex = pageIndex * itemsPerPage;
         int endIndex = Math.min(startIndex + itemsPerPage, prisonerList.size());
 
@@ -83,7 +84,7 @@ public class ManagementVisitViewController implements Initializable {
             Prisoner prisoner = prisonerList.get(i);
             try {
 //                FXMLLoader fxmlLoader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/" + "ItemPrisonerView.fxml")));
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/" + "ItemPrisonerView.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/" + "ItemPrisonerView.fxml"));
                 AnchorPane prisonerItem = fxmlLoader.load();
 
 //                VBox prisonerItem = fxmlLoader.load();
@@ -100,7 +101,7 @@ public class ManagementVisitViewController implements Initializable {
     public void openAddWindow() {
         try {
             // Load FXML file for the new window content
-            AnchorPane newWindowContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/" + "addPrisonerView.fxml")));
+            AnchorPane newWindowContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/prisoner/" + "addPrisonerView.fxml")));
             // Create a new Stage
             Stage newStage = new Stage();
             // Create a new Scene with the new window content

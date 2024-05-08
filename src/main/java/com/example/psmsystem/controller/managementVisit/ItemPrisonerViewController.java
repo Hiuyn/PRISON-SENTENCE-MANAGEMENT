@@ -7,12 +7,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.File;
 
 
 public class ItemPrisonerViewController {
 
+    @FXML
+    private AnchorPane ItemPrisoner;
     @FXML
     private Button btnDelete;
 
@@ -38,7 +41,7 @@ public class ItemPrisonerViewController {
         String id = prisoner.getPrisonerId();
         String name = prisoner.getPrisonerName();
         String imagePath = prisoner.getImagePath();
-
+        int idShow = Integer.parseInt(id);
         try {
             File imageFile;
             if (imagePath != null && !imagePath.isEmpty()) {
@@ -48,7 +51,17 @@ public class ItemPrisonerViewController {
             }
 
             Image image = new Image(imageFile.toURI().toString());
-            prisonerId.setText(id);
+                if (idShow < 10) {
+                    prisonerId.setText("00"+idShow);
+                }
+                else if (idShow < 100) {
+                    prisonerId.setText("0"+idShow);
+                }
+                else
+                {
+                    prisonerId.setText(""+idShow);
+                }
+
             prisonerName.setText(name);
             imagePrisoner.setImage(image);
         } catch (Exception e) {
