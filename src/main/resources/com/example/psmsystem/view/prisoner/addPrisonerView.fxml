@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.managementVisit.AddPrisonerController">
+<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
    <children>
       <TextField fx:id="txtPrisonerFNAdd" layoutX="102.0" layoutY="47.0" promptText="Full name" />
       <Button fx:id="btnAddImage" layoutX="435.0" layoutY="200.0" mnemonicParsing="false" text="Add Image" onAction="#selectImageFile"/>

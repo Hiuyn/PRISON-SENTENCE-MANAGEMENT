@@ -120,7 +120,7 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadManageVisitsView(MouseEvent event) {
-        loadFXML("Prisoner");
+        loadFXML("ManagementVisit");
         setButtonStyle(manageVisits);
     }
 
@@ -132,6 +132,7 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadPrisonerView(MouseEvent event) {
+
         loadFXML("Prisoner");
         setButtonStyle(prisoner);
     }

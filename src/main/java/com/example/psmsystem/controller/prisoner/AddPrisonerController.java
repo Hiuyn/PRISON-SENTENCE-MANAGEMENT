@@ -1,4 +1,4 @@
-package com.example.psmsystem.controller.managementVisit;
+package com.example.psmsystem.controller.prisoner;
 
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
@@ -12,10 +12,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -57,9 +53,6 @@ public class AddPrisonerController {
     String saveImagesPath = "src/main/resources/com/example/psmsystem/imagesPrisoner";
 
     public void setBtnAddPrisonerFinal(ActionEvent event) throws SQLException, IOException {
-
-
-
             if (imgPrisonerAdd.getImage() == null) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Add Prisoner");
@@ -67,7 +60,6 @@ public class AddPrisonerController {
                 alert.setContentText("Please select a prisoner image");
                 alert.showAndWait();
             }
-
             PrisonerDAO prisonerDAO = new PrisonerDAO();
             int id = Integer.parseInt(prisonerId.getText());
             String fullName = txtPrisonerFNAdd.getText();

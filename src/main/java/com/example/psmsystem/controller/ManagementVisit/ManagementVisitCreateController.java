@@ -1,11 +1,11 @@
-package com.example.psmsystem.controller.prisoner;
+package com.example.psmsystem.controller.ManagementVisit;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
-public class PrisonerCreateController {
+public class ManagementVisitCreateController {
 
     @FXML
     void isAdd(ActionEvent event) {

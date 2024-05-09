@@ -48,7 +48,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
                 prisoner.setPrisonerId(String.valueOf(rs.getInt("prisoner_id")));
-                prisoner.setPrisonerName(rs.getString("prisoner_full_name"));
+                prisoner.setPrisonerName(rs.getString("prisoner_name"));
                 prisoner.setImagePath(rs.getString("image_path"));
                 PrisonerList.add(prisoner);
             }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="560.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
+    <children>
+        <TextField fx:id="txtPrisonerFNAdd" layoutX="151.0" layoutY="147.0" promptText="Full name" />
+        <Button fx:id="btnAddImage" layoutX="433.0" layoutY="293.0" mnemonicParsing="false" text="Add Image" />
+        <Button fx:id="btnUpdate" layoutX="252.0" layoutY="479.0" mnemonicParsing="false" text="Update" />
+        <ImageView fx:id="imgPrisonerAdd" fitHeight="150.0" fitWidth="194.0" layoutX="373.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" />
+        <DatePicker fx:id="datePrisonerDOBAdd" layoutX="150.0" layoutY="185.0" prefHeight="26.0" prefWidth="150.0" promptText="Date of birth" />
+        <TextField fx:id="txtContactName" layoutX="151.0" layoutY="267.0" promptText="Contact name" />
+        <TextField fx:id="txtContactPhone" layoutX="151.0" layoutY="306.0" promptText="Contact phone" />
+        <Label layoutX="84.0" layoutY="230.0" text="Sex :" />
+        <RadioButton layoutX="153.0" layoutY="230.0" mnemonicParsing="false" text="Male" />
+        <RadioButton layoutX="214.0" layoutY="230.0" mnemonicParsing="false" text="Female" />
+        <RadioButton layoutX="281.0" layoutY="230.0" mnemonicParsing="false" text="Other" />
+        <Label fx:id="printTest" layoutX="232.0" layoutY="13.0" text="UPDATE">
+            <font>
+                <Font name="System Bold Italic" size="36.0" />
+            </font>
+        </Label>
+        <TextField fx:id="txtPrisonerId" layoutX="151.0" layoutY="111.0" promptText="Id" />
+      <Label layoutX="50.0" layoutY="115.0" text="Prisoner id: " />
+      <Label layoutX="55.0" layoutY="151.0" text="Full name: " />
+      <Label layoutX="47.0" layoutY="190.0" text="Date of birth" />
+      <Label layoutX="41.0" layoutY="271.0" text="Contact name: " />
+      <Label layoutX="39.0" layoutY="310.0" text="Contact phone: " />
+      <TextField fx:id="txtPhysicalCondition" layoutX="150.0" layoutY="344.0" promptText="Physical Condition" />
+      <Label layoutX="39.0" layoutY="348.0" text="Physical Condition: " />
+      <TextField fx:id="txtCrimes" layoutX="151.0" layoutY="381.0" promptText="Crimes" />
+      <Label layoutX="39.0" layoutY="385.0" text="Crimes" />
+    </children>
+</AnchorPane>
