@@ -213,7 +213,7 @@ public class ManagementVisitController implements Initializable {
         // Create a filtered list and predicate
         FilteredList<Prisoner> filteredData = new FilteredList<>(listTable);
         filteredData.setPredicate(prisoner -> {
-            boolean maTNContainsKeyword = maTNKeyword.isEmpty() || prisoner.getPrisonerId().toLowerCase().contains(maTNKeyword);
+            boolean maTNContainsKeyword = maTNKeyword.isEmpty() || prisoner.getPrisonerCode().toLowerCase().contains(maTNKeyword);
 //            boolean nameTNContainsKeyword = nameTNKeyword.isEmpty() || prisoner.getNameTN().toLowerCase().contains(nameTNKeyword);
             return maTNContainsKeyword;
         });

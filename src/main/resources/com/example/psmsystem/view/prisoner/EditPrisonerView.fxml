@@ -9,19 +9,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="560.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
+<AnchorPane prefHeight="560.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
     <children>
         <TextField fx:id="txtPrisonerFNAdd" layoutX="151.0" layoutY="147.0" promptText="Full name" />
-        <Button fx:id="btnAddImage" layoutX="433.0" layoutY="293.0" mnemonicParsing="false" text="Add Image" />
+        <Button fx:id="btnAddImage" layoutX="426.0" layoutY="280.0" mnemonicParsing="false" text="Add Image" />
         <Button fx:id="btnUpdate" layoutX="252.0" layoutY="479.0" mnemonicParsing="false" text="Update" />
-        <ImageView fx:id="imgPrisonerAdd" fitHeight="150.0" fitWidth="194.0" layoutX="373.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="imgPrisonerAdd" fitHeight="150.0" fitWidth="129.0" layoutX="399.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" />
         <DatePicker fx:id="datePrisonerDOBAdd" layoutX="150.0" layoutY="185.0" prefHeight="26.0" prefWidth="150.0" promptText="Date of birth" />
         <TextField fx:id="txtContactName" layoutX="151.0" layoutY="267.0" promptText="Contact name" />
         <TextField fx:id="txtContactPhone" layoutX="151.0" layoutY="306.0" promptText="Contact phone" />
         <Label layoutX="84.0" layoutY="230.0" text="Sex :" />
-        <RadioButton layoutX="153.0" layoutY="230.0" mnemonicParsing="false" text="Male" />
-        <RadioButton layoutX="214.0" layoutY="230.0" mnemonicParsing="false" text="Female" />
-        <RadioButton layoutX="281.0" layoutY="230.0" mnemonicParsing="false" text="Other" />
+        <RadioButton fx:id="rbtnMale" layoutX="153.0" layoutY="230.0" mnemonicParsing="false" text="Male" />
+        <RadioButton fx:id="rbtnFemale" layoutX="214.0" layoutY="230.0" mnemonicParsing="false" text="Female" />
+        <RadioButton fx:id="rbtnOther" layoutX="281.0" layoutY="230.0" mnemonicParsing="false" text="Other" />
         <Label fx:id="printTest" layoutX="232.0" layoutY="13.0" text="UPDATE">
             <font>
                 <Font name="System Bold Italic" size="36.0" />

@@ -19,9 +19,9 @@
       <TextField fx:id="txtContactName" layoutX="102.0" layoutY="213.0" promptText="Contact name" />
       <TextField fx:id="txtContactPhone" layoutX="103.0" layoutY="261.0" promptText="Contact phone" />
        <Label layoutX="103.0" layoutY="166.0" text="Sex :" />
-      <RadioButton layoutX="133.0" layoutY="166.0" mnemonicParsing="false" text="Male" />
-      <RadioButton layoutX="196.0" layoutY="166.0" mnemonicParsing="false" text="Female" />
-      <RadioButton layoutX="274.0" layoutY="166.0" mnemonicParsing="false" text="Other" />
+      <RadioButton layoutX="133.0" layoutY="166.0" mnemonicParsing="false" text="Male" onAction="#rbtnGender"/>
+      <RadioButton layoutX="196.0" layoutY="166.0" mnemonicParsing="false" text="Female" onAction="#rbtnGender" />
+      <RadioButton layoutX="274.0" layoutY="166.0" mnemonicParsing="false" text="Other"  onAction="#rbtnGender"/>
       <Label fx:id="printTest" layoutX="358.0" layoutY="47.0" text="Label">
          <font>
             <Font size="36.0" />

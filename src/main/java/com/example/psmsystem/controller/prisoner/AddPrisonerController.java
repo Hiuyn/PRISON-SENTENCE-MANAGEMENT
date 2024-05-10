@@ -45,12 +45,48 @@ public class AddPrisonerController {
     @FXML
     private Label printTest;
     @FXML
-    private TextField prisonerSexAdd;
+    private RadioButton rbtnFemale;
+
+    @FXML
+    private RadioButton rbtnMale;
+
+    @FXML
+    private RadioButton rbtnOther;
+
     @FXML
     private TextField prisonerId;
 
     private String getRelativePath;
     String saveImagesPath = "src/main/resources/com/example/psmsystem/imagesPrisoner";
+
+    private String gender="null";
+
+    public String rbtnGender()
+    {
+        if (rbtnMale.isSelected())
+        {
+            rbtnFemale.setSelected(false);
+            rbtnOther.setSelected(false);
+            return gender = "male";
+        }
+        else if (rbtnFemale.isSelected()) {
+            rbtnOther.setSelected(false);
+            rbtnMale.setSelected(false);
+            return gender = "Female";
+        }
+        else if (rbtnOther.isSelected()) {
+            rbtnFemale.setSelected(false);
+            rbtnMale.setSelected(false);
+            return gender = "other";
+        }
+        else
+        {
+            rbtnOther.setSelected(false);
+            rbtnFemale.setSelected(false);
+            rbtnMale.setSelected(false);
+            return gender = "null";
+        }
+    }
 
     public void setBtnAddPrisonerFinal(ActionEvent event) throws SQLException, IOException {
             if (imgPrisonerAdd.getImage() == null) {
@@ -66,11 +102,16 @@ public class AddPrisonerController {
             LocalDate Dob = datePrisonerDOBAdd.getValue();
             String contactName = txtContactName.getText();
             String contactPhone = txtContactPhone.getText();
-
+            String genderInsert = gender;
             Prisoner prisoner = new Prisoner();
-            prisoner.setPrisonerId(String.valueOf(id));
+            prisoner.setPrisonerCode(String.valueOf(id));
             prisoner.setPrisonerName(fullName);
-            prisoner.setImagePath("src/main/resources"+getRelativePath);
+            prisoner.setDOB(String.valueOf(Dob));
+            prisoner.setContactName(contactName);
+            prisoner.setContactPhone(contactPhone);
+            prisoner.setGender(gender);
+        System.out.println("Gender :" +gender);
+//            prisoner.setImagePath("src/main/resources"+getRelativePath);
             prisonerDAO.insertPrisonerDB(prisoner);
 
     }

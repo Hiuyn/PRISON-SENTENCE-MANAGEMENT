@@ -44,14 +44,12 @@ public class ItemPrisonerViewController {
     private String fxmlPath = "/com/example/psmsystem/";
     private Prisoner prisonerShowEdit;
 
-    private FXMLLoader getLoader;
-
     public void setPrisonerItem(Prisoner prisoner) {
 
         prisonerShowEdit=prisoner;
 
         String defaultPath = "/com/example/psmsystem/assets/imagesPrisoner/default.png";
-        String id = prisoner.getPrisonerId();
+        String id = prisoner.getPrisonerCode();
         String name = prisoner.getPrisonerName();
         String imagePath = prisoner.getImagePath();
         int idShow = Integer.parseInt(id);
@@ -66,6 +64,7 @@ public class ItemPrisonerViewController {
             }
 
             Image image = new Image(imageFile.toURI().toString());
+
                 if (idShow < 10) {
                     prisonerId.setText("00"+idShow);
                 }
@@ -82,45 +81,14 @@ public class ItemPrisonerViewController {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-
     }
-
-//    public void btnEditOnAction() {
-//        try {
-//
-////            AnchorPane loader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/prisoner/" + "EditPrisonerView.fxml")));
-////            AnchorPane newWindowContent = loader;
-//
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/EditPrisonerView.fxml"));
-//            AnchorPane newWindowContent = loader.load();
-//
-//            EditPrisonerController editPrisonerController = loader.getController();
-//            editPrisonerController.setPrisonerEdit(prisonerShowEdit);
-//
-//            Stage newStage = new Stage();
-//            // Create a new Scene with the new window content
-//            Scene scene = new Scene(newWindowContent);
-//            // Set the Scene to the Stage
-//            newStage.setScene(scene);
-//            // Set modality to APPLICATION_MODAL to block interactions with other windows
-//            newStage.initModality(Modality.APPLICATION_MODAL);
-//            // Set the title of the Stage
-//            newStage.setTitle("New Window");
-//            // Show the Stage
-//            newStage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 public void btnEditOnAction() {
     try {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/EditPrisonerView.fxml"));
         AnchorPane newWindowContent = loader.load();
-//
-//        EditPrisonerController editPrisonerController = loader.getController();
-//        editPrisonerController.setPrisonerEdit(prisonerShowEdit); // Truyền thông tin về tù nhân cần chỉnh sửa
 
-        this.getLoader=loader;
+        EditPrisonerController editPrisonerController = loader.getController();
+        editPrisonerController.setPrisonerEdit(prisonerShowEdit); // Truyền thông tin về tù nhân cần chỉnh sửa
         Stage newStage = new Stage();
         Scene scene = new Scene(newWindowContent);
         newStage.setScene(scene);
@@ -133,31 +101,9 @@ public void btnEditOnAction() {
 }
     @FXML
     void loadEditPrisonerView(ActionEvent event) {
-
         btnEditOnAction();
-
-        if (this.getLoader==null)
-        {
-          this.getLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/EditPrisonerView.fxml"));
-        }
-        System.out.println("this get loader: " +this.getLoader);
-        EditPrisonerController editPrisonerController = this.getLoader.getController();
-        editPrisonerController.setPrisonerEdit(prisonerShowEdit); // Truyền thông tin về tù nhân cần chỉnh sửa
-//        if (this.getLoader==null)
-//        {
-//          this.getLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/EditPrisonerView.fxml"));
-//        }
-//        System.out.println("this get loader: " +this.getLoader);
-//        EditPrisonerController editPrisonerController = this.getLoader.getController();
-//        editPrisonerController.setPrisonerEdit(prisonerShowEdit); // Truyền thông tin về tù nhân cần chỉnh sửa
-//        System.out.println("prisoner edit: " + prisonerShowEdit);
-
     }
 
-//    public Prisoner getPrisonerShowEdit()
-//    {
-//        return prisonerShowEdit;
-//    }
     public void btnDeleteOnAction(ActionEvent actionEvent) {}
 
 }

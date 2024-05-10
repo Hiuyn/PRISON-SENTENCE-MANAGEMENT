@@ -1,20 +1,20 @@
 package com.example.psmsystem.controller.prisoner;
 
 import com.example.psmsystem.model.prisoner.Prisoner;
-import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.File;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class EditPrisonerController implements Initializable {
+public class EditPrisonerController  implements Initializable {
 
     @FXML
     private Button btnAddImage;
@@ -65,20 +65,34 @@ public class EditPrisonerController implements Initializable {
 //    }
 
     public void setPrisonerEdit(Prisoner prisoner) {
+
         this.prisonerEdit = prisoner;
+        setInformation();
 
     }
 
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Sử dụng thông tin về tù nhân cần chỉnh sửa để cập nhật giao diện
-        if (this.prisonerEdit != null) {
-            txtPrisonerId.setText(this.prisonerEdit.getPrisonerId());
-            txtPrisonerFNAdd.setText(this.prisonerEdit.getPrisonerName());
-            // Cập nhật các trường thông tin khác tương ứng
+
+    public void setInformation() {
+        String defaultPath = "/com/example/psmsystem/assets/imagesPrisoner/default.png";
+        if (prisonerEdit != null) {
+            String imagePath = prisonerEdit.getImagePath();
+            File imageFile;
+            if (imagePath != null && !imagePath.isEmpty()) {
+                imageFile = new File(imagePath);
+            } else {
+                imageFile = new File(defaultPath);
+            }
+
+            Image image = new Image(imageFile.toURI().toString());
+            txtPrisonerId.setText(prisonerEdit.getPrisonerCode());
+            txtPrisonerFNAdd.setText(prisonerEdit.getPrisonerName());
+            imgPrisonerAdd.setImage(image);
         }
-        else
-        {
-            System.out.println("Edit prisoner edit: "+ null);
-        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        setInformation();
     }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrisonerDAO implements IPrisonerDao<Prisoner> {
-    private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_full_name, image_path) VALUES (?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners";
@@ -28,7 +28,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
-                prisoner.setPrisonerId(rs.getString("maTN"));
+                prisoner.setPrisonerCode(rs.getString("maTN"));
                 prisoner.setPrisonerName(rs.getString("nameTN"));
                 userList.add(prisoner);
             }
@@ -47,7 +47,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
-                prisoner.setPrisonerId(String.valueOf(rs.getInt("prisoner_id")));
+                prisoner.setPrisonerCode(String.valueOf(rs.getInt("prisoner_id")));
                 prisoner.setPrisonerName(rs.getString("prisoner_name"));
                 prisoner.setImagePath(rs.getString("image_path"));
                 PrisonerList.add(prisoner);
@@ -63,9 +63,13 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
-            ps.setString(1,prisoner.getPrisonerId());
+            ps.setString(1,prisoner.getPrisonerCode());
             ps.setString(2,prisoner.getPrisonerName());
-            ps.setString(3,prisoner.getImagePath());
+            ps.setString(3,prisoner.getDOB());
+            ps.setString(4,prisoner.getGender());
+            ps.setString(5,prisoner.getContactName());
+            ps.setString(6,prisoner.getContactPhone());
+            ps.setString(7,prisoner.getImagePath());
             int rowAffected = ps.executeUpdate();
             if (rowAffected>0)
             {
