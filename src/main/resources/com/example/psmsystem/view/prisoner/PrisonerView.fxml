@@ -23,9 +23,9 @@
                      <children>
                         <AnchorPane prefHeight="134.0" prefWidth="1290.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="234.0" prefWidth="1692.0" spacing="10.0" styleClass="bgAnchorPane" stylesheets="@../../css/ManagementVisit.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <HBox alignment="CENTER" prefHeight="234.0" prefWidth="1692.0" spacing="10.0" styleClass="bgAnchorPane" stylesheets="@../../css/prisoner.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <AnchorPane fx:id="totalPrisonerFun" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="276.0" styleClass="card" stylesheets="@../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
+                                    <AnchorPane fx:id="totalPrisonerFun" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="276.0" styleClass="card" stylesheets="@../../css/prisoner.css" HBox.hgrow="ALWAYS">
                                        <children>
                                           <ImageView fitHeight="146.0" fitWidth="121.0" layoutX="141.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -38,7 +38,7 @@
                                              </font></Label>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane fx:id="viewAllFun" prefHeight="243.0" prefWidth="191.0" styleClass="card" stylesheets="@../../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
+                                    <AnchorPane fx:id="viewAllFun" prefHeight="243.0" prefWidth="191.0" styleClass="card" stylesheets="@../../css/prisoner.css" HBox.hgrow="ALWAYS">
                                        <children>
                                           <ImageView fitHeight="115.0" fitWidth="141.0" layoutX="148.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -52,7 +52,7 @@
                                           </Label>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane fx:id="printListFun" styleClass="card" stylesheets="@../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
+                                    <AnchorPane fx:id="printListFun" styleClass="card" stylesheets="@../../css/prisoner.css" HBox.hgrow="ALWAYS">
                                        <children>
                                           <ImageView fitHeight="130.0" fitWidth="119.0" layoutX="160.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -65,7 +65,7 @@
                                              </font></Label>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane styleClass="card" stylesheets="@../../css/ManagementVisit.css" HBox.hgrow="ALWAYS">
+                                    <AnchorPane styleClass="card" stylesheets="@../../css/prisoner.css" HBox.hgrow="ALWAYS">
                                        <children>
                                           <ImageView fitHeight="141.0" fitWidth="121.0" layoutX="157.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -89,7 +89,7 @@
                         <AnchorPane prefHeight="648.0" prefWidth="1692.0" styleClass="bgAnchorPane" stylesheets="@../../css/ManagementVisit.css">
                            <TextField fx:id="txtSearch" layoutX="1307.0" layoutY="14.0" prefHeight="25.0" prefWidth="307.0" promptText="Type into search" />
                            <Button fx:id="btnSearch" layoutX="1629.0" layoutY="14.0" mnemonicParsing="false" styleClass="btnSearch" stylesheets="@../css/ManagementVisit.css" text="search" />
-                           <Pagination fx:id="pgPagination" layoutY="56.0" prefHeight="580.0" prefWidth="1693.0" styleClass="btnSearch" stylesheets="@../css/ManagementVisit.css" />
+                           <Pagination fx:id="pgPagination" layoutY="56.0" prefHeight="580.0" prefWidth="1693.0" styleClass="btnSearch" stylesheets="@../../css/prisoner.css" />
                            <Button fx:id="btnAdd" layoutX="32.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadAddPrisonerView" text="Add" />
                            <Button fx:id="btnViewAll" layoutX="104.0" layoutY="14.0" mnemonicParsing="false" text="ViewAll" />
                            <Button fx:id="btnExport" layoutX="176.0" layoutY="14.0" mnemonicParsing="false" text="Export" />

@@ -65,7 +65,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
             ps.setString(1,prisoner.getPrisonerCode());
             ps.setString(2,prisoner.getPrisonerName());
-            ps.setString(3,prisoner.getDOB());
+            ps.setString(3, prisoner.getDOB());
             ps.setString(4,prisoner.getGender());
             ps.setString(5,prisoner.getContactName());
             ps.setString(6,prisoner.getContactPhone());
