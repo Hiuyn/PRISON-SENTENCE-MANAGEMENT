@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +27,7 @@ public class MainPanel extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("view/LoginView.fxml"));
         Scene scene = new Scene(root);
         stage.setMaximized(false);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle("User Login");
         stage.setScene(scene);
         stage.getIcons().add(new Image("file: /com/example/psmsystem/assets/icon.png"));
@@ -37,6 +39,5 @@ public class MainPanel extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-
     }
 }

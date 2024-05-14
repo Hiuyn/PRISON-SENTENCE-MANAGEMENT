@@ -7,6 +7,7 @@ import com.example.psmsystem.service.userDao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -123,5 +124,11 @@ public class LoginController implements Initializable{
         stage.getIcons().add(new Image("file: " + fxmlPath + "assets/icon.png"));
         stage.show();
     }
+
+    public void onBtnCloseClick(ActionEvent event) throws IOException {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
+    }
+
 
 }
