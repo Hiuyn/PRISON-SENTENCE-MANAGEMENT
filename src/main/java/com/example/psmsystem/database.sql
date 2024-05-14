@@ -16,6 +16,7 @@ create table prisoners(
      date_birth date not null,
      gender enum('male','female','other') not null,
      contact_name nvarchar(50),
+
      contact_phone nvarchar(15),
      image_path text not null
 );
