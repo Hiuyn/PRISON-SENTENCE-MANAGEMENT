@@ -22,4 +22,5 @@ module com.example.psmsystem {
 
     exports com.example.psmsystem.controller.prisoner;
     opens com.example.psmsystem.controller.prisoner;
+    opens com.example.psmsystem.model.managementvisit to javafx.base;
 }
