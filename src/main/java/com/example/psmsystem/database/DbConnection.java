@@ -30,8 +30,10 @@ public class DbConnection {
         }
     }
 
-    public static DbConnection getDatabaseConnection() {
+    public static DbConnection getDatabaseConnection() throws SQLException {
         if (dbc == null) {
+            dbc = new DbConnection();
+        } else if (dbc.getConnection().isClosed()) {
             dbc = new DbConnection();
         }
         return dbc;

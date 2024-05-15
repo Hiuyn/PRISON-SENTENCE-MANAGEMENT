@@ -3,6 +3,8 @@ package com.example.psmsystem.service.prisonerDAO;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
@@ -19,7 +21,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
     @Override
     public List<Prisoner> getAllPrisoner() {
-        List<Prisoner> userList = new ArrayList<>();
+        List<Prisoner> prisonerList = new ArrayList<>();
         try {
 
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
@@ -28,14 +30,20 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
-                prisoner.setPrisonerCode(rs.getString("maTN"));
-                prisoner.setPrisonerName(rs.getString("nameTN"));
-                userList.add(prisoner);
+                prisoner.setPrisonerCode(rs.getString("prisoner_code"));
+                prisoner.setPrisonerName(rs.getString("prisoner_name"));
+                prisoner.setDOB(rs.getString("date_birth"));
+                prisoner.setGender(rs.getString("gender"));
+                prisoner.setContactName(rs.getString("contact_name"));
+                prisoner.setContactPhone(rs.getString("contact_phone"));
+                prisoner.setImagePath(rs.getString("image_path"));
+
+                prisonerList.add(prisoner);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return userList;
+        return prisonerList;
     }
     public List<Prisoner> getPrisonerInItem() {
         List<Prisoner> PrisonerList = new ArrayList<>();
@@ -58,6 +66,13 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         return PrisonerList;
     }
 
+    @Override
+    public ObservableList<Prisoner> getPrisonerName() {
+        List<Prisoner> prisoners = getAllPrisoner();
+        ObservableList<Prisoner> prisonerList = FXCollections.observableArrayList(prisoners);
+        return prisonerList;
+    }
+
     public void insertPrisonerDB(Prisoner prisoner)
     {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
@@ -70,6 +85,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             ps.setString(5,prisoner.getContactName());
             ps.setString(6,prisoner.getContactPhone());
             ps.setString(7,prisoner.getImagePath());
+
             int rowAffected = ps.executeUpdate();
             if (rowAffected>0)
             {

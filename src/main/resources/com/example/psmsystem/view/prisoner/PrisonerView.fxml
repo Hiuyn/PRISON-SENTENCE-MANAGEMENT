@@ -85,10 +85,10 @@
                               </HBox>
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="0.0" prefWidth="1692.0" stylesheets="@../../css/ManagementVisit.css" />
-                        <AnchorPane prefHeight="648.0" prefWidth="1692.0" styleClass="bgAnchorPane" stylesheets="@../../css/ManagementVisit.css">
+                        <AnchorPane prefHeight="0.0" prefWidth="1692.0" stylesheets="@../../css/prisoner.css" />
+                        <AnchorPane prefHeight="648.0" prefWidth="1692.0" styleClass="bgAnchorPane" stylesheets="@../../css/prisoner.css">
                            <TextField fx:id="txtSearch" layoutX="1307.0" layoutY="14.0" prefHeight="25.0" prefWidth="307.0" promptText="Type into search" />
-                           <Button fx:id="btnSearch" layoutX="1629.0" layoutY="14.0" mnemonicParsing="false" styleClass="btnSearch" stylesheets="@../css/ManagementVisit.css" text="search" />
+                           <Button fx:id="btnSearch" layoutX="1629.0" layoutY="14.0" mnemonicParsing="false" styleClass="btnSearch" stylesheets="@../../css/prisoner.css" text="search" />
                            <Pagination fx:id="pgPagination" layoutY="56.0" prefHeight="580.0" prefWidth="1693.0" styleClass="btnSearch" stylesheets="@../../css/prisoner.css" />
                            <Button fx:id="btnAdd" layoutX="32.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadAddPrisonerView" text="Add" />
                            <Button fx:id="btnViewAll" layoutX="104.0" layoutY="14.0" mnemonicParsing="false" text="ViewAll" />

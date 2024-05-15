@@ -98,7 +98,6 @@ public class AddPrisonerController implements Initializable {
             prisoner.setContactName(contactName);
             prisoner.setContactPhone(contactPhone);
             prisoner.setGender(selectedRadioButtonText);
-//        System.out.println("Gender :" +);
             prisoner.setImagePath("src/main/resources"+getRelativePath);
             prisonerDAO.insertPrisonerDB(prisoner);
     }

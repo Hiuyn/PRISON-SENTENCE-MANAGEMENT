@@ -72,7 +72,6 @@ public class MainPanelController implements Initializable {
             else{
                 pathFileNmae = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
             }
-            System.out.println(pathFileNmae);
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pathFileNmae)));
             borderPane.setCenter(root);
             dashboard.getScene().getWindow();
@@ -114,7 +113,7 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadHealthView(MouseEvent event) {
-        loadFXML("Dashboard");
+        loadFXML("Health");
         setButtonStyle(health);
     }
 
