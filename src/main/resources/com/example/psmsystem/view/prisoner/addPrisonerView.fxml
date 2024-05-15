@@ -10,30 +10,73 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
+
+<?import org.controlsfx.control.CheckComboBox?>
+
+<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="667.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
    <children>
-      <TextField fx:id="txtPrisonerFNAdd" layoutX="102.0" layoutY="47.0" promptText="Full name" />
-      <Button fx:id="btnAddImage" layoutX="435.0" layoutY="200.0" mnemonicParsing="false" onAction="#selectImageFile" text="Add Image" />
-      <Button fx:id="btnAddPrisonerFinal" layoutX="117.0" layoutY="325.0" mnemonicParsing="false" onAction="#setBtnAddPrisonerFinal" text="Add" />
-      <ImageView fx:id="imgPrisonerAdd" fitHeight="150.0" fitWidth="194.0" layoutX="372.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true" />
-      <DatePicker fx:id="datePrisonerDOBAdd" layoutX="102.0" layoutY="131.0" prefHeight="26.0" prefWidth="150.0" promptText="Date of birth" />
-      <TextField fx:id="txtContactName" layoutX="102.0" layoutY="213.0" promptText="Contact name" />
-      <TextField fx:id="txtContactPhone" layoutX="103.0" layoutY="261.0" promptText="Contact phone" />
-       <Label layoutX="36.0" layoutY="181.0" text="Sex :" />
-      <Label fx:id="printTest" layoutX="358.0" layoutY="47.0" text="Label">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <TextField fx:id="prisonerId" layoutX="102.0" layoutY="14.0" promptText="Id" />
-      <HBox layoutX="86.0" layoutY="175.0" prefHeight="30.0" prefWidth="233.0">
+      <AnchorPane layoutX="43.0" layoutY="28.0" prefHeight="281.0" prefWidth="515.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css">
          <children>
-      <!--      <HBox fx:id="tnGender" layoutX="171.0" layoutY="169.0" prefHeight="30.0" prefWidth="226.0" >-->
-                  <RadioButton fx:id="rbtnMale" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="Male" />
-                  <RadioButton fx:id="rbtnFemale" mnemonicParsing="false" prefHeight="30.0" prefWidth="86.0" text="Female" />
-                  <RadioButton fx:id="rbtnOther" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Other" />
+            <ImageView fx:id="imgPrisonerAdd" fitHeight="141.0" fitWidth="164.0" layoutX="331.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" />
+            <TextField fx:id="prisonerId" layoutX="212.0" layoutY="60.0" prefHeight="26.0" prefWidth="103.0" promptText="Id" />
+            <TextField fx:id="txtPrisonerFNAdd" layoutX="31.0" layoutY="60.0" promptText="Full name" />
+            <HBox layoutX="82.0" layoutY="102.0" prefHeight="30.0" prefWidth="233.0">
+               <children>
+            <!--      <HBox fx:id="tnGender" layoutX="171.0" layoutY="169.0" prefHeight="30.0" prefWidth="226.0" >-->
+                        <RadioButton fx:id="rbtnMale" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="Male" />
+                        <RadioButton fx:id="rbtnFemale" mnemonicParsing="false" prefHeight="30.0" prefWidth="86.0" text="Female" />
+                        <RadioButton fx:id="rbtnOther" mnemonicParsing="false" prefHeight="29.0" prefWidth="77.0" text="Other" />
+               </children>
+            </HBox>
+             <Label layoutX="31.0" layoutY="108.0" text="Sex :" />
+            <Button fx:id="btnAddImage" layoutX="363.0" layoutY="192.0" mnemonicParsing="false" onAction="#selectImageFile" styleClass="buttonAddImg" stylesheets="@../../css/addPrisoner.css" text="Add Image" />
+            <TextField fx:id="txtContactName" layoutX="31.0" layoutY="204.0" prefHeight="26.0" prefWidth="200.0" promptText="Contact name" />
+            <TextField fx:id="txtContactPhone" layoutX="179.0" layoutY="142.0" prefHeight="26.0" prefWidth="136.0" promptText="Contact phone" />
+            <Label layoutX="27.0" layoutY="14.0" prefHeight="26.0" prefWidth="152.0" text="Prisoner information">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="datePrisonerDOBAdd" layoutX="31.0" layoutY="142.0" prefHeight="26.0" prefWidth="136.0" promptText="Date of birth" />
          </children>
-      </HBox>
+      </AnchorPane>
+      <AnchorPane layoutX="81.0" layoutY="334.0" prefHeight="257.0" prefWidth="438.0" styleClass="sentenceForm" stylesheets="@../../css/addPrisoner.css">
+         <children>
+            <CheckComboBox fx:id="ccbCrimes" title="Crimes"/>
+            <TextField fx:id="prisonerId1" layoutX="252.0" layoutY="14.0" prefHeight="26.0" prefWidth="152.0" promptText="Id" />
+            <HBox fx:id="rbtnSentenceType" layoutX="148.0" layoutY="63.0" prefHeight="30.0" prefWidth="256.0">
+               <children>
+                  <RadioButton fx:id="rbtnUnlimited" mnemonicParsing="false" prefHeight="30.0" prefWidth="151.0" text="Life imprisonment" />
+                  <RadioButton fx:id="rbtnLimited" mnemonicParsing="false" prefHeight="30.0" prefWidth="109.0" text="limited time" />
+               </children>
+            </HBox>
+            <Label layoutX="37.0" layoutY="69.0" text="Sentence type:" />
+            <Label layoutX="27.0" layoutY="14.0" prefHeight="26.0" prefWidth="164.0" text="Sentence information">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="dateIn" layoutX="33.0" layoutY="116.0" prefHeight="26.0" prefWidth="152.0" promptText="Start date" />
+            <DatePicker fx:id="dateOut" layoutX="252.0" layoutY="116.0" prefHeight="26.0" prefWidth="152.0" promptText="End date" />
+            <TextField fx:id="txtCrimesAdd" layoutX="254.0" layoutY="169.0" prefHeight="26.0" prefWidth="87.0" promptText="Add cirimes " />
+            <Button fx:id="btnAddCrimes" layoutX="350.0" layoutY="170.0" mnemonicParsing="false" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Add" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="236.0" layoutY="602.0" prefHeight="30.0" prefWidth="148.0">
+         <children>
+            <Button fx:id="btnBack" layoutY="-1.0" mnemonicParsing="false" onAction="#back" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Back">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnAddPrisonerFinal" layoutX="81.0" layoutY="-1.0" mnemonicParsing="false" onAction="#setBtnAddPrisonerFinal" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Create">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
 <!--      </HBox>-->
    </children>
+
 </AnchorPane>

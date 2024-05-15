@@ -17,7 +17,6 @@ create table prisoners(
      date_birth date not null,
      gender enum('male','female','other') not null,
      contact_name nvarchar(50),
-
      contact_phone nvarchar(15),
      image_path text not null
 );
@@ -33,7 +32,6 @@ VALUES
 (108, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png'),
 (109, 'Phạm Văn I', '1983-11-17', 'female', 'Lê Thị J', '0654789123', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
 (110, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png');
-=======
 create table prisoners(
   prisoner_id int primary key auto_increment,
   prisoner_code int not null unique,
@@ -56,7 +54,6 @@ VALUES
     (108, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img.png'),
     (109, 'Phạm Văn I', '1983-11-17', 'female', 'Lê Thị J', '0654789123', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
     (110, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img.png');
->>>>>>> Stashed changes
 
 create table incareration_process(
      process_id int primary key auto_increment,
@@ -130,11 +127,10 @@ VALUES
 
 create table sentences(
   sentence_id int primary key auto_increment,
-  sentence_code int not null,
   prisoner_code int not null,
-  sentence_type enum ("life imprisonment",'limited time'),
+  sentence_type enum ("life_imprisonment",'limited_time'),
   start_date date default (curdate()),
-  end_date date,   -- if any
+  end_date date,   
   status nvarchar(50),
   parole_eligibility text,
   foreign key (prisoner_code) references prisoners(prisoner_code)
@@ -151,24 +147,24 @@ VALUES
     (8, 108, 'limited time', '2027-08-30', '2037-08-30', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 7 năm'),
     (9, 109, 'limited time', '2028-09-10', '2038-09-10', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 6 năm'),
     (10, 110, 'limited time', '2029-10-15', '2039-10-15', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 4 năm');
-
+use prisoner_sentence
 ALTER TABLE sentences
     ADD INDEX idx_sentence_code (sentence_code);
 create table crimes(
    crime_id int primary key auto_increment,
-   note text,
-   foreign key (crime_id) references sentences(sentence_code)
+   crime_name nvarchar(255),
+   note text
 );
 
-INSERT INTO crimes (note)
+INSERT INTO crimes (crime_name)
 VALUES
-    ('Tội danh 1'),
-    ('Tội danh 2'),
-    ('Tội danh 3'),
-    ('Tội danh 4'),
-    ('Tội danh 5'),
-    ('Tội danh 6'),
-    ('Tội danh 7'),
+    ('Cướp của'),
+    ('Giết người'),
+    ('Hành hung'),
+    ('Trộm'),
+    ('Bạo hành'),
+    ('Cố ý gây thương tích'),
+    ('Nhận hối lộ'),
     ('Tội danh 8'),
     ('Tội danh 9'),
     ('Tội danh 10');

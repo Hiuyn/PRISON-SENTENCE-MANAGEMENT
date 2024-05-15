@@ -1,0 +1,37 @@
+.formAdd
+{
+    -fx-background-radius: 5px;
+    -fx-background-color: #efefef;
+}
+.prisonerForm
+{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-boder-radius:solid 2px black ;
+}
+
+.sentenceForm
+{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-boder-radius:solid 2px black ;
+}
+.buttonControl
+{
+    -fx-max-width: 120px;
+    -fx-max-height: 25px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-background-color: #b3b3b3;
+}
+
+.buttonAddImg
+{
+    -fx-max-width: 120px;
+    -fx-max-height: 25px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-background-color: #b3b3b3;
+}

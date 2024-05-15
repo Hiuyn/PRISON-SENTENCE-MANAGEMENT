@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -108,6 +109,7 @@ public class PrisonerController implements Initializable {
             Scene scene = new Scene(newWindowContent);
             // Set the Scene to the Stage
             newStage.setScene(scene);
+            newStage.initStyle(StageStyle.UNDECORATED);
             // Set modality to APPLICATION_MODAL to block interactions with other windows
             newStage.initModality(Modality.APPLICATION_MODAL);
             // Set the title of the Stage

@@ -11,6 +11,7 @@ module com.example.psmsystem {
     requires java.sql;
     requires MaterialFX;
     requires java.sql.rowset;
+    requires jdk.compiler;
 
     opens com.example.psmsystem to javafx.fxml;
     exports com.example.psmsystem;
@@ -27,4 +28,6 @@ module com.example.psmsystem {
     exports com.example.psmsystem.controller.health;
     opens com.example.psmsystem.controller.health to javafx.fxml;
     opens com.example.psmsystem.model.health to javafx.base;
+
+
 }

@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,6 +93,7 @@ public void btnEditOnAction() {
         Stage newStage = new Stage();
         Scene scene = new Scene(newWindowContent);
         newStage.setScene(scene);
+        newStage.initStyle(StageStyle.UNDECORATED);
         newStage.initModality(Modality.APPLICATION_MODAL);
         newStage.setTitle("Edit Prisoner");
         newStage.show();

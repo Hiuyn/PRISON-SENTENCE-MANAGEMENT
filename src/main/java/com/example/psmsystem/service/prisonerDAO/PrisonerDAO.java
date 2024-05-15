@@ -16,6 +16,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners";
+    private static final String SELECT_BY_CRIMES = "SELECT * FROM crimes";
 //    private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoner";
 ////    private static final String INSERT_INTO_PRISONER_QUERY = "INSERT INTO  prisoner VALUES (prisonerId = ?)";
 
@@ -102,5 +103,23 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public List<String> getCrimes()
+    {
+        List<String> crimesList = new ArrayList<>();
+        try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
+        {
+            PreparedStatement ps = connection.prepareStatement(SELECT_BY_CRIMES);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next())
+            {
+                crimesList.add(rs.getString("crime_name"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return crimesList;
     }
 }
