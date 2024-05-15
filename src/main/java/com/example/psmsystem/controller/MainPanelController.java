@@ -113,7 +113,7 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadHealthView(MouseEvent event) {
-        loadFXML("Dashboard");
+        loadFXML("Health");
         setButtonStyle(health);
     }
 
