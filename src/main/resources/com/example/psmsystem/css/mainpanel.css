@@ -94,3 +94,41 @@ and open the template in the editor.
     -fx-border-width: .5px;
     -fx-padding: 10px;
 }
+
+.shadow{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.4), 6,0,0,0);
+}
+.text-center{
+    -fx-alignment: CENTER;
+}
+
+/**************************************************
+ * Filter Combos
+**************************************************/
+#customFilter {
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-background-color: #007BF6;
+    -fx-text-fill: white;
+
+    -fx-padding: 4;
+    -fx-background-insets: 0;
+}
+
+#customFilter .text-field {
+    -fx-prompt-text-fill: white;
+}
+
+#customFilter .combo-popup .text-field {
+    -fx-prompt-text-fill: -mfx-text-me;
+}
+
+#customFilter .caret .mfx-font-icon {
+    -mfx-color: #FF794B;
+    -mfx-description: "fas-angle-down";
+    -mfx-size: 16;
+}
+
+#customFilter .caret .mfx-ripple-generator {
+    -mfx-ripple-color: rgba(255, 255, 255, 0.5);
+}

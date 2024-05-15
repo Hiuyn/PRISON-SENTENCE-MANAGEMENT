@@ -7,26 +7,33 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
    <children>
       <TextField fx:id="txtPrisonerFNAdd" layoutX="102.0" layoutY="47.0" promptText="Full name" />
-      <Button fx:id="btnAddImage" layoutX="435.0" layoutY="200.0" mnemonicParsing="false" text="Add Image" onAction="#selectImageFile"/>
+      <Button fx:id="btnAddImage" layoutX="435.0" layoutY="200.0" mnemonicParsing="false" onAction="#selectImageFile" text="Add Image" />
       <Button fx:id="btnAddPrisonerFinal" layoutX="117.0" layoutY="325.0" mnemonicParsing="false" onAction="#setBtnAddPrisonerFinal" text="Add" />
       <ImageView fx:id="imgPrisonerAdd" fitHeight="150.0" fitWidth="194.0" layoutX="372.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true" />
       <DatePicker fx:id="datePrisonerDOBAdd" layoutX="102.0" layoutY="131.0" prefHeight="26.0" prefWidth="150.0" promptText="Date of birth" />
       <TextField fx:id="txtContactName" layoutX="102.0" layoutY="213.0" promptText="Contact name" />
       <TextField fx:id="txtContactPhone" layoutX="103.0" layoutY="261.0" promptText="Contact phone" />
-       <Label layoutX="103.0" layoutY="166.0" text="Sex :" />
-      <RadioButton layoutX="133.0" layoutY="166.0" mnemonicParsing="false" text="Male" onAction="#rbtnGender"/>
-      <RadioButton layoutX="196.0" layoutY="166.0" mnemonicParsing="false" text="Female" onAction="#rbtnGender" />
-      <RadioButton layoutX="274.0" layoutY="166.0" mnemonicParsing="false" text="Other"  onAction="#rbtnGender"/>
+       <Label layoutX="36.0" layoutY="181.0" text="Sex :" />
       <Label fx:id="printTest" layoutX="358.0" layoutY="47.0" text="Label">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
       <TextField fx:id="prisonerId" layoutX="102.0" layoutY="14.0" promptText="Id" />
+      <HBox layoutX="86.0" layoutY="175.0" prefHeight="30.0" prefWidth="233.0">
+         <children>
+      <!--      <HBox fx:id="tnGender" layoutX="171.0" layoutY="169.0" prefHeight="30.0" prefWidth="226.0" >-->
+                  <RadioButton fx:id="rbtnMale" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="Male" />
+                  <RadioButton fx:id="rbtnFemale" mnemonicParsing="false" prefHeight="30.0" prefWidth="86.0" text="Female" />
+                  <RadioButton fx:id="rbtnOther" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Other" />
+         </children>
+      </HBox>
+<!--      </HBox>-->
    </children>
 </AnchorPane>

@@ -4,6 +4,7 @@ import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,11 +13,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class AddPrisonerController {
+public class AddPrisonerController implements Initializable {
     @FXML
     private TextField txtContactName;
 
@@ -44,6 +47,10 @@ public class AddPrisonerController {
 
     @FXML
     private Label printTest;
+
+    @FXML
+    private ToggleGroup tgGender;
+
     @FXML
     private RadioButton rbtnFemale;
 
@@ -57,36 +64,12 @@ public class AddPrisonerController {
     private TextField prisonerId;
 
     private String getRelativePath;
+
+    private boolean imageSelected = false;
+
     String saveImagesPath = "src/main/resources/com/example/psmsystem/imagesPrisoner";
 
-    private String gender="null";
 
-    public String rbtnGender()
-    {
-        if (rbtnMale.isSelected())
-        {
-            rbtnFemale.setSelected(false);
-            rbtnOther.setSelected(false);
-            return gender = "male";
-        }
-        else if (rbtnFemale.isSelected()) {
-            rbtnOther.setSelected(false);
-            rbtnMale.setSelected(false);
-            return gender = "Female";
-        }
-        else if (rbtnOther.isSelected()) {
-            rbtnFemale.setSelected(false);
-            rbtnMale.setSelected(false);
-            return gender = "other";
-        }
-        else
-        {
-            rbtnOther.setSelected(false);
-            rbtnFemale.setSelected(false);
-            rbtnMale.setSelected(false);
-            return gender = "null";
-        }
-    }
 
     public void setBtnAddPrisonerFinal(ActionEvent event) throws SQLException, IOException {
             if (imgPrisonerAdd.getImage() == null) {
@@ -97,27 +80,28 @@ public class AddPrisonerController {
                 alert.showAndWait();
             }
             PrisonerDAO prisonerDAO = new PrisonerDAO();
+
+            RadioButton selectedRadioButton = (RadioButton) tgGender.getSelectedToggle();
+            String selectedRadioButtonText = selectedRadioButton.getText();
+
             int id = Integer.parseInt(prisonerId.getText());
             String fullName = txtPrisonerFNAdd.getText();
             LocalDate Dob = datePrisonerDOBAdd.getValue();
             String contactName = txtContactName.getText();
             String contactPhone = txtContactPhone.getText();
-            String genderInsert = gender;
             Prisoner prisoner = new Prisoner();
             prisoner.setPrisonerCode(String.valueOf(id));
             prisoner.setPrisonerName(fullName);
             prisoner.setDOB(String.valueOf(Dob));
             prisoner.setContactName(contactName);
             prisoner.setContactPhone(contactPhone);
-            prisoner.setGender(gender);
-        System.out.println("Gender :" +gender);
-//            prisoner.setImagePath("src/main/resources"+getRelativePath);
+            prisoner.setGender(selectedRadioButtonText);
+            prisoner.setImagePath("src/main/resources"+getRelativePath);
             prisonerDAO.insertPrisonerDB(prisoner);
-
     }
 
     // Tạo một biến để kiểm tra xem đã chọn ảnh hay chưa
-    private boolean imageSelected = false;
+
 
     public String selectImageFile() throws SQLException, IOException {
         if (!imageSelected) {
@@ -161,6 +145,11 @@ public class AddPrisonerController {
         return null;
     }
 
-
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        tgGender = new ToggleGroup();
+        rbtnMale.setToggleGroup(tgGender);
+        rbtnFemale.setToggleGroup(tgGender);
+        rbtnOther.setToggleGroup(tgGender);
+    }
 }

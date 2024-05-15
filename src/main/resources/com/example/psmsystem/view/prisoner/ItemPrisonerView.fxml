@@ -6,16 +6,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="ItemPrisoner" maxHeight="200" maxWidth="400" prefHeight="150.0" prefWidth="223.0" styleClass="itemBackground" stylesheets="@../../css/ManagementVisit.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.ItemPrisonerViewController">
+<AnchorPane fx:id="ItemPrisoner" maxHeight="200.0" maxWidth="270.0" prefHeight="150.0" prefWidth="270.0" styleClass="itemBackground" stylesheets="@../../css/prisoner.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.ItemPrisonerViewController">
    <children>
-      <ImageView fx:id="imagePrisoner" fitHeight="70.0" fitWidth="62.0" layoutX="158.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imagePrisoner" fitHeight="62.0" fitWidth="153.0" layoutX="158.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../../java/com/example/psmsystem/assets/images/user.png" />
          </image>
       </ImageView>
       <Label fx:id="prisonerId" layoutX="34.0" layoutY="28.0" prefHeight="17.0" prefWidth="72.0" text="Prisoner id" />
       <Label fx:id="prisonerName" layoutX="53.0" layoutY="58.0" prefHeight="17.0" prefWidth="100.0" text="Prisoner name" />
-      <Button fx:id="btnEdit" layoutX="5.0" layoutY="109.0" mnemonicParsing="false" text="Edit" onAction="#loadEditPrisonerView" />
+      <Button fx:id="btnEdit" layoutX="5.0" layoutY="109.0" mnemonicParsing="false" onAction="#loadEditPrisonerView" text="Edit" />
       <Button fx:id="btnDelete" layoutX="90.0" layoutY="109.0" mnemonicParsing="false" text="Delete" />
       <Button fx:id="btnDetail" layoutX="42.0" layoutY="109.0" mnemonicParsing="false" text="Detail" />
       <Label fx:id="prisonerName1" layoutX="5.0" layoutY="85.0" text="serving sentence: xx year" />
