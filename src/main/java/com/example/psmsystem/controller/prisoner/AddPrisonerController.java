@@ -159,7 +159,6 @@ public class AddPrisonerController implements Initializable {
         }
         return null;
     }
-
     public void back(ActionEvent event) throws IOException {
 //            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("PrisonerView.fxml"));
 //            Parent root = fxmlLoader.load();
@@ -167,10 +166,9 @@ public class AddPrisonerController implements Initializable {
             // Lấy stage hiện tại từ sự kiện
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Set scene mới
             currentStage.close();
-    }
 
+    }
     public void setCbCrimes()
     {
         PrisonerDAO prisonerDAO = new PrisonerDAO();
@@ -178,7 +176,6 @@ public class AddPrisonerController implements Initializable {
         crimes = prisonerDAO.getCrimes();
         ccbCrimes.getItems().addAll(crimes);
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tgGender = new ToggleGroup();

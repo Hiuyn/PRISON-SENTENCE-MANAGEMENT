@@ -18,14 +18,15 @@
 }
 .buttonControl
 {
+    -fx-pref-width: 45px;
+    -fx-pref-height: 20px;
     -fx-max-width: 120px;
-    -fx-max-height: 25px;
+    -fx-max-height: 20px;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-background-radius: 3px;
     -fx-background-color: #b3b3b3;
 }
-
 .buttonAddImg
 {
     -fx-max-width: 120px;

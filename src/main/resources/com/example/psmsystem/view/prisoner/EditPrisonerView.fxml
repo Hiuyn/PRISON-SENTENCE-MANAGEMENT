@@ -11,6 +11,11 @@
 
 <AnchorPane prefHeight="560.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
     <children>
+        <Button fx:id="btnBack" layoutY="-1.0" mnemonicParsing="false" onAction="#back" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Back">
+            <font>
+                <Font name="Arial Bold" size="16.0" />
+            </font>
+        </Button>
         <TextField fx:id="txtPrisonerFNAdd" layoutX="151.0" layoutY="147.0" promptText="Full name" />
         <Button fx:id="btnAddImage" layoutX="426.0" layoutY="280.0" mnemonicParsing="false" text="Add Image" />
         <Button fx:id="btnUpdate" layoutX="252.0" layoutY="479.0" mnemonicParsing="false" text="Update" />
@@ -38,4 +43,5 @@
       <TextField fx:id="txtCrimes" layoutX="151.0" layoutY="381.0" promptText="Crimes" />
       <Label layoutX="39.0" layoutY="385.0" text="Crimes" />
     </children>
+
 </AnchorPane>
