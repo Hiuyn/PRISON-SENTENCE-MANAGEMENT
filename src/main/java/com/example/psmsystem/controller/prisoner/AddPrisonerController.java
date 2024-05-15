@@ -115,7 +115,7 @@ public class AddPrisonerController implements Initializable {
             if (selectedFile != null) {
                 // Lấy tên tệp từ đường dẫn ban đầu
                 String fileName = selectedFile.getName();
-                
+
                 String destinationFolderPath = "/com/example/psmsystem/imagesPrisoner/";
 
                 String relativePath = destinationFolderPath + fileName;
