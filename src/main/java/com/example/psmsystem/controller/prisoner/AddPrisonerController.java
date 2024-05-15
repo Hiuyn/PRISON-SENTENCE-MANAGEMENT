@@ -18,6 +18,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class AddPrisonerController implements Initializable {
     @FXML
@@ -113,23 +115,15 @@ public class AddPrisonerController implements Initializable {
             if (selectedFile != null) {
                 // Lấy tên tệp từ đường dẫn ban đầu
                 String fileName = selectedFile.getName();
-
-                // Đường dẫn đến thư mục đích trong resources
+                
                 String destinationFolderPath = "/com/example/psmsystem/imagesPrisoner/";
 
-                // Tạo một thư mục để lưu trữ hình ảnh trong thư mục tài nguyên (nếu chưa tồn tại)
                 String relativePath = destinationFolderPath + fileName;
+                File destFile = new File(relativePath);
 
                 // Copy file vào thư mục tài nguyên của ứng dụng
                 try (InputStream inputStream = new FileInputStream(selectedFile)) {
-                    OutputStream outputStream = new FileOutputStream(new File(Objects.requireNonNull(getClass().getResource(relativePath)).getFile()));
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = inputStream.read(buffer)) > 0) {
-                        outputStream.write(buffer, 0, length);
-                    }
-//                    outputStream.close();
-//                    inputStream.close();
+                    Files.copy(inputStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
