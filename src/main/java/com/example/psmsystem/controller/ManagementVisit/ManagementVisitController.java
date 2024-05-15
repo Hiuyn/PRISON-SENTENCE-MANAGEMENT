@@ -224,7 +224,6 @@ public class ManagementVisitController implements Initializable {
                 return;
             }
 
-            String prisonerCode = selectedValue.getPrisonerCode();
             LocalDate selectedDate = dateVisitDate.getValue();
             if (selectedDate == null) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
@@ -232,9 +231,6 @@ public class ManagementVisitController implements Initializable {
                 return;
             }
 
-            String date = selectedDate.toString();
-
-//            int visitationId = managementVisitDao.getVisitationId(prisonerCode, date);
             if (visitationId == -1) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                         "No visit found for the selected prisoner and date.");
@@ -277,11 +273,6 @@ public class ManagementVisitController implements Initializable {
         }
 
         Prisoner selectedValue = filterCombo.getValue();
-//        if (selectedValue == null) {
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-//                    "Please select a prisoner.");
-//            return;
-//        }
 
         String prisonerCode = selectedValue.getPrisonerCode();
         String visitorName = txtVisitorName.getText();
@@ -289,12 +280,6 @@ public class ManagementVisitController implements Initializable {
         String relationship = txtRelationship.getText();
         String note = txtaNote.getText();
         LocalDate selectedDate = dateVisitDate.getValue();
-
-//        if (selectedDate == null || prisonerCode.isEmpty() || visitorName.isEmpty() || cccd.isEmpty() || relationship.isEmpty()) {
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-//                    "Please fill all the required fields.");
-//            return;
-//        }
 
         String date = selectedDate.toString();
 
@@ -322,6 +307,8 @@ public class ManagementVisitController implements Initializable {
             dataTable.refresh();
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                     "Visit updated successfully.");
+
+            onClean(event);
         } else {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "No visit selected.");
@@ -381,6 +368,18 @@ public class ManagementVisitController implements Initializable {
                 if (managementVisit.getPrisonerCode().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 } else if (managementVisit.getVisitorName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (managementVisit.getNationalIdentificationNumber().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (managementVisit.getRelationship().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (managementVisit.getVisitDate().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (managementVisit.getNotes().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 return false;
