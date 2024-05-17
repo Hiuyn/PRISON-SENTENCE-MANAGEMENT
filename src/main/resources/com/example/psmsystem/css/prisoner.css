@@ -2,6 +2,8 @@
 {
     -fx-background-color: #c1bcbc;
     -fx-background-radius: 5px;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 14px;
 }
 .btnSearch
 {
@@ -12,19 +14,11 @@
 /*{*/
 /*    -fx-background-color: blue;*/
 /*}*/
-.card {
-    -fx-background-color: #fff;
-    -fx-background-radius: 10px;
-    -fx-border-color: #ccc;
-    -fx-border-width: .5px;
-    -fx-padding: 10px;
-}
-.itemBackground
-{
-    -fx-background-color: white;
-    -fx-max-width: 200px;
-    -fx-max-height: 150px;
-    -fx-border-color: blue;
-    /*-fx-pref-width: 100px;*/
-    /*-fx-pref-height: 80px;*/
-}
+/*.card {*/
+/*    -fx-background-color: #fff;*/
+/*    -fx-background-radius: 10px;*/
+/*    -fx-border-color: #ccc;*/
+/*    -fx-border-width: 0.5px;*/
+/*    -fx-padding: 10px;*/
+/*}*/
+

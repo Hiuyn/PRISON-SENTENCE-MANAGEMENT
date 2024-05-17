@@ -2,7 +2,6 @@ package com.example.psmsystem.controller.prisoner;
 
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -68,7 +68,7 @@ public class AddPrisonerController implements Initializable {
     private RadioButton rbtnOther;
 
     @FXML
-    private TextField prisonerId;
+    private TextField txtPrisonerId;
 
     @FXML
     private CheckComboBox<String> ccbCrimes;
@@ -81,7 +81,8 @@ public class AddPrisonerController implements Initializable {
 
     @FXML
     private RadioButton rbtnLimited;
-
+    @FXML
+    private TextField txtSentenceId;
     private String getRelativePath;
 
     private boolean imageSelected = false;
@@ -98,34 +99,46 @@ public class AddPrisonerController implements Initializable {
                 alert.setContentText("Please select a prisoner image");
                 alert.showAndWait();
             }
-            PrisonerDAO prisonerDAO = new PrisonerDAO();
-
-            RadioButton selectedGender = (RadioButton) tgGender.getSelectedToggle();
-            String selectedRadioButtonText = selectedGender.getText();
-
-            RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
-            String sentenceTypeText = selectedSentenceType.getText();
-
-            new ArrayList<>(ccbCrimes.getCheckModel().getCheckedItems());
-
-            int id = Integer.parseInt(prisonerId.getText());
-            String fullName = txtPrisonerFNAdd.getText();
-            LocalDate Dob = datePrisonerDOBAdd.getValue();
-            String contactName = txtContactName.getText();
-            String contactPhone = txtContactPhone.getText();
-            Prisoner prisoner = new Prisoner();
-            prisoner.setPrisonerCode(String.valueOf(id));
-            prisoner.setPrisonerName(fullName);
-            prisoner.setDOB(String.valueOf(Dob));
-            prisoner.setContactName(contactName);
-            prisoner.setContactPhone(contactPhone);
-            prisoner.setGender(selectedRadioButtonText);
-            prisoner.setImagePath("src/main/resources"+getRelativePath);
-
-            prisonerDAO.insertPrisonerDB(prisoner);
+            getPrisoner();
+            getSentence();
     }
 
+    public void getSentence()
+    {
+        PrisonerDAO prisonerDAO = new PrisonerDAO();
 
+        RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
+        String sentenceTypeText = selectedSentenceType.getText();
+        new ArrayList<>(ccbCrimes.getCheckModel().getCheckedItems());
+
+    }
+
+    public void setIdSentence()
+    {
+        txtSentenceId.setText(txtPrisonerId.getText());
+    }
+    public void getPrisoner()
+    {
+        PrisonerDAO prisonerDAO = new PrisonerDAO();
+
+        RadioButton selectedGender = (RadioButton) tgGender.getSelectedToggle();
+        String selectedRadioButtonText = selectedGender.getText();
+
+        int id = Integer.parseInt(txtPrisonerId.getText());
+        String fullName = txtPrisonerFNAdd.getText();
+        LocalDate Dob = datePrisonerDOBAdd.getValue();
+        String contactName = txtContactName.getText();
+        String contactPhone = txtContactPhone.getText();
+        Prisoner prisoner = new Prisoner();
+        prisoner.setPrisonerCode(String.valueOf(id));
+        prisoner.setPrisonerName(fullName);
+        prisoner.setDOB(String.valueOf(Dob));
+        prisoner.setContactName(contactName);
+        prisoner.setContactPhone(contactPhone);
+        prisoner.setGender(selectedRadioButtonText);
+        prisoner.setImagePath(getRelativePath);
+        prisonerDAO.insertPrisonerDB(prisoner);
+    }
     public String selectImageFile() throws SQLException, IOException {
         if (!imageSelected) {
             FileChooser fileChooser = new FileChooser();
@@ -136,7 +149,7 @@ public class AddPrisonerController implements Initializable {
                 // Lấy tên tệp từ đường dẫn ban đầu
                 String fileName = selectedFile.getName();
 
-                String destinationFolderPath = "/com/example/psmsystem/imagesPrisoner/";
+                String destinationFolderPath = "src/main/resources/com/example/psmsystem/imagesPrisoner/";
 
                 String relativePath = destinationFolderPath + fileName;
                 File destFile = new File(relativePath);
@@ -162,10 +175,8 @@ public class AddPrisonerController implements Initializable {
     public void back(ActionEvent event) throws IOException {
 //            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("PrisonerView.fxml"));
 //            Parent root = fxmlLoader.load();
-
             // Lấy stage hiện tại từ sự kiện
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
             currentStage.close();
 
     }
@@ -186,5 +197,11 @@ public class AddPrisonerController implements Initializable {
         rbtnLimited.setToggleGroup(tgSentenceType);
         rbtnUnlimited.setToggleGroup(tgSentenceType);
         setCbCrimes();
+//        txtPrisonerId.setOnAction(event -> setIdSentence());
+        txtPrisonerId.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) { // Khi TextField mất tiêu điểm
+                setIdSentence();
+            }
+        });
     }
 }

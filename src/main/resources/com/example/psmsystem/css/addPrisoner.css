@@ -1,31 +1,43 @@
 .formAdd
 {
-    -fx-background-radius: 5px;
-    -fx-background-color: #efefef;
+    -fx-background-color: #d2d0d0;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 14px;
 }
 .prisonerForm
 {
     -fx-background-color: #ffffff;
     -fx-background-radius: 5px;
-    -fx-boder-radius:solid 2px black ;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
 }
-
 .sentenceForm
 {
     -fx-background-color: #ffffff;
     -fx-background-radius: 5px;
     -fx-boder-radius:solid 2px black ;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
+
+}
+.imgView
+{
+    -fx-border-color: black;
+    -fx-border-width: 1px;
 }
 .buttonControl
 {
-    -fx-pref-width: 45px;
-    -fx-pref-height: 20px;
+    -fx-pref-width: 70px;
+    -fx-pref-height: 15px;
     -fx-max-width: 120px;
     -fx-max-height: 20px;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-background-radius: 3px;
     -fx-background-color: #b3b3b3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 5);
+}
+.buttonControl:hover
+{
+    -fx-effect: none;
 }
 .buttonAddImg
 {
@@ -35,4 +47,30 @@
     -fx-font-weight: bold;
     -fx-background-radius: 3px;
     -fx-background-color: #b3b3b3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 5);
+}
+.buttonControl:hover
+{
+    -fx-effect: none;
+}
+.btnAddCrimes
+{
+    -fx-pref-width: 40px;
+    /*-fx-pref-height: 13px;*/
+    /*-fx-max-width: 120px;*/
+    -fx-max-height: 14px;
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-background-color: #b3b3b3;
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 5);*/
+}
+/*.nameFont*/
+/*{*/
+/*    -fx-font-family: "Times New Roman";*/
+/*    -fx-font-size: 14px;*/
+/*}*/
+.title
+{
+    -fx-background-color: White;
 }
