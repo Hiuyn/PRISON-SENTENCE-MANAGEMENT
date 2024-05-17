@@ -67,15 +67,20 @@ public class ItemPrisonerViewController {
             Image image = new Image(imageFile.toURI().toString());
 
                 if (idShow < 10) {
+                    prisonerId.setText("0000"+idShow);
+                }
+                else if (idShow < 100 && idShow > 10) {
+                    prisonerId.setText("000"+idShow);
+                }
+                else if (idShow > 100 && idShow < 1000 )
+                {
                     prisonerId.setText("00"+idShow);
                 }
-                else if (idShow < 100) {
+                else if (idShow > 1000 && idShow < 10000 )
+                {
                     prisonerId.setText("0"+idShow);
                 }
-                else
-                {
-                    prisonerId.setText(""+idShow);
-                }
+
 
             prisonerName.setText(name);
             imagePrisoner.setImage(image);

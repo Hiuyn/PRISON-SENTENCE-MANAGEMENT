@@ -15,7 +15,8 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
-    private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners";
+    private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners WHERE status = ? ";
+    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_code FROM prisoners WHERE status = ? ORDER BY prisoner_code ASC LIMIT 1";
     private static final String SELECT_BY_CRIMES = "SELECT * FROM crimes";
 //    private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoner";
 ////    private static final String INSERT_INTO_PRISONER_QUERY = "INSERT INTO  prisoner VALUES (prisonerId = ?)";
@@ -52,11 +53,12 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_PRISONER_QUERY);
+            statement.setInt(1,1);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
-                prisoner.setPrisonerCode(String.valueOf(rs.getInt("prisoner_id")));
+                prisoner.setPrisonerCode(String.valueOf(rs.getInt("prisoner_code")));
                 prisoner.setPrisonerName(rs.getString("prisoner_name"));
                 prisoner.setImagePath(rs.getString("image_path"));
                 PrisonerList.add(prisoner);
@@ -122,4 +124,20 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         }
         return crimesList;
     }
+    public int getIdEmpty() {
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(SELECT_MIN_EMPTY_PRISONER_CODE);
+            ps.setInt(1,0);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("prisoner_code");
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

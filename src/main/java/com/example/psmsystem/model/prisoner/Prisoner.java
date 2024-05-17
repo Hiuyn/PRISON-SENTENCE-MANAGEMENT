@@ -8,10 +8,11 @@ public class Prisoner {
     private String contactName;
     private String contactPhone;
     private String imagePath;
+    private boolean status;
 
     public Prisoner(){}
 
-    public Prisoner(String prisonerCode, String prisonerName, String DOB, String gender, String contactName, String contactPhone, String imagePath) {
+    public Prisoner(String prisonerCode, String prisonerName, String DOB, String gender, String contactName, String contactPhone, String imagePath, boolean status) {
         this.prisonerCode = prisonerCode;
         this.prisonerName = prisonerName;
         this.DOB = DOB;
@@ -19,6 +20,7 @@ public class Prisoner {
         this.contactName = contactName;
         this.contactPhone = contactPhone;
         this.imagePath = imagePath;
+        this.status = status;
     }
 
     public String getPrisonerCode() {
@@ -75,5 +77,13 @@ public class Prisoner {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

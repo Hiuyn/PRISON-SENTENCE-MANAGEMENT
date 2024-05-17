@@ -9,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -51,10 +50,6 @@ public class AddPrisonerController implements Initializable {
     @FXML
     private TextField txtPrisonerFNAdd;
 
-
-    @FXML
-    private Label printTest;
-
     @FXML
     private ToggleGroup tgGender;
 
@@ -68,7 +63,7 @@ public class AddPrisonerController implements Initializable {
     private RadioButton rbtnOther;
 
     @FXML
-    private TextField txtPrisonerId;
+    private Label lbPrisonerId;
 
     @FXML
     private CheckComboBox<String> ccbCrimes;
@@ -82,7 +77,7 @@ public class AddPrisonerController implements Initializable {
     @FXML
     private RadioButton rbtnLimited;
     @FXML
-    private TextField txtSentenceId;
+    private Label lbSentenceId;
     private String getRelativePath;
 
     private boolean imageSelected = false;
@@ -115,28 +110,49 @@ public class AddPrisonerController implements Initializable {
 
     public void setIdSentence()
     {
-        txtSentenceId.setText(txtPrisonerId.getText());
+        String sentenceIdShow = lbPrisonerId.getText();
+        lbSentenceId.setText(sentenceIdShow);
+    }
+    public void setPrisonerId()
+    {
+        PrisonerDAO prisonerDAO = new PrisonerDAO();
+        int prisonerIdDB = prisonerDAO.getIdEmpty();
+
+        if ( prisonerIdDB < 10) {
+            lbPrisonerId.setText("0000"+prisonerIdDB);
+        }
+        else if (prisonerIdDB < 100 && prisonerIdDB > 10) {
+            lbPrisonerId.setText("000"+prisonerIdDB);
+        }
+        else if (prisonerIdDB > 100 && prisonerIdDB < 1000 )
+        {
+            lbPrisonerId.setText("00"+prisonerIdDB);
+        }
+        else if (prisonerIdDB > 1000 && prisonerIdDB < 10000 )
+        {
+            lbPrisonerId.setText("0"+prisonerIdDB);
+        }
     }
     public void getPrisoner()
     {
         PrisonerDAO prisonerDAO = new PrisonerDAO();
-
         RadioButton selectedGender = (RadioButton) tgGender.getSelectedToggle();
         String selectedRadioButtonText = selectedGender.getText();
-
-        int id = Integer.parseInt(txtPrisonerId.getText());
         String fullName = txtPrisonerFNAdd.getText();
         LocalDate Dob = datePrisonerDOBAdd.getValue();
         String contactName = txtContactName.getText();
         String contactPhone = txtContactPhone.getText();
+        String code = lbPrisonerId.getText();
+        boolean status = true;
         Prisoner prisoner = new Prisoner();
-        prisoner.setPrisonerCode(String.valueOf(id));
+        prisoner.setPrisonerCode(String.valueOf(code));
         prisoner.setPrisonerName(fullName);
         prisoner.setDOB(String.valueOf(Dob));
         prisoner.setContactName(contactName);
         prisoner.setContactPhone(contactPhone);
         prisoner.setGender(selectedRadioButtonText);
         prisoner.setImagePath(getRelativePath);
+        prisoner.setStatus(status);
         prisonerDAO.insertPrisonerDB(prisoner);
     }
     public String selectImageFile() throws SQLException, IOException {
@@ -189,19 +205,17 @@ public class AddPrisonerController implements Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setPrisonerId();
+        setIdSentence();
+        setCbCrimes();
         tgGender = new ToggleGroup();
         tgSentenceType = new ToggleGroup();
+
         rbtnMale.setToggleGroup(tgGender);
         rbtnFemale.setToggleGroup(tgGender);
         rbtnOther.setToggleGroup(tgGender);
         rbtnLimited.setToggleGroup(tgSentenceType);
         rbtnUnlimited.setToggleGroup(tgSentenceType);
-        setCbCrimes();
-//        txtPrisonerId.setOnAction(event -> setIdSentence());
-        txtPrisonerId.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) { // Khi TextField mất tiêu điểm
-                setIdSentence();
-            }
-        });
+
     }
 }
