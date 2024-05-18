@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 public class PrisonerController implements Initializable {
 
     private final int itemsPerPage = 5;
-
+    private final int rowsPerPage = 3;
     PrisonerDAO  prisonerDAO = new PrisonerDAO();
     List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
 
@@ -70,34 +70,67 @@ public class PrisonerController implements Initializable {
 //        assert pgPagination != null : "fx:id=\"pgPagination\" was not injected: check your FXML file 'YourFXMLFileName.fxml'.";
         setupPagination();
     }
+//    private void setupPagination() {
+//        int pageCount = (int) Math.ceil((double) prisonerList.size() / itemsPerPage);
+//        pgPagination.setPageCount(pageCount);
+//        pgPagination.setPageFactory(this::createPage);
+//    }
+//
+//    private HBox createPage(int pageIndex) {
+//        HBox pageBox = new HBox();
+//        int startIndex = pageIndex * itemsPerPage;
+//        int endIndex = Math.min(startIndex + itemsPerPage, prisonerList.size());
+//
+//        for (int i = startIndex; i < endIndex; i++) {
+//            Prisoner prisoner = prisonerList.get(i);
+//            try {
+////                FXMLLoader fxmlLoader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/" + "ItemPrisonerView.fxml")));
+//                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/" + "ItemPrisonerView.fxml"));
+//                AnchorPane prisonerItem = fxmlLoader.load();
+//
+////                VBox prisonerItem = fxmlLoader.load();
+//                ItemPrisonerViewController controller = fxmlLoader.getController();
+//                controller.setPrisonerItem(prisoner);
+//                pageBox.getChildren().add(prisonerItem);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return pageBox;
+//    }
+
+
     private void setupPagination() {
-        int pageCount = (int) Math.ceil((double) prisonerList.size() / itemsPerPage);
+        int pageCount = (int) Math.ceil((double) prisonerList.size() / (itemsPerPage * rowsPerPage));
         pgPagination.setPageCount(pageCount);
         pgPagination.setPageFactory(this::createPage);
     }
 
-    private HBox createPage(int pageIndex) {
-        HBox pageBox = new HBox();
-        int startIndex = pageIndex * itemsPerPage;
-        int endIndex = Math.min(startIndex + itemsPerPage, prisonerList.size());
+    private VBox createPage(int pageIndex) {
+        VBox pageBox = new VBox(10);
+        int startIndex = pageIndex * itemsPerPage * rowsPerPage;
+        int endIndex = Math.min(startIndex + itemsPerPage * rowsPerPage, prisonerList.size());
 
-        for (int i = startIndex; i < endIndex; i++) {
-            Prisoner prisoner = prisonerList.get(i);
-            try {
-//                FXMLLoader fxmlLoader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/" + "ItemPrisonerView.fxml")));
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/" + "ItemPrisonerView.fxml"));
-                AnchorPane prisonerItem = fxmlLoader.load();
-
-//                VBox prisonerItem = fxmlLoader.load();
-                ItemPrisonerViewController controller = fxmlLoader.getController();
-                controller.setPrisonerItem(prisoner);
-                pageBox.getChildren().add(prisonerItem);
-            } catch (IOException e) {
-                e.printStackTrace();
+        for (int i = startIndex; i < endIndex; i += itemsPerPage) {
+            HBox rowBox = new HBox(30);
+            int rowEndIndex = Math.min(i + itemsPerPage, prisonerList.size());
+            for (int j = i; j < rowEndIndex; j++) {
+                Prisoner prisoner = prisonerList.get(j);
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/" + "ItemPrisonerView.fxml"));
+                    AnchorPane prisonerItem = fxmlLoader.load();
+                    ItemPrisonerViewController controller = fxmlLoader.getController();
+                    controller.setPrisonerItem(prisoner);
+                    rowBox.getChildren().add(prisonerItem);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            pageBox.getChildren().add(rowBox);
         }
         return pageBox;
     }
+
 
     public void openAddWindow() {
         try {
