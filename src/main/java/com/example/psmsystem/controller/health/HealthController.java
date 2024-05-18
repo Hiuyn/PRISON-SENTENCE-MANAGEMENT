@@ -3,10 +3,9 @@ package com.example.psmsystem.controller.health;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.health.IHealthDao;
-import com.example.psmsystem.model.managementvisit.ManagementVisit;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
-import com.example.psmsystem.service.health.HealthDao;
+import com.example.psmsystem.service.healthDao.HealthDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
@@ -22,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 import javafx.event.ActionEvent;
+import org.controlsfx.control.SearchableComboBox;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -42,8 +42,11 @@ public class HealthController implements Initializable {
     @FXML
     private DatePicker dateCheckupDate;
 
+//    @FXML
+//    private ComboBox<Prisoner> filterCombo;
+
     @FXML
-    private ComboBox<Prisoner> filterCombo;
+    private SearchableComboBox<Prisoner> filterCombo;
 
     @FXML
     private TableColumn<Health, Double> heightColumn;
@@ -109,6 +112,8 @@ public class HealthController implements Initializable {
 //        Function<String, Predicate<Prisoner>> filterFunction = s -> prisoner -> StringUtils.containsIgnoreCase(converter.toString(prisoner), s);
         filterCombo.setItems(prisonerDao.getPrisonerName());
         filterCombo.setConverter(converter);
+//        filterCombo2.setItems(prisonerDao.getPrisonerName());
+//        filterCombo2.setConverter(converter);
 //        filterCombo.setFilterFunction(filterFunction);
 
         loadDataTable();
@@ -159,7 +164,6 @@ public class HealthController implements Initializable {
         txtSituation.clear();
         txtaNote.clear();
     }
-
 
     private void initUI() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -358,7 +362,6 @@ public class HealthController implements Initializable {
                 return;
             }
 
-            // Hiển thị hộp thoại xác nhận
             Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationDialog.setTitle("Confirmation");
             confirmationDialog.setHeaderText("Delete health!");
@@ -370,7 +373,6 @@ public class HealthController implements Initializable {
 
             Optional<ButtonType> result = confirmationDialog.showAndWait();
 
-            // Xử lý phản hồi của người dùng
             if (result.isPresent() && result.get() == okButton) {
                 healthDao.deleteHealth(visitationId);
                 Health selected = dataTable.getSelectionModel().getSelectedItem();

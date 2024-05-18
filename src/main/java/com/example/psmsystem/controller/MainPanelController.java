@@ -49,6 +49,9 @@ public class MainPanelController implements Initializable {
     @FXML
     private Label report;
 
+    @FXML
+    private Label sentence;
+
     String fxmlPath = "/com/example/psmsystem/";
 
     @Override
@@ -136,6 +139,13 @@ public class MainPanelController implements Initializable {
         setButtonStyle(prisoner);
     }
 
+    @FXML
+    void loadSentenceView(MouseEvent event) {
+
+        loadFXML("Sentence");
+        setButtonStyle(sentence);
+    }
+
     private void setButtonStyle(Label label) {
         // Xóa kiểu đã chọn từ tất cả các nút
         dashboard.getStyleClass().remove("selected");
@@ -144,6 +154,7 @@ public class MainPanelController implements Initializable {
         manageVisits.getStyleClass().remove("selected");
         report.getStyleClass().remove("selected");
         health.getStyleClass().remove("selected");
+        sentence.getStyleClass().remove("selected");
         label.getStyleClass().add("selected");
     }
 

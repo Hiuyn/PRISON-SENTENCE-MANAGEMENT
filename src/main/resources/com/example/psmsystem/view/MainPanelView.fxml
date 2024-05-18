@@ -72,6 +72,11 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Label>
+                  <Label fx:id="sentence" alignment="CENTER" layoutX="10.0" layoutY="180.0" onMouseClicked="#loadSentenceView" prefHeight="40.0" prefWidth="160.0" styleClass="bt" text="Sentence" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
                   <Label fx:id="assess" alignment="CENTER" onMouseClicked="#loadAssessView" prefHeight="40.0" prefWidth="160.0" styleClass="bt" text="Assess" textFill="WHITE">
                      <cursor>
                         <Cursor fx:constant="HAND" />

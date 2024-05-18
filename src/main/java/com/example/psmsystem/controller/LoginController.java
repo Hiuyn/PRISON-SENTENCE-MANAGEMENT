@@ -66,7 +66,7 @@ public class LoginController implements Initializable{
                         Scene scene = new Scene(root);
 
                         stage.setScene(scene);
-                        stage.setMaximized(true);;
+                        stage.setMaximized(true);
                         stage.setTitle("Admin Panel");
                         stage.getIcons().add(new Image("file: " + fxmlPath + "assets/icon.png"));
                         stage.show();

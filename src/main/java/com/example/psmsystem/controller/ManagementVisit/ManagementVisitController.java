@@ -43,6 +43,7 @@ import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import javafx.stage.Window;
+import org.controlsfx.control.SearchableComboBox;
 
 public class ManagementVisitController implements Initializable {
     private static IPrisonerDao<Prisoner> prisonerDao;
@@ -55,7 +56,7 @@ public class ManagementVisitController implements Initializable {
     private DatePicker dateVisitDate;
 
     @FXML
-    private ComboBox<Prisoner> filterCombo;
+    private SearchableComboBox<Prisoner> filterCombo;
 
     @FXML
     private TableColumn<ManagementVisit, String> noteColumn;

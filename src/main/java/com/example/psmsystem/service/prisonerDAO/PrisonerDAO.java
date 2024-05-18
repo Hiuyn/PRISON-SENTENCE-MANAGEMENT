@@ -18,7 +18,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners WHERE status = ? ";
     private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_code FROM prisoners WHERE status = ? ORDER BY prisoner_code ASC LIMIT 1";
     private static final String SELECT_BY_CRIMES = "SELECT * FROM crimes";
-//    private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoner";
+    private static final String SELECT_BY_PRISONER_QUERY_COMBOBOX = "SELECT * FROM prisoners";
 ////    private static final String INSERT_INTO_PRISONER_QUERY = "INSERT INTO  prisoner VALUES (prisonerId = ?)";
 
     @Override
@@ -28,6 +28,31 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_PRISONER_QUERY);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Prisoner prisoner = new Prisoner();
+                prisoner.setPrisonerCode(rs.getString("prisoner_code"));
+                prisoner.setPrisonerName(rs.getString("prisoner_name"));
+                prisoner.setDOB(rs.getString("date_birth"));
+                prisoner.setGender(rs.getString("gender"));
+                prisoner.setContactName(rs.getString("contact_name"));
+                prisoner.setContactPhone(rs.getString("contact_phone"));
+                prisoner.setImagePath(rs.getString("image_path"));
+
+                prisonerList.add(prisoner);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return prisonerList;
+    }
+    public List<Prisoner> getItemComboboxPrisoner() {
+        List<Prisoner> prisonerList = new ArrayList<>();
+        try {
+
+            Connection conn = DbConnection.getDatabaseConnection().getConnection();
+            PreparedStatement statement = conn.prepareStatement(SELECT_BY_PRISONER_QUERY_COMBOBOX);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -71,7 +96,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
     @Override
     public ObservableList<Prisoner> getPrisonerName() {
-        List<Prisoner> prisoners = getAllPrisoner();
+        List<Prisoner> prisoners = getItemComboboxPrisoner();
         ObservableList<Prisoner> prisonerList = FXCollections.observableArrayList(prisoners);
         return prisonerList;
     }

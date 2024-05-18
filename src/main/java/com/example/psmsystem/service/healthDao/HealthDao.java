@@ -1,4 +1,4 @@
-package com.example.psmsystem.service.health;
+package com.example.psmsystem.service.healthDao;
 
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.health.Health;
