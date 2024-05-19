@@ -209,6 +209,9 @@ public class SentenceController implements Initializable {
                 if (sentence.getPrisonerCode().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
+                else if (sentence.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
                 else if (String.valueOf(sentence.getSentenceType()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
@@ -246,8 +249,6 @@ public class SentenceController implements Initializable {
             return new BorderPane(dataTable);
         });
     }
-
-
 
     private void initUI() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -551,6 +552,7 @@ public class SentenceController implements Initializable {
         if (index >= 0) {
             Sentence s = listTable.get(index);
             s.setPrisonerCode(prisonerCode);
+            s.setPrisonerName(prisonerName);
             s.setSentenceType(sentenceType);
             s.setSentenceCode(sentenceCode);
             s.setStartDate(startDate);

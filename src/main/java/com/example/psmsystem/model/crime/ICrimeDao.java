@@ -8,4 +8,5 @@ public interface ICrimeDao<T> {
     void updateCrime(T t, int id);
     void deleteCrime(int id);
     int getCrimeId(String crimeName);
+    int getCountCrime();
 }

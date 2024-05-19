@@ -37,5 +37,7 @@ module com.example.psmsystem {
     opens com.example.psmsystem.controller.crime to javafx.fxml;
     opens com.example.psmsystem.model.crime to javafx.base;
 
-
+    exports com.example.psmsystem.controller.assess;
+    opens com.example.psmsystem.controller.assess to javafx.fxml;
+    opens com.example.psmsystem.model.assess to javafx.base;
 }

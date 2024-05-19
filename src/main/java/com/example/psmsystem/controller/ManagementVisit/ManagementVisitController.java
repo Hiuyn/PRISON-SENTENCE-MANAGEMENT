@@ -304,6 +304,7 @@ public class ManagementVisitController implements Initializable {
         if (index >= 0) {
             ManagementVisit visit = listTable.get(index);
             visit.setPrisonerCode(prisonerCode);
+            visit.setPrisonerName(prisonerName);
             visit.setVisitorName(visitorName);
             visit.setNationalIdentificationNumber(cccd);
             visit.setRelationship(relationship);
@@ -374,7 +375,11 @@ public class ManagementVisitController implements Initializable {
 
                 if (managementVisit.getPrisonerCode().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (managementVisit.getVisitorName().toLowerCase().contains(lowerCaseFilter)) {
+                }
+                else if (managementVisit.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (managementVisit.getVisitorName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (managementVisit.getNationalIdentificationNumber().toLowerCase().contains(lowerCaseFilter)) {

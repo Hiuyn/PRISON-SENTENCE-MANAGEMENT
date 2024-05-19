@@ -18,6 +18,7 @@ public class CrimeDao implements ICrimeDao<Crime> {
     private static final String DELETE_CRIME_QUERY = "DELETE FROM crimes WHERE crime_id = ?";
     private static final String SELECT_BY_CRIME_QUERY = "SELECT * FROM crimes";
     private static final String SELECT_BY_CODE_CRIME_QUERY = "SELECT * FROM crimes WHERE crime_name = ?";
+    private static final String COUNT_CRIME_QUERY = "SELECT COUNT(*) FROM crimes";
 
     @Override
     public void addCrime(Crime crime) {
@@ -94,5 +95,21 @@ public class CrimeDao implements ICrimeDao<Crime> {
         }
 
         return crimeId;
+    }
+
+    @Override
+    public int getCountCrime() {
+        int count = 0;
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(COUNT_CRIME_QUERY);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1); // Lấy giá trị của cột đầu tiên (đếm tổng số bản ghi)
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return count;
     }
 }

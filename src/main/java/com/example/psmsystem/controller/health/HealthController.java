@@ -112,12 +112,8 @@ public class HealthController implements Initializable {
         listTable.addAll(healthDao.getHealth());
         dataTable.setFixedCellSize(37);
         StringConverter<Prisoner> converter = FunctionalStringConverter.to(prisoner -> (prisoner == null) ? "" : prisoner.getPrisonerCode() + ": " + prisoner.getPrisonerName());
-//        Function<String, Predicate<Prisoner>> filterFunction = s -> prisoner -> StringUtils.containsIgnoreCase(converter.toString(prisoner), s);
         filterCombo.setItems(prisonerDao.getPrisonerName());
         filterCombo.setConverter(converter);
-//        filterCombo2.setItems(prisonerDao.getPrisonerName());
-//        filterCombo2.setConverter(converter);
-//        filterCombo.setFilterFunction(filterFunction);
 
         loadDataTable();
         setupPagination();
@@ -234,6 +230,9 @@ public class HealthController implements Initializable {
                 String lowerCaseFilter = newValue.toLowerCase();
 
                 if (health.getPrisonerCode().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (health.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (String.valueOf(health.getWeight()).toLowerCase().contains(lowerCaseFilter)) {
@@ -428,6 +427,7 @@ public class HealthController implements Initializable {
         if (index >= 0) {
             Health health = listTable.get(index);
             health.setPrisonerCode(prisonerCode);
+            health.setPrisonerName(prisonerName);
             health.setWeight(weight);
             health.setHeight(height);
             health.setCheckupDate(date);

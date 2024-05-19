@@ -9,7 +9,9 @@ import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -19,6 +21,9 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_code FROM prisoners WHERE status = ? ORDER BY prisoner_code ASC LIMIT 1";
     private static final String SELECT_BY_CRIMES = "SELECT * FROM crimes";
     private static final String SELECT_BY_PRISONER_QUERY_COMBOBOX = "SELECT * FROM prisoners";
+    private static final String COUNT_PRISONER_QUERY = "SELECT COUNT(*) FROM prisoners";
+    private static final String COUNT_GENDER_QUERY = "SELECT gender, COUNT(*) as count FROM prisoners GROUP BY gender";
+
 ////    private static final String INSERT_INTO_PRISONER_QUERY = "INSERT INTO  prisoner VALUES (prisonerId = ?)";
 
     @Override
@@ -163,6 +168,40 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getCountPrisoner(){
+        int count = 0;
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(COUNT_PRISONER_QUERY);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1); // Lấy giá trị của cột đầu tiên (đếm tổng số bản ghi)
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return count;
+    }
+
+    public Map<String, Integer> countGender() {
+        Map<String, Integer> genderCount = new HashMap<>();
+
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(COUNT_GENDER_QUERY);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String gender = rs.getString("gender");
+                int count = rs.getInt("count");
+                genderCount.put(gender, count);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return genderCount;
     }
 
 }

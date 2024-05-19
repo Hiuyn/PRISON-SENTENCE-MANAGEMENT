@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SentenceDao implements ISentenceDao<Sentence> {
     private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_code, sentence_type, sentence_code, start_date, end_date, status, parole_eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -18,6 +20,8 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     private static final String DELETE_SENTENCE_QUERY = "DELETE FROM sentences WHERE sentence_id = ?";
     private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.prisoner_code, p.prisoner_name, s.sentence_type, s.sentence_code, s.start_date, s.end_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_code = s.prisoner_code";
     private static final String SELECT_BY_CODE_SENTENCE_QUERY = "SELECT * FROM sentences WHERE prisoner_code = ?";
+    private static final String COUNT_PRISONERS_BY_SENTENCE_TYPE_QUERY = "SELECT sentence_type, COUNT(*) AS prisoner_count FROM sentences GROUP BY sentence_type";
+
 
     @Override
     public void addSentence(Sentence sentence) {
@@ -114,5 +118,24 @@ public class SentenceDao implements ISentenceDao<Sentence> {
         }
 
         return sentenceId;
+    }
+
+    public Map<String, Integer> countPrisonersBySentenceType() {
+        Map<String, Integer> prisonersBySentenceType = new HashMap<>();
+
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(COUNT_PRISONERS_BY_SENTENCE_TYPE_QUERY);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String sentenceType = rs.getString("sentence_type");
+                int prisonerCount = rs.getInt("prisoner_count");
+                prisonersBySentenceType.put(sentenceType, prisonerCount);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return prisonersBySentenceType;
     }
 }

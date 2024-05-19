@@ -68,14 +68,14 @@ public class MainPanelController implements Initializable {
     private void loadFXML(String fileName) {
         try {
             nameView.setText(fileName);
-            String pathFileNmae;
+            String pathFileName;
             if (fileName.equals("Dashboard")){
-                pathFileNmae = fxmlPath + "view/" + fileName + "View.fxml";
+                pathFileName = fxmlPath + "view/" + fileName + "View.fxml";
             }
             else{
-                pathFileNmae = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
+                pathFileName = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
             }
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pathFileNmae)));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pathFileName)));
             borderPane.setCenter(root);
             dashboard.getScene().getWindow();
 
@@ -110,7 +110,7 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadAssessView(MouseEvent event) {
-        loadFXML("Dashboard");
+        loadFXML("Assess");
         setButtonStyle(assess);
     }
 

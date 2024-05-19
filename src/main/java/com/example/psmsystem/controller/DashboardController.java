@@ -1,13 +1,32 @@
 package com.example.psmsystem.controller;
 
+import com.example.psmsystem.model.crime.Crime;
+import com.example.psmsystem.model.crime.ICrimeDao;
+import com.example.psmsystem.model.managementvisit.IManagementVisitDao;
+import com.example.psmsystem.model.managementvisit.ManagementVisit;
+import com.example.psmsystem.model.prisoner.IPrisonerDao;
+import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.ISentenceDao;
+import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.service.crimeDao.CrimeDao;
+import com.example.psmsystem.service.managementvisitDao.ManagementVisitDao;
+import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
+import javafx.scene.control.Label;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
+    private IPrisonerDao<Prisoner> prisonerDao;
+    private IManagementVisitDao<ManagementVisit> managementVisitDao;
+    private ICrimeDao<Crime> crimeDao;
+    private ISentenceDao<Sentence> sentenceDao;
+
     @FXML
     private AreaChart<String, Number> areaChart;
 
@@ -24,10 +43,25 @@ public class DashboardController implements Initializable {
     private StackedAreaChart<Number, Number> stackedAreaChart;
 
     @FXML
-//    private Label labelString;
+    private Label txtCrime;
+
+    @FXML
+    private Label txtPrisoner;
+
+    @FXML
+    private Label txtVisitor;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        prisonerDao = new PrisonerDAO();
+        managementVisitDao = new ManagementVisitDao();
+        sentenceDao = new SentenceDao();
+        crimeDao = new CrimeDao();
+
+        txtPrisoner.setText(String.valueOf(prisonerDao.getCountPrisoner()));
+        txtVisitor.setText(String.valueOf(managementVisitDao.getCountManagementVisit()));
+        txtCrime.setText(String.valueOf(crimeDao.getCountCrime()));
+
         areaChartController();
         lineChartController();
         barChartController();
@@ -61,42 +95,50 @@ public class DashboardController implements Initializable {
     }
 
     public void lineChartController() {
-        NumberAxis xAxis = new NumberAxis(1960, 2020, 10);
-        xAxis.setLabel("Years");
-        NumberAxis yAxis = new NumberAxis(0, 350, 50);
-        yAxis.setLabel("No.of schools");
-        lineChart.setTitle("Line Chart Example");
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Month");
+        yAxis.setLabel("Number of Visits");
+
+        lineChart.setTitle("Number of Visits per Month");
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("No of schools in an year");
-        series.getData().add(new XYChart.Data("1970", 15));
-        series.getData().add(new XYChart.Data("1980", 30));
-        series.getData().add(new XYChart.Data("1990", 60));
-        series.getData().add(new XYChart.Data("2000", 120));
-        series.getData().add(new XYChart.Data("2013", 240));
-        series.getData().add(new XYChart.Data("2014", 300));
+        series.setName("Visits");
+
+        Map<String, Integer> visitsByMonth = managementVisitDao.countVisitsByMonth();
+        for (Map.Entry<String, Integer> entry : visitsByMonth.entrySet()) {
+            series.getData().add(new XYChart.Data(entry.getKey(), entry.getValue()));
+        }
         lineChart.getData().add(series);
     }
 
     public void barChartController() {
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        barChart.setTitle("Bar Chart Example");
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Sentence Type");
+        yAxis.setLabel("Number of Prisoners");
+
+        barChart.setTitle("Number of Prisoners by Sentence Type");
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Data");
-        series.getData().add(new XYChart.Data<>("A", 10));
-        series.getData().add(new XYChart.Data<>("B", 20));
-        series.getData().add(new XYChart.Data<>("C", 30));
+        series.setName("Prisoners");
+
+        Map<String, Integer> prisonersBySentenceType = sentenceDao.countPrisonersBySentenceType();
+        for (Map.Entry<String, Integer> entry : prisonersBySentenceType.entrySet()) {
+            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
+
         barChart.getData().add(series);
     }
 
     public void pieChartController() {
-        pieChart.setTitle("Pie Chart Example");
-        PieChart.Data slice1 = new PieChart.Data("A", 30);
-        PieChart.Data slice2 = new PieChart.Data("B", 40);
-        PieChart.Data slice3 = new PieChart.Data("C", 30);
-        pieChart.getData().add(slice1);
-        pieChart.getData().add(slice2);
-        pieChart.getData().add(slice3);
+        Map<String, Integer> genderCount = prisonerDao.countGender();
+
+        pieChart.setTitle("Gender Prisoner Chart");
+        for (Map.Entry<String, Integer> entry : genderCount.entrySet()) {
+            PieChart.Data slice = new PieChart.Data(entry.getKey(), entry.getValue());
+            pieChart.getData().add(slice);
+        }
     }
 
     public void stackedAreaChartController() {
