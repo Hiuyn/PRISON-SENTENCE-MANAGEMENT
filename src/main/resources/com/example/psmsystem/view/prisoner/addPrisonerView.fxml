@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
+<?import org.controlsfx.control.CheckComboBox?>
 <AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="667.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
    <children>
       <AnchorPane layoutX="95.0" layoutY="109.0" prefHeight="258.0" prefWidth="490.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css">

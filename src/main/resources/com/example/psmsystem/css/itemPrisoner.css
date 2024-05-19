@@ -11,7 +11,10 @@
     -fx-background-radius: 5px;
     /*-fx-border-width: solid 2px;*/
     -fx-border-color: #5d5858;
+    -fx-start-margin: 10px;
+    -fx-end-margin: 30px;
 }
+
 /*.nameFont*/
 /*{*/
 /*    -fx-font-family: "Times New Roman";*/
