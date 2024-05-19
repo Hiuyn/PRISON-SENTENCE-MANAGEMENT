@@ -2,6 +2,7 @@ package com.example.psmsystem.model.health;
 
 public class Health {
     private String prisonerCode;
+    private String prisonerName;
     private Double weight;
     private Double height;
     private String checkupDate;
@@ -12,8 +13,9 @@ public class Health {
 
     public Health() {}
 
-    public Health(String prisonerCode, Double weight, Double height, String checkupDate, String physicalCondition, String psychologicalSigns, String situation, String notes) {
+    public Health(String prisonerCode, String prisonerName, Double weight, Double height, String checkupDate, String physicalCondition, String psychologicalSigns, String situation, String notes) {
         this.prisonerCode = prisonerCode;
+        this.prisonerName = prisonerName;
         this.weight = weight;
         this.height = height;
         this.checkupDate = checkupDate;
@@ -29,6 +31,14 @@ public class Health {
 
     public void setPrisonerCode(String prisonerCode) {
         this.prisonerCode = prisonerCode;
+    }
+
+    public String getPrisonerName() {
+        return prisonerName;
+    }
+
+    public void setPrisonerName(String prisonerName) {
+        this.prisonerName = prisonerName;
     }
 
     public Double getWeight() {

@@ -16,7 +16,7 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
     private static final String INSERT_QUERY = "INSERT INTO visitation (prisoner_code, visitor_name, national_identification_number, relationship, visit_date, notes) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_MANAGEMENTVISIT_QUERY = "UPDATE visitation SET prisoner_code = ?, visitor_name = ?, national_identification_number = ?, relationship = ?, visit_date = ?, notes = ? WHERE Visitation_id = ?";
     private static final String DELETE_MANAGEMENTVISIT_QUERY = "DELETE FROM visitation WHERE Visitation_id = ?";
-    private static final String SELECT_BY_MANAGEMENTVISIT_QUERY = "SELECT * FROM visitation";
+    private static final String SELECT_BY_MANAGEMENTVISIT_QUERY = "SELECT v.prisoner_code, p.prisoner_name, v.visitor_name,  v.national_identification_number, v.relationship, v.visit_date, v.notes FROM visitation v JOIN prisoners p ON p.prisoner_code = v.prisoner_code";
     private static final String SELECT_BY_CODE_DATE_MANAGEMENTVISIT_QUERY = "SELECT * FROM visitation WHERE prisoner_code = ? AND visit_date = ?";
     @Override
     public void addManagementVisit(ManagementVisit managementVisit) {
@@ -48,6 +48,7 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
             while (rs.next()) {
                 ManagementVisit managementVisit = new ManagementVisit();
                 managementVisit.setPrisonerCode(rs.getString("prisoner_code"));
+                managementVisit.setPrisonerName(rs.getString("prisoner_name"));
                 managementVisit.setVisitorName(rs.getString("visitor_name"));
                 managementVisit.setNationalIdentificationNumber(rs.getString("national_identification_number"));
                 managementVisit.setRelationship(rs.getString("relationship"));

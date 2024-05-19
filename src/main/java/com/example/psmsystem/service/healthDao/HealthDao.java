@@ -15,7 +15,7 @@ public class HealthDao implements IHealthDao<Health> {
     private static final String INSERT_QUERY = "INSERT INTO healths (prisoner_code, weight, height, checkup_date, physical_condition, psychological_signs, situation, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_HEALTH_QUERY = "UPDATE healths SET prisoner_code = ?, weight = ?, height = ?, checkup_date = ?, physical_condition = ?, psychological_signs = ?, situation = ?, notes = ? WHERE health_id = ?";
     private static final String DELETE_HEALTH_QUERY = "DELETE FROM healths WHERE health_id = ?";
-    private static final String SELECT_BY_HEALTH_QUERY = "SELECT * FROM healths";
+    private static final String SELECT_BY_HEALTH_QUERY = "SELECT h.prisoner_code, p.prisoner_name,h.weight, h.height, h.checkup_date, h.physical_condition, h.psychological_signs, h.situation, h.notes FROM healths h JOIN prisoners p ON p.prisoner_code = h.prisoner_code";
     private static final String SELECT_BY_CODE_DATE_HEALTH_QUERY = "SELECT * FROM healths WHERE prisoner_code = ? AND checkup_date = ?";
 
     @Override
@@ -50,6 +50,7 @@ public class HealthDao implements IHealthDao<Health> {
             while (rs.next()) {
                 Health health = new Health();
                 health.setPrisonerCode(rs.getString("prisoner_code"));
+                health.setPrisonerName(rs.getString("prisoner_name"));
                 health.setWeight(rs.getDouble("weight"));
                 health.setHeight(rs.getDouble("weight"));
                 health.setCheckupDate(rs.getString("checkup_date"));

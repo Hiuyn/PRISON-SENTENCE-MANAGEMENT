@@ -69,6 +69,9 @@ public class SentenceController implements Initializable {
     private TableColumn<Sentence, String> prisonerCodeColumn;
 
     @FXML
+    private TableColumn<Sentence, String> prisonerNameColumn;
+
+    @FXML
     private TableColumn<Sentence, String> crimesColumn;
 
     @FXML
@@ -180,6 +183,7 @@ public class SentenceController implements Initializable {
 
     private void loadDataTable() {
         prisonerCodeColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerCode"));
+        prisonerNameColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerName"));
         sentenceTypeColumn.setCellValueFactory(new PropertyValueFactory<>("sentenceType"));
         crimesColumn.setCellValueFactory(new PropertyValueFactory<>("sentenceCode"));
         startDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
@@ -401,6 +405,7 @@ public class SentenceController implements Initializable {
 
         Prisoner selectedValue = filterCombo.getValue();
         String prisonerCode = selectedValue.getPrisonerCode();
+        String prisonerName = selectedValue.getPrisonerName();
         String sentenceType = cbSentenceType.getValue();
         String sentenceCode = listCrime();
         LocalDate selectedStartDate = dateStartDate.getValue();
@@ -410,7 +415,7 @@ public class SentenceController implements Initializable {
         String status = txtStatus.getText();
         String paroleeligibility = txtParoleEligibility.getText();
 
-        Sentence sentence = new Sentence(prisonerCode, sentenceType, sentenceCode, startDate, endDate, status, paroleeligibility);
+        Sentence sentence = new Sentence(prisonerCode, prisonerName, sentenceType, sentenceCode, startDate, endDate, status, paroleeligibility);
         sentenceDao.addSentence(sentence);
         listTable.add(sentence);
         dataTable.setItems(listTable);
@@ -523,6 +528,7 @@ public class SentenceController implements Initializable {
         String sentenceCode = listCrime();
 
         String prisonerCode = selectedValue.getPrisonerCode();
+        String prisonerName = selectedValue.getPrisonerName();
         LocalDate selectedStartDate = dateStartDate.getValue();
         String startDate = selectedStartDate.toString();
 
@@ -537,7 +543,7 @@ public class SentenceController implements Initializable {
             return;
         }
 
-        Sentence sentence = new Sentence(prisonerCode, sentenceType, sentenceCode, startDate, endDate, status, paroleEligibility);
+        Sentence sentence = new Sentence(prisonerCode, prisonerName, sentenceType, sentenceCode, startDate, endDate, status, paroleEligibility);
         sentenceDao.updateSentence(sentence, visitationId);
 
         index = dataTable.getSelectionModel().getSelectedIndex();

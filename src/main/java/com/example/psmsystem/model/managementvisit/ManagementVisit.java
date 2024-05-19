@@ -2,6 +2,7 @@ package com.example.psmsystem.model.managementvisit;
 
 public class ManagementVisit {
     private String prisonerCode;
+    private String prisonerName;
     private String visitorName;
     private String nationalIdentificationNumber;
     private String relationship;
@@ -10,13 +11,22 @@ public class ManagementVisit {
 
     public ManagementVisit() {}
 
-    public ManagementVisit(String prisonerCode, String visitorName, String nationalIdentificationNumber, String relationship, String visitDate, String notes) {
+    public ManagementVisit(String prisonerCode, String prisonerName, String visitorName, String nationalIdentificationNumber, String relationship, String visitDate, String notes) {
         this.prisonerCode = prisonerCode;
+        this.prisonerName = prisonerName;
         this.visitorName = visitorName;
         this.nationalIdentificationNumber = nationalIdentificationNumber;
         this.relationship = relationship;
         this.visitDate = visitDate;
         this.notes = notes;
+    }
+
+    public String getPrisonerName() {
+        return prisonerName;
+    }
+
+    public void setPrisonerName(String prisonerName) {
+        this.prisonerName = prisonerName;
     }
 
     public String getPrisonerCode() {

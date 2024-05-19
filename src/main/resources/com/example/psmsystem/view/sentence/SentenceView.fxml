@@ -82,6 +82,7 @@
             <TableView fx:id="dataTable" layoutX="14.0" layoutY="73.0" onMouseClicked="#getItem" prefHeight="433.0" prefWidth="1676.0">
               <columns>
                 <TableColumn fx:id="prisonerCodeColumn" prefWidth="118.0" styleClass="text-center" text="Prisoner Code" />
+                  <TableColumn fx:id="prisonerNameColumn" prefWidth="118.0" styleClass="text-center" text="Prisoner Name" />
                 <TableColumn fx:id="sentenceTypeColumn" prefWidth="109.0" styleClass="text-center" text="Sentence Type" />
                   <TableColumn fx:id="crimesColumn" prefWidth="117.0" styleClass="text-center" text="Crimes" />
                   <TableColumn fx:id="startDateColumn" minWidth="0.0" prefWidth="86.0" styleClass="text-center" text="Start Date" />

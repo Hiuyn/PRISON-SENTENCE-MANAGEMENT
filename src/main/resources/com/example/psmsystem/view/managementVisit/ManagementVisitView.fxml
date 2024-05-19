@@ -72,6 +72,7 @@
             <TableView fx:id="dataTable" layoutX="21.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#getItem" prefHeight="772.0" prefWidth="1264.0" stylesheets="@../../css/mainpanel.css">
                <columns>
                   <TableColumn fx:id="prisonercodeColumn" prefWidth="133.0" styleClass="text-center" text="Prisoner Code" />
+                  <TableColumn fx:id="prisonernameColumn" prefWidth="133.0" styleClass="text-center" text="Prisoner Name" />
                   <TableColumn fx:id="visitnameColumn" prefWidth="109.0" styleClass="text-center" text="Visit Name" />
                   <TableColumn fx:id="cccdColumn" prefWidth="109.0" styleClass="text-center" text="CCCD/CMD" />
                   <TableColumn fx:id="relationshipColumn" prefWidth="109.0" styleClass="text-center" text="Relationship" />

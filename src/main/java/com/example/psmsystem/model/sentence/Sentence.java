@@ -2,6 +2,7 @@ package com.example.psmsystem.model.sentence;
 
 public class Sentence {
     private String prisonerCode;
+    private String prisonerName;
     private String sentenceType;
     private String sentenceCode;
     private String startDate;
@@ -12,8 +13,9 @@ public class Sentence {
     public Sentence() {
     }
 
-    public Sentence(String prisonerCode, String sentenceType, String sentenceCode, String startDate, String endDate, String status, String paroleEligibility) {
+    public Sentence(String prisonerCode, String prisonerName, String sentenceType, String sentenceCode, String startDate, String endDate, String status, String paroleEligibility) {
         this.prisonerCode = prisonerCode;
+        this.prisonerName = prisonerName;
         this.sentenceType = sentenceType;
         this.sentenceCode = sentenceCode;
         this.startDate = startDate;
@@ -28,6 +30,14 @@ public class Sentence {
 
     public void setPrisonerCode(String prisonerCode) {
         this.prisonerCode = prisonerCode;
+    }
+
+    public String getPrisonerName() {
+        return prisonerName;
+    }
+
+    public void setPrisonerName(String prisonerName) {
+        this.prisonerName = prisonerName;
     }
 
     public String getSentenceType() {

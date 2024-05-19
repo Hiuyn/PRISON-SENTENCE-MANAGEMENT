@@ -64,6 +64,9 @@ public class HealthController implements Initializable {
     private TableColumn<Health, String> prisonercodeColumn;
 
     @FXML
+    private TableColumn<Health, String> prisonernameColumn;
+
+    @FXML
     private TableColumn<Health, String> psychologicalSignsColumn;
 
     @FXML
@@ -193,6 +196,7 @@ public class HealthController implements Initializable {
 
     private void loadDataTable() {
         prisonercodeColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerCode"));
+        prisonernameColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerName"));
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
         heightColumn.setCellValueFactory(new PropertyValueFactory<>("height"));
         checkupDateColumn.setCellValueFactory(new PropertyValueFactory<>("checkupDate"));
@@ -320,6 +324,7 @@ public class HealthController implements Initializable {
 
         Prisoner selectedValue = filterCombo.getValue();
         String prisonerCode = selectedValue.getPrisonerCode();
+        String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
         Double height = Double.valueOf(txtHeight.getText());
         String physicalCondition = txtPhysicalCondition.getText();
@@ -329,7 +334,7 @@ public class HealthController implements Initializable {
         LocalDate selectedDate = dateCheckupDate.getValue();
         String date = selectedDate.toString();
 
-        Health health = new Health(prisonerCode, weight, height, date, physicalCondition, psychological, situation, note);
+        Health health = new Health(prisonerCode, prisonerName, weight, height, date, physicalCondition, psychological, situation, note);
         healthDao.addHealth(health);
         listTable.add(health);
         dataTable.setItems(listTable);
@@ -398,6 +403,7 @@ public class HealthController implements Initializable {
         Prisoner selectedValue = filterCombo.getValue();
 
         String prisonerCode = selectedValue.getPrisonerCode();
+        String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
         Double height = Double.valueOf(txtHeight.getText());
         String physicalCondition = txtPhysicalCondition.getText();
@@ -414,7 +420,7 @@ public class HealthController implements Initializable {
             return;
         }
 
-        Health mv = new Health(prisonerCode, weight, height, date, physicalCondition, psychological, situation, note);
+        Health mv = new Health(prisonerCode, prisonerName, weight, height, date, physicalCondition, psychological, situation, note);
         healthDao.updateHealth(mv, visitationId);
 
         index = dataTable.getSelectionModel().getSelectedIndex();

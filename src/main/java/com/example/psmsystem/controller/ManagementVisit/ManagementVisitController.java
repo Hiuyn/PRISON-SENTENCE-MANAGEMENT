@@ -68,6 +68,9 @@ public class ManagementVisitController implements Initializable {
     private TableColumn<ManagementVisit, String> prisonercodeColumn;
 
     @FXML
+    private TableColumn<ManagementVisit, String> prisonernameColumn;
+
+    @FXML
     private TableColumn<ManagementVisit, String> relationshipColumn;
 
     @FXML
@@ -152,6 +155,7 @@ public class ManagementVisitController implements Initializable {
 
     private void loadDataTable() {
         prisonercodeColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerCode"));
+        prisonernameColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerName"));
         visitnameColumn.setCellValueFactory(new PropertyValueFactory<>("visitorName"));
         cccdColumn.setCellValueFactory(new PropertyValueFactory<>("nationalIdentificationNumber"));
         relationshipColumn.setCellValueFactory(new PropertyValueFactory<>("relationship"));
@@ -198,6 +202,7 @@ public class ManagementVisitController implements Initializable {
 
         Prisoner selectedValue = filterCombo.getValue();
         String prisonerCode = selectedValue.getPrisonerCode();
+        String prisonerName = selectedValue.getPrisonerName();
         String visitorName = txtVisitorName.getText();
         String cccd = txtcccd.getText();
         String relationship = txtRelationship.getText();
@@ -205,7 +210,7 @@ public class ManagementVisitController implements Initializable {
         LocalDate selectedDate = dateVisitDate.getValue();
         String date = selectedDate.toString();
 
-        ManagementVisit mv = new ManagementVisit(prisonerCode, visitorName, cccd, relationship, date, note);
+        ManagementVisit mv = new ManagementVisit(prisonerCode, prisonerName, visitorName, cccd, relationship, date, note);
         managementVisitDao.addManagementVisit(mv);
         listTable.add(mv);
         dataTable.setItems(listTable);
@@ -276,6 +281,7 @@ public class ManagementVisitController implements Initializable {
         Prisoner selectedValue = filterCombo.getValue();
 
         String prisonerCode = selectedValue.getPrisonerCode();
+        String prisonerName = selectedValue.getPrisonerName();
         String visitorName = txtVisitorName.getText();
         String cccd = txtcccd.getText();
         String relationship = txtRelationship.getText();
@@ -290,7 +296,7 @@ public class ManagementVisitController implements Initializable {
             return;
         }
 
-        ManagementVisit mv = new ManagementVisit(prisonerCode, visitorName, cccd, relationship, date, note);
+        ManagementVisit mv = new ManagementVisit(prisonerCode, prisonerName, visitorName, cccd, relationship, date, note);
         managementVisitDao.updateManagementVisit(mv, visitationId);
 
         index = dataTable.getSelectionModel().getSelectedIndex();

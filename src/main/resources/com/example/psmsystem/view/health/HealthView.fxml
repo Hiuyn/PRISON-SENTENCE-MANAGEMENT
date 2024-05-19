@@ -16,7 +16,7 @@
 
 <AnchorPane prefHeight="957.0" prefWidth="1760.0" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.health.HealthController">
    <children>
-      <AnchorPane prefHeight="909.0" prefWidth="1036.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="24.0">
+      <AnchorPane prefHeight="909.0" prefWidth="1153.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="24.0">
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
@@ -25,9 +25,10 @@
             <String fx:value="shadow" />
          </styleClass>
          <children>
-            <TableView fx:id="dataTable" layoutX="12.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#getItem" prefHeight="772.0" prefWidth="992.0" stylesheets="@../../css/mainpanel.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <TableView fx:id="dataTable" layoutX="12.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#getItem" prefHeight="772.0" stylesheets="@../../css/mainpanel.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <columns>
                   <TableColumn fx:id="prisonercodeColumn" prefWidth="98.0" styleClass="text-center" text="Prisoner Code" />
+                  <TableColumn fx:id="prisonernameColumn" prefWidth="98.0" styleClass="text-center" text="Prisoner Name" />
                   <TableColumn fx:id="weightColumn" prefWidth="72.0" styleClass="text-center" text="Weight (kg)" />
                   <TableColumn fx:id="heightColumn" prefWidth="67.0" styleClass="text-center" text="Height (m)" />
                   <TableColumn fx:id="checkupDateColumn" prefWidth="124.0" styleClass="text-center" text="Checkup Date" />
@@ -37,12 +38,12 @@
                   <TableColumn fx:id="noteColumn" prefWidth="166.0" styleClass="text-center" text="Note" />
                </columns>
             </TableView>
-            <Pagination fx:id="pagination" layoutX="14.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="818.0" prefWidth="938.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+            <Pagination fx:id="pagination" layoutX="14.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="818.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
             <TextField fx:id="txtSearch" layoutX="31.0" layoutY="14.0" prefHeight="40.0" prefWidth="367.0" promptText="Search..." />
             <FontAwesomeIcon glyphName="SEARCH" layoutX="367.0" layoutY="41.0" size="22" />
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="909.0" prefWidth="663.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
+      <AnchorPane prefHeight="909.0" prefWidth="468.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
@@ -63,25 +64,25 @@
             <Label alignment="CENTER_RIGHT" layoutX="114.0" layoutY="507.0" prefHeight="40.0" prefWidth="80.0" text="Note:" />
             <TextArea fx:id="txtaNote" layoutX="244.0" layoutY="507.0" prefHeight="200.0" prefWidth="241.0" />
             <DatePicker fx:id="dateCheckupDate" layoutX="244.0" layoutY="254.0" prefHeight="40.0" prefWidth="241.0" promptText="YYYY-MM-DD" />
-            <Button layoutX="106.0" layoutY="803.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CREATE">
+            <Button layoutX="64.0" layoutY="802.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CREATE">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="success" />
                </styleClass>
             </Button>
-            <Button layoutX="221.0" layoutY="803.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="EDIT">
+            <Button layoutX="179.0" layoutY="802.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="EDIT">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="infor" />
                </styleClass>
             </Button>
-            <Button layoutX="452.0" layoutY="803.0" mnemonicParsing="false" onAction="#onClean" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CLEAN">
+            <Button layoutX="410.0" layoutY="802.0" mnemonicParsing="false" onAction="#onClean" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CLEAN">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="clear" />
                </styleClass>
             </Button>
-            <Button layoutX="337.0" layoutY="803.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="DELETE">
+            <Button layoutX="295.0" layoutY="802.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="DELETE">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="danger" />

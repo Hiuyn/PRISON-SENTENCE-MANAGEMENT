@@ -16,7 +16,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_code, sentence_type, sentence_code, start_date, end_date, status, parole_eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET prisoner_code = ?, sentence_type = ?, sentence_code = ?, start_date = ?, end_date = ?, status = ?, parole_eligibility = ? WHERE sentence_id = ?";
     private static final String DELETE_SENTENCE_QUERY = "DELETE FROM sentences WHERE sentence_id = ?";
-    private static final String SELECT_BY_SENTENCE_QUERY = "SELECT * FROM sentences";
+    private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.prisoner_code, p.prisoner_name, s.sentence_type, s.sentence_code, s.start_date, s.end_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_code = s.prisoner_code";
     private static final String SELECT_BY_CODE_SENTENCE_QUERY = "SELECT * FROM sentences WHERE prisoner_code = ?";
 
     @Override
@@ -50,6 +50,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
             while (rs.next()) {
                 Sentence sentence = new Sentence();
                 sentence.setPrisonerCode(rs.getString("prisoner_code"));
+                sentence.setPrisonerName(rs.getString("prisoner_name"));
                 sentence.setSentenceType(rs.getString("sentence_type"));
                 sentence.setSentenceCode(rs.getString("sentence_code"));
                 sentence.setStartDate(rs.getString("start_date"));
