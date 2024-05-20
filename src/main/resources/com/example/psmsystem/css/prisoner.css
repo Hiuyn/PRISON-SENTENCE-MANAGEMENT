@@ -1,6 +1,6 @@
 .bgAnchorPane
 {
-    -fx-background-color: #c1bcbc;
+    -fx-background-color: #7e8c8f;
     -fx-background-radius: 5px;
     -fx-font-family: "Courier New";
     -fx-font-size: 14px;
@@ -21,4 +21,19 @@
 /*    -fx-border-width: 0.5px;*/
 /*    -fx-padding: 10px;*/
 /*}*/
-
+.bgTest
+{
+    -fx-background-color: #222020;
+}
+.bgTestControl
+{
+    -fx-background-color: green;
+}
+.card
+{
+    -fx-background-color: #6e797a;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 14px;
+}

@@ -3,16 +3,11 @@
     -fx-font-family: "Courier New";
     -fx-font-size: 14px;
     -fx-background-color: white;
-    -fx-max-width: 400px;
-    /*-fx-pref-width: 300px;*/
-    /*-fx-pref-height: 200px;*/
-    -fx-max-height: 180px;
-    /*-fx-pref-height: 80px;*/
+    /*-fx-max-width: 400px;*/
+    /*-fx-max-height: 180px;*/
     -fx-background-radius: 5px;
-    /*-fx-border-width: solid 2px;*/
+    -fx-border-radius: 5px;
     -fx-border-color: #5d5858;
-    -fx-start-margin: 10px;
-    -fx-end-margin: 30px;
 }
 
 /*.nameFont*/
@@ -24,4 +19,5 @@
 {
     -fx-pref-width: 70px;
     -fx-background-color: #8d938d;
+
 }

@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <?import org.controlsfx.control.*?>
 
-<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="667.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
+<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="667.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
     <children>
         <AnchorPane layoutX="29.0" layoutY="110.0" prefHeight="250.0" prefWidth="492.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css">
             <children>
@@ -20,7 +20,7 @@
                         <RadioButton fx:id="rbtnOther" mnemonicParsing="false" prefHeight="30.0" prefWidth="68.0" text="Other" />
                     </children>
                 </HBox>
-                <Label layoutX="27.0" layoutY="108.0" prefHeight="16.0" prefWidth="42.0" text="Sex :" />
+                <Label layoutX="27.0" layoutY="108.0" prefHeight="16.0" prefWidth="42.0" text="Sex:" />
                 <Button fx:id="btnAddImage" layoutX="355.0" layoutY="203.0" mnemonicParsing="false" styleClass="buttonAddImg" stylesheets="@../../css/addPrisoner.css" text="Add Image" />
                 <TextField fx:id="txtContactName" layoutX="27.0" layoutY="204.0" prefHeight="26.0" prefWidth="200.0" promptText="Contact name" />
                 <TextField fx:id="txtContactPhone" layoutX="179.0" layoutY="155.0" prefHeight="26.0" prefWidth="136.0" promptText="Contact phone" />

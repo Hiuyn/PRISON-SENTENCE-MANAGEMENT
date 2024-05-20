@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -58,7 +59,7 @@ public class PrisonerController implements Initializable {
     private TextField txtSearch;
 
     @FXML
-    private AnchorPane viewAllFun;
+    private AnchorPane anchoViewAll;
 
     @FXML
     private AnchorPane anchorPaneAddPrisoner;
@@ -107,7 +108,7 @@ public class PrisonerController implements Initializable {
     }
 
     private VBox createPage(int pageIndex) {
-        VBox pageBox = new VBox(10);
+        VBox pageBox = new VBox(30);
         int startIndex = pageIndex * itemsPerPage * rowsPerPage;
         int endIndex = Math.min(startIndex + itemsPerPage * rowsPerPage, prisonerList.size());
 
