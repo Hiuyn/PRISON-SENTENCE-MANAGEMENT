@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -52,6 +53,8 @@ public class MainPanelController implements Initializable {
     @FXML
     private Label sentence;
 
+    @FXML
+    private AnchorPane centerPane;
     String fxmlPath = "/com/example/psmsystem/";
 
     @Override
@@ -76,8 +79,15 @@ public class MainPanelController implements Initializable {
                 pathFileName = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
             }
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pathFileName)));
-            borderPane.setCenter(root);
+//            borderPane.setCenter(root);
+            centerPane.getChildren().clear(); // Xóa các node con hiện có
+            centerPane.getChildren().add(root);
+            AnchorPane.setTopAnchor(root, 0.0);
+            AnchorPane.setBottomAnchor(root, 0.0);
+            AnchorPane.setLeftAnchor(root, 0.0);
+            AnchorPane.setRightAnchor(root, 0.0);
             dashboard.getScene().getWindow();
+
 
         } catch (IOException ex) {
             Logger.getLogger(MainPanelController.class.getName()).log(Level.SEVERE, null, ex);
