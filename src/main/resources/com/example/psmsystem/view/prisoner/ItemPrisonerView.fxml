@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ItemPrisoner" maxHeight="200.0" maxWidth="285.0" prefHeight="171.0" prefWidth="285.0" styleClass="itemBackground" stylesheets="@../../css/itemPrisoner.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.ItemPrisonerViewController">
+<AnchorPane fx:id="ItemPrisoner" maxHeight="50.0" maxWidth="99.0" prefHeight="171.0" prefWidth="285.0" styleClass="itemBackground" stylesheets="@../../css/itemPrisoner.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.ItemPrisonerViewController">
    <children>
       <ImageView fx:id="imagePrisoner" fitHeight="89.0" fitWidth="94.0" layoutX="178.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
          <image>
