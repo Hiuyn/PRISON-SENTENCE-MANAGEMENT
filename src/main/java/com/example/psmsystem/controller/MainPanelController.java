@@ -4,10 +4,12 @@ import com.example.psmsystem.model.user.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -17,6 +19,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.input.MouseEvent;
+import javafx.geometry.Pos;
+
 
 public class MainPanelController implements Initializable {
     @FXML
@@ -52,6 +56,8 @@ public class MainPanelController implements Initializable {
     @FXML
     private Label sentence;
 
+    @FXML
+    private AnchorPane centerContent;
     String fxmlPath = "/com/example/psmsystem/";
 
     @Override
@@ -73,7 +79,8 @@ public class MainPanelController implements Initializable {
                 pathFileName = fxmlPath + "view/" + fileName + "View.fxml";
             }
             else{
-                pathFileName = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
+                pathFileName = fxmlPath + "view/" + "Page01View.fxml";
+//                pathFileName = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
             }
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pathFileName)));
             borderPane.setCenter(root);

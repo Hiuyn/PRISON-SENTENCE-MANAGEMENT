@@ -97,4 +97,7 @@
          </children>
       </AnchorPane>
    </left>
+<!--   <center>-->
+<!--      <AnchorPane fx:id="centerContent" BorderPane.alignment="CENTER" />-->
+<!--   </center>-->
 </BorderPane>
