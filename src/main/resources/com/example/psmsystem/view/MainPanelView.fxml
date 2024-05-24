@@ -35,9 +35,9 @@
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="160.0" style="-fx-background-color: linear-gradient(to bottom right, #188ba7, #306090);" BorderPane.alignment="CENTER">
+      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefWidth="160.0" style="-fx-background-color: linear-gradient(to bottom right, #188ba7, #306090);" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="132.0" prefWidth="160.0" style="-fx-border-width: .5px 0 .4px 0;">
+            <AnchorPane prefHeight="132.0" prefWidth="160.0" style="-fx-border-width: .5px 0 .4px 0;" AnchorPane.bottomAnchor="442.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0">
                <children>
                   <ImageView fitHeight="64.0" fitWidth="150.0" layoutX="48.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -97,7 +97,7 @@
          </children>
       </AnchorPane>
    </left>
-<!--   <center>-->
-<!--      <AnchorPane fx:id="centerContent" BorderPane.alignment="CENTER" />-->
-<!--   </center>-->
+   <center>
+      <AnchorPane fx:id="centerPane" />
+   </center>
 </BorderPane>

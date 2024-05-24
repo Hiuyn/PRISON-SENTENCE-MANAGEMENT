@@ -3,6 +3,8 @@ package com.example.psmsystem.controller;
 import com.example.psmsystem.helper.AlertHelper;
 import java.io.IOException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
 import com.example.psmsystem.model.user.IUserDao;
@@ -56,7 +58,8 @@ public class RegisterController implements Initializable{
     private void register() {
         window = registerButton.getScene().getWindow();
         if (this.isValidated()) {
-            User user = new User(txtFullName.getText(), txtUsername.getText(), txtPassword.getText());
+            String hashPassword = hashPassword(txtPassword.getText());
+            User user = new User(txtFullName.getText(), txtUsername.getText(), hashPassword);
             userDao.addUser(user);
             this.clearForm();
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Information",
@@ -154,6 +157,25 @@ public class RegisterController implements Initializable{
         stage.setTitle("User Login");
         stage.getIcons().add(new Image("file: " + fxmlPath + "assets/icon.png"));
         stage.show();
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+
+        }
     }
 
 }

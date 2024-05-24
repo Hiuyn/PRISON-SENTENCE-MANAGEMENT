@@ -18,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -70,6 +71,15 @@ public class PrisonerController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 //        assert pgPagination != null : "fx:id=\"pgPagination\" was not injected: check your FXML file 'YourFXMLFileName.fxml'.";
         setupPagination();
+        // Lấy đối tượng Toolkit mặc định
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+        // Lấy kích thước màn hình
+        Dimension screenSize = toolkit.getScreenSize();
+
+        // In kích thước màn hình
+        System.out.println("Chiều rộng màn hình: " + screenSize.width);
+        System.out.println("Chiều cao màn hình: " + screenSize.height);
     }
 //    private void setupPagination() {
 //        int pageCount = (int) Math.ceil((double) prisonerList.size() / itemsPerPage);

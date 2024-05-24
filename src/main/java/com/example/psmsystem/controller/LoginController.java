@@ -21,6 +21,8 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
@@ -54,7 +56,7 @@ public class LoginController implements Initializable{
     void login(ActionEvent event) throws IOException {
         if (this.isValidated()) {
             String usernameText = username.getText();
-            String passwordText = password.getText();
+            String passwordText = hashPassword(password.getText());
             User user = userDao.checkLogin(usernameText, passwordText);
             if (user != null) {
                 loginButton.getScene().getWindow().hide();
@@ -130,5 +132,22 @@ public class LoginController implements Initializable{
         currentStage.close();
     }
 
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
 
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+
+        }
+    }
 }
