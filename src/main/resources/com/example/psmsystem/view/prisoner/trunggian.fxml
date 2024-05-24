@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="935.0" prefWidth="1473.0" stylesheets="@../../css/prisoner.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.PrisonerController">
+    <children>
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="915.0" prefWidth="1463.0" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="10">
+            <children>
+                <AnchorPane prefHeight="169.0" prefWidth="1393.0" stylesheets="@../../css/prisoner.css">
+                    <children>
+                        <AnchorPane fx:id="anchoViewAll" layoutX="33.0" prefHeight="168.0" prefWidth="241.0" stylesheets="@../../css/prisoner.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="1195.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Button fx:id="btnViewAll" mnemonicParsing="false" prefHeight="148.0" prefWidth="372.0" styleClass="card" stylesheets="@../../css/prisoner.css" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10" />
+                                <ImageView fitHeight="89.0" fitWidth="94.0" layoutX="74.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                            </children></AnchorPane>
+                        <AnchorPane layoutX="315.0" prefHeight="168.0" prefWidth="221.0" stylesheets="@../../css/prisoner.css">
+                            <children>
+                                <Button fx:id="btnFilter" mnemonicParsing="false" styleClass="card" stylesheets="@../../css/prisoner.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                                <ImageView fitHeight="89.0" fitWidth="94.0" layoutX="57.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" />
+                            </children></AnchorPane>
+                        <AnchorPane layoutX="570.0" prefHeight="168.0" prefWidth="241.0">
+                            <children>
+                                <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#loadAddPrisonerView" styleClass="card" stylesheets="@../../css/prisoner.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                                <ImageView fitHeight="89.0" fitWidth="94.0" layoutX="76.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../imgsApp/prisonerIcon.png" />
+                                    </image>
+                                </ImageView>
+                                <Label layoutX="76.0" layoutY="128.0" text="NEW PRISONER">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                            </children></AnchorPane>
+                        <HBox layoutX="1151.0" layoutY="104.0" prefHeight="50.0" prefWidth="241.0">
+                            <padding>
+                                <Insets bottom="10" left="10" right="10" top="10" />
+                            </padding>
+                            <style>
+                                -fx-background-color: #f0f0f0;
+                                -fx-border-color: #d0d0d0;
+                                -fx-border-radius: 5;
+                                -fx-background-radius: 5;
+                            </style>
+                            <children>
+                                <TextField fx:id="txtSearch" prefHeight="26.0" prefWidth="161.0" promptText="Type into search" />
+                                <Button fx:id="btnSearch" mnemonicParsing="false" styleClass="btnSearch" stylesheets="@../../css/prisoner.css" text="search" />
+                            </children>
+                        </HBox>
+                        <AnchorPane layoutX="844.0" prefHeight="168.0" prefWidth="241.0">
+                            <children>
+                                <Button fx:id="btnAdd1" mnemonicParsing="false" onAction="#loadAddPrisonerView" styleClass="card" stylesheets="@../../css/prisoner.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                                <ImageView fitHeight="81.0" fitWidth="89.0" layoutX="80.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../imgsApp/filterIcon.png" />
+                                    </image></ImageView>
+                                <Label layoutX="102.0" layoutY="124.0" text="FILTER">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </AnchorPane>
+                <AnchorPane prefHeight="33.0" prefWidth="1190.0" />
+                <AnchorPane prefHeight="714.0" prefWidth="1294.0" styleClass="bgAnchorPane" stylesheets="@../../css/prisoner.css">
+                    <children>
+                        <Pagination fx:id="pgPagination" layoutX="35.0" layoutY="57.0" prefHeight="657.0" prefWidth="1234.0" styleClass="btnSearch" stylesheets="@../../css/prisoner.css" />
+                    </children>
+                    <VBox.margin>
+                        <Insets left="100.0" right="100.0" />
+                    </VBox.margin>
+                </AnchorPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

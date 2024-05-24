@@ -79,8 +79,8 @@ public class MainPanelController implements Initializable {
                 pathFileName = fxmlPath + "view/" + fileName + "View.fxml";
             }
             else{
-                pathFileName = fxmlPath + "view/" + "Page01View.fxml";
-//                pathFileName = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
+//                pathFileName = fxmlPath + "view/" + "Page01View.fxml";
+                pathFileName = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
             }
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pathFileName)));
 //            borderPane.setCenter(root);
