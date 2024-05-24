@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <?import org.controlsfx.control.*?>
 
-<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="667.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
+<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="667.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
     <children>
         <AnchorPane layoutX="29.0" layoutY="110.0" prefHeight="250.0" prefWidth="492.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css">
             <children>
@@ -32,7 +32,7 @@
                 <DatePicker fx:id="datePrisonerDOBAdd" layoutX="27.0" layoutY="155.0" prefHeight="26.0" prefWidth="136.0" promptText="Date of birth" />
                 <AnchorPane layoutX="334.0" layoutY="56.0" prefHeight="127.0" prefWidth="138.0" styleClass="imgView" stylesheets="@../../css/addPrisoner.css">
                     <children>
-                        <ImageView fx:id="imgPrisonerAdd" fitHeight="134.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="imgPrisonerAdd" fitHeight="137.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true" />
                     </children></AnchorPane>
             </children>
         </AnchorPane>

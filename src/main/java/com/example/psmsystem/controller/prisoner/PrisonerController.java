@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 
 public class PrisonerController implements Initializable {
 
-    private final int itemsPerPage = 5;
+    private final int itemsPerPage = 4;
     private final int rowsPerPage = 3;
     PrisonerDAO  prisonerDAO = new PrisonerDAO();
     List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
