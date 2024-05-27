@@ -13,7 +13,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 <junit.version>5.10.0</junit.version>  </properties>
 
+
   <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version> <!-- Thay đổi phiên bản nếu cần -->
+      <scope>provided</scope>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx -->
     <dependency>
       <groupId>de.jensd</groupId>

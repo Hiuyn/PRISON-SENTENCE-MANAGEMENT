@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 import java.io.IOException;
@@ -66,13 +67,12 @@ public class LoginController implements Initializable{
                         Parent root = loader.load();
                         Stage stage = new Stage();
                         Scene scene = new Scene(root);
-
                         stage.setScene(scene);
                         stage.setMaximized(true);
+                        stage.initStyle(StageStyle.UNDECORATED);
                         stage.setTitle("Admin Panel");
                         stage.getIcons().add(new Image("file: " + fxmlPath + "assets/icon.png"));
                         stage.show();
-
                         MainPanelController controller = loader.getController();
                         controller.initData(user);
                     } catch (IOException e) {

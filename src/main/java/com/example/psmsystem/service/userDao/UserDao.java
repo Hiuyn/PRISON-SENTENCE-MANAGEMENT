@@ -15,8 +15,8 @@ public class UserDao implements IUserDao<User> {
 //    private static final String DB_USER = "root";
 ////    private static final String DB_PASSWORD = "12345678";
 //    private static final String DB_PASSWORD = "";
-    private static final String INSERT_QUERY = "INSERT INTO users (name, username, hash_password) VALUES (?, ?, ?)";
-    private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and hash_password = ?";
+    private static final String INSERT_QUERY = "INSERT INTO users (full_name, username, password) VALUES (?, ?, ?)";
+    private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE username = ?";
     private static final String SELECT_BY_USER_QUERY = "SELECT * FROM users";
 
@@ -58,9 +58,10 @@ public class UserDao implements IUserDao<User> {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     user = new User();
-                    user.setFullName(rs.getString("name"));
+                    user.setUserId(rs.getInt("user_id"));
+                    user.setFullName(rs.getString("full_name"));
                     user.setUsername(rs.getString("username"));
-                    user.setPassword(rs.getString("hash_password"));
+                    user.setPassword(rs.getString("password"));
                 }
             }
         } catch (SQLException e) {

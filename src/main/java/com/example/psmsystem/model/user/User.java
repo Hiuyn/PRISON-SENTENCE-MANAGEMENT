@@ -1,6 +1,7 @@
 package com.example.psmsystem.model.user;
 
 public class User {
+    private int userId;
     private String fullName;
     private String username;
     private String password;
@@ -9,9 +10,18 @@ public class User {
     public User() {}
 
     public User(String fullName, String username, String password) {
+        this.userId = userId;
         this.fullName = fullName;
         this.username = username;
         this.password = password;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getFullName() {

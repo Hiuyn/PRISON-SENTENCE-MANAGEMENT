@@ -82,10 +82,6 @@ public class AddPrisonerController implements Initializable {
 
     private boolean imageSelected = false;
 
-    String saveImagesPath = "src/main/resources/com/example/psmsystem/imagesPrisoner";
-
-
-
     public void setBtnAddPrisonerFinal(ActionEvent event) throws SQLException, IOException {
             if (imgPrisonerAdd.getImage() == null) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -100,12 +96,9 @@ public class AddPrisonerController implements Initializable {
 
     public void getSentence()
     {
-        PrisonerDAO prisonerDAO = new PrisonerDAO();
-
         RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
         String sentenceTypeText = selectedSentenceType.getText();
         new ArrayList<>(ccbCrimes.getCheckModel().getCheckedItems());
-
     }
 
     public void setIdSentence()
@@ -137,7 +130,7 @@ public class AddPrisonerController implements Initializable {
     {
         PrisonerDAO prisonerDAO = new PrisonerDAO();
         RadioButton selectedGender = (RadioButton) tgGender.getSelectedToggle();
-        String selectedRadioButtonText = selectedGender.getText();
+        int selectedRadioButtonText = Integer.parseInt(selectedGender.getText());
         String fullName = txtPrisonerFNAdd.getText();
         LocalDate Dob = datePrisonerDOBAdd.getValue();
         String contactName = txtContactName.getText();
@@ -216,6 +209,5 @@ public class AddPrisonerController implements Initializable {
         rbtnOther.setToggleGroup(tgGender);
         rbtnLimited.setToggleGroup(tgSentenceType);
         rbtnUnlimited.setToggleGroup(tgSentenceType);
-
     }
 }

@@ -1,12 +1,14 @@
 package com.example.psmsystem.controller;
 
 import com.example.psmsystem.model.user.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -19,10 +21,15 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.input.MouseEvent;
-import javafx.geometry.Pos;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class MainPanelController implements Initializable {
+    @FXML
+    private Button btnClose;
     @FXML
     private Label assess;
 
@@ -62,8 +69,15 @@ public class MainPanelController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
     }
+
+//    private int doGet(HttpServletRequest request, HttpServletResponse response) {
+//        // Lấy session hiện tại hoặc tạo mới nếu chưa có
+//        HttpSession session = request.getSession();
+//
+//        // Đặt thuộc tính cho session
+//        session.setAttribute("userId", idLogin.getText());
+//    }
 
 
     public void initData(User user) {
@@ -172,4 +186,8 @@ public class MainPanelController implements Initializable {
         label.getStyleClass().add("selected");
     }
 
+    public void onBtnCloseClick(ActionEvent event) throws IOException {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
+    }
 }

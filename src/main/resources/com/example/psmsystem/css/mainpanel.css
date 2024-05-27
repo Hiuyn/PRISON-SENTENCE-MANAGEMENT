@@ -7,6 +7,18 @@ and open the template in the editor.
     Created on : Oct 28, 2020, 9:06:34 PM
     Author     : Ramesh Godara
 */
+.btnClose
+{
+    -fx-text-fill: #838383;
+    -fx-background-color: #d3d1d1;
+    -fx-background-radius: 0px 0px 0px 3px;
+}
+.btnClose:hover
+{
+    -fx-text-fill: #000000;
+    -fx-background-color: #fa0101;
+    -fx-font-weight: bold;
+}
 .parent {
     -fx-background-color: #fff
 }

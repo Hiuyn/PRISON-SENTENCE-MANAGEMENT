@@ -9,7 +9,6 @@ create table users(
   hash_password varchar(500) not null
 );
 
-<<<<<<< Updated upstream
 create table prisoners( 
 	 prisoner_id int primary key auto_increment,
      prisoner_code int not null unique,
@@ -20,18 +19,32 @@ create table prisoners(
      contact_phone nvarchar(15),
      image_path text not null
 );
-INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path)
+INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path, status)
 VALUES
-(101, 'Nguyễn Văn A', '1980-05-12', 'female', 'Trần Thị B', '0123456789', 'src/main/resources/com/example/psmsystem/imagesPrisoner/filterIcon.png'),
+(101, 'Nguyễn Văn A', '1980-05-12', 'female', 'Trần Thị B', '0123456789', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
 (102, 'Lê Thị B', '1990-08-20', 'male', 'Nguyễn Văn C', '0987654321', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
 (103, 'Phạm Văn C', '1975-12-30', 'female', 'Nguyễn Thị D', '0345678901', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-(104, 'Trần Thị D', '1985-04-15', 'other', 'Trần Văn E', '0789123456', 'src/main/resources/com/example/psmsystem/imagesPrisoner/filterIcon.png'),
+(104, 'Trần Thị D', '1985-04-15', 'other', 'Trần Văn E', '0789123456', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
 (105, 'Nguyễn Văn E', '1965-01-25', 'female', 'Lê Thị F', '0456789012','src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png'),
 (106, 'Lê Thị F', '1995-07-10', 'male', 'Phạm Văn G', '0321654987', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png'),
-(107, 'Trần Văn G', '1987-02-22', 'other', 'Nguyễn Thị H', '0465789012','src/main/resources/com/example/psmsystem/imagesPrisoner/filterIcon.png'),
+(107, 'Trần Văn G', '1987-02-22', 'other', 'Nguyễn Thị H', '0465789012','src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
 (108, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png'),
 (109, 'Phạm Văn I', '1983-11-17', 'female', 'Lê Thị J', '0654789123', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
 (110, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png');
+use prisoner_sentence;
+INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path, status)
+VALUES
+(1, 'Nguyễn Văn A', '1980-05-12', 'female', 'Trần Thị B', '0123456789', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png','1'),
+(2, 'Lê Thị B', '1990-08-20', 'male', 'Nguyễn Văn C', '0987654321', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png','1'),
+(3, 'Phạm Văn C', '1975-12-30', 'female', 'Nguyễn Thị D', '0345678901', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png','1'),
+(4, 'Trần Thị D', '1985-04-15', 'other', 'Trần Văn E', '0789123456', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png','1'),
+(5, 'Nguyễn Văn E', '1965-01-25', 'female', 'Lê Thị F', '0456789012','src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png','1'),
+(6, 'Lê Thị F', '1995-07-10', 'male', 'Phạm Văn G', '0321654987', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png','1'),
+(7, 'Trần Văn G', '1987-02-22', 'other', 'Nguyễn Thị H', '0465789012','src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png','1'),
+(8, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png','1'),
+(9, 'Phạm Văn I', '1983-11-17', 'female', 'Lê Thị J', '0654789123', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png','1'),
+(10, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png','1');
+
 create table prisoners(
   prisoner_id int primary key auto_increment,
   prisoner_code int not null unique,
@@ -44,16 +57,16 @@ create table prisoners(
 );
 INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path)
 VALUES
-    (101, 'Nguyễn Văn A', '1980-05-12', 'female', 'Trần Thị B', '0123456789', 'src/main/resources/com/example/psmsystem/imagesPrisoner/filterIcon.png'),
+    (101, 'Nguyễn Văn A', '1980-05-12', 'female', 'Trần Thị B', '0123456789', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
     (102, 'Lê Thị B', '1990-08-20', 'male', 'Nguyễn Văn C', '0987654321', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
     (103, 'Phạm Văn C', '1975-12-30', 'female', 'Nguyễn Thị D', '0345678901', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-    (104, 'Trần Thị D', '1985-04-15', 'other', 'Trần Văn E', '0789123456', 'src/main/resources/com/example/psmsystem/imagesPrisoner/filterIcon.png'),
-    (105, 'Nguyễn Văn E', '1965-01-25', 'female', 'Lê Thị F', '0456789012','src/main/resources/com/example/psmsystem/imagesPrisoner/prisonerIcon.png'),
-    (106, 'Lê Thị F', '1995-07-10', 'male', 'Phạm Văn G', '0321654987', 'src/main/resources/com/example/psmsystem/imagesPrisoner/prisonerIcon.png'),
-    (107, 'Trần Văn G', '1987-02-22', 'other', 'Nguyễn Thị H', '0465789012','src/main/resources/com/example/psmsystem/imagesPrisoner/filterIcon.png'),
-    (108, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/prisonerIcon.png'),
+    (104, 'Trần Thị D', '1985-04-15', 'other', 'Trần Văn E', '0789123456', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
+    (105, 'Nguyễn Văn E', '1965-01-25', 'female', 'Lê Thị F', '0456789012','src/main/resources/com/example/psmsystem/imagesPrisoner/img.png'),
+    (106, 'Lê Thị F', '1995-07-10', 'male', 'Phạm Văn G', '0321654987', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img.png'),
+    (107, 'Trần Văn G', '1987-02-22', 'other', 'Nguyễn Thị H', '0465789012','src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
+    (108, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img.png'),
     (109, 'Phạm Văn I', '1983-11-17', 'female', 'Lê Thị J', '0654789123', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-    (110, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/prisonerIcon.png');
+    (110, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img.png');
 
 create table incareration_process(
      process_id int primary key auto_increment,
@@ -76,7 +89,7 @@ VALUES
     (108, '2023-07-20', 'Bonus', 'Được thưởng vì cải tạo tốt', 'Gia hạn quyền lợi'),
     (109, '2023-08-30', 'Participate in renovation', 'Tham gia cải tạo', 'Làm vườn rau'),
     (110, '2023-09-10', 'Vbreach of discipline', 'Vi phạm kỷ luật', 'Báo cáo kỷ luật');
-
+use prisoner_sentence;
 create table Visitation(
    Visitation_id int primary key auto_increment,
    prisoner_code int not null,

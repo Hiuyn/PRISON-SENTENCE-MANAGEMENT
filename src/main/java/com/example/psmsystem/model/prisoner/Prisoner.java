@@ -4,23 +4,28 @@ public class Prisoner {
     private String prisonerCode;
     private String prisonerName;
     private String DOB;
-    private String Gender;
+    private int Gender;
+    private int identityCard;
     private String contactName;
     private String contactPhone;
     private String imagePath;
     private boolean status;
+    private String user_id;
+
 
     public Prisoner(){}
 
-    public Prisoner(String prisonerCode, String prisonerName, String DOB, String gender, String contactName, String contactPhone, String imagePath, boolean status) {
+    public Prisoner(String prisonerCode, String prisonerName, String DOB, int gender, int identityCard, String contactName, String contactPhone, String imagePath, boolean status, String user_id) {
         this.prisonerCode = prisonerCode;
         this.prisonerName = prisonerName;
         this.DOB = DOB;
         Gender = gender;
+        this.identityCard = identityCard;
         this.contactName = contactName;
         this.contactPhone = contactPhone;
         this.imagePath = imagePath;
         this.status = status;
+        this.user_id = user_id;
     }
 
     public String getPrisonerCode() {
@@ -47,12 +52,20 @@ public class Prisoner {
         this.DOB = DOB;
     }
 
-    public String getGender() {
+    public int getGender() {
         return Gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(int gender) {
         Gender = gender;
+    }
+
+    public int getIdentityCard() {
+        return identityCard;
+    }
+
+    public void setIdentityCard(int identityCard) {
+        this.identityCard = identityCard;
     }
 
     public String getContactName() {
@@ -85,5 +98,13 @@ public class Prisoner {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

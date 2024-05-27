@@ -52,7 +52,7 @@ public class EditPrisonerController  implements Initializable {
     private TextField txtPrisonerFNAdd;
 
     @FXML
-    private TextField txtPrisonerId;
+    private Label txtPrisonerId;
 
     @FXML
     private Prisoner prisonerEdit;
@@ -79,6 +79,7 @@ public class EditPrisonerController  implements Initializable {
 
     @FXML
     private RadioButton rbtnLimited;
+
     public void setPrisonerEdit(Prisoner prisoner) {
         this.prisonerEdit = prisoner;
         setInformation();
@@ -97,7 +98,12 @@ public class EditPrisonerController  implements Initializable {
             txtPrisonerId.setText(prisonerEdit.getPrisonerCode());
             txtPrisonerFNAdd.setText(prisonerEdit.getPrisonerName());
             imgPrisonerAdd.setImage(image);
+
         }
+    }
+    public void getGender()
+    {
+
     }
     public void back(ActionEvent event) throws IOException {
 //            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("PrisonerView.fxml"));
@@ -105,7 +111,6 @@ public class EditPrisonerController  implements Initializable {
 
         // Lấy stage hiện tại từ sự kiện
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
         currentStage.close();
 
     }

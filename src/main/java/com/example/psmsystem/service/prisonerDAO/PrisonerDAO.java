@@ -14,11 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 public class PrisonerDAO implements IPrisonerDao<Prisoner> {
-    private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_name, date_birth, gender, identity_card, contacter_name, contacter_phone, image, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners WHERE status = ? ";
-    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_code FROM prisoners WHERE status = ? ORDER BY prisoner_code ASC LIMIT 1";
+//    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_id FROM prisoners WHERE status = ? ORDER BY prisoner_id ASC LIMIT 1";
+    private static final String SELECT_MAX_VALUES_PRISONER_ID ="SELECT MAX(prisoner_id) AS max_prisoner_id FROM prisoners";
+
     private static final String SELECT_BY_CRIMES = "SELECT * FROM crimes";
     private static final String SELECT_BY_PRISONER_QUERY_COMBOBOX = "SELECT * FROM prisoners";
     private static final String COUNT_PRISONER_QUERY = "SELECT COUNT(*) FROM prisoners";
@@ -40,7 +42,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
                 prisoner.setPrisonerCode(rs.getString("prisoner_code"));
                 prisoner.setPrisonerName(rs.getString("prisoner_name"));
                 prisoner.setDOB(rs.getString("date_birth"));
-                prisoner.setGender(rs.getString("gender"));
+                prisoner.setGender(rs.getInt("gender"));
                 prisoner.setContactName(rs.getString("contact_name"));
                 prisoner.setContactPhone(rs.getString("contact_phone"));
                 prisoner.setImagePath(rs.getString("image_path"));
@@ -65,7 +67,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
                 prisoner.setPrisonerCode(rs.getString("prisoner_code"));
                 prisoner.setPrisonerName(rs.getString("prisoner_name"));
                 prisoner.setDOB(rs.getString("date_birth"));
-                prisoner.setGender(rs.getString("gender"));
+                prisoner.setGender(rs.getInt("gender"));
                 prisoner.setContactName(rs.getString("contact_name"));
                 prisoner.setContactPhone(rs.getString("contact_phone"));
                 prisoner.setImagePath(rs.getString("image_path"));
@@ -83,14 +85,14 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_PRISONER_QUERY);
-            statement.setInt(1,1);
+            statement.setBoolean(1,false);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
-                prisoner.setPrisonerCode(String.valueOf(rs.getInt("prisoner_code")));
+                prisoner.setPrisonerCode(String.valueOf(rs.getInt("prisoner_id")));
                 prisoner.setPrisonerName(rs.getString("prisoner_name"));
-                prisoner.setImagePath(rs.getString("image_path"));
+                prisoner.setImagePath(rs.getString("image"));
                 PrisonerList.add(prisoner);
             }
         } catch (SQLException e) {
@@ -114,10 +116,13 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             ps.setString(1,prisoner.getPrisonerCode());
             ps.setString(2,prisoner.getPrisonerName());
             ps.setString(3, prisoner.getDOB());
-            ps.setString(4,prisoner.getGender());
+            ps.setInt(4,prisoner.getGender());
+            ps.setInt(5,prisoner.getIdentityCard());
             ps.setString(5,prisoner.getContactName());
             ps.setString(6,prisoner.getContactPhone());
             ps.setString(7,prisoner.getImagePath());
+            ps.setBoolean(8,prisoner.isStatus());
+            ps.setString(9,prisoner.getUser_id());
 
             int rowAffected = ps.executeUpdate();
             if (rowAffected>0)
@@ -156,12 +161,11 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     }
     public int getIdEmpty() {
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(SELECT_MIN_EMPTY_PRISONER_CODE);
-            ps.setInt(1,0);
-            ResultSet rs = ps.executeQuery();
+            PreparedStatement ps = connection.prepareStatement(SELECT_MAX_VALUES_PRISONER_ID);
 
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt("prisoner_code");
+                return rs.getInt("max_prisoner_id")+1;
             } else {
                 return -1;
             }
