@@ -12,7 +12,6 @@ module com.example.psmsystem {
     requires MaterialFX;
     requires java.sql.rowset;
     requires jdk.compiler;
-    requires javax.servlet.api;
 
     opens com.example.psmsystem to javafx.fxml;
     exports com.example.psmsystem;
