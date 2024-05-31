@@ -1,11 +1,15 @@
 package com.example.psmsystem.controller.prisoner;
 
+import com.example.psmsystem.controller.LoginController;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,6 +30,8 @@ import java.nio.file.StandardCopyOption;
 
 public class AddPrisonerController implements Initializable {
 
+    @FXML
+    private TextField txtIdentityCard;
     @FXML
     private TextField txtContactName;
 
@@ -79,8 +85,9 @@ public class AddPrisonerController implements Initializable {
     @FXML
     private Label lbSentenceId;
     private String getRelativePath;
-
+    private int userId;
     private boolean imageSelected = false;
+    private PrisonerController prisonerController;
 
     public void setBtnAddPrisonerFinal(ActionEvent event) throws SQLException, IOException {
             if (imgPrisonerAdd.getImage() == null) {
@@ -92,8 +99,13 @@ public class AddPrisonerController implements Initializable {
             }
             getPrisoner();
             getSentence();
+            back(event);
+            prisonerController.refreshPrisonerList();
     }
 
+    public void setPrisonerController(PrisonerController prisonerController) {
+        this.prisonerController = prisonerController;
+    }
     public void getSentence()
     {
         RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
@@ -130,24 +142,48 @@ public class AddPrisonerController implements Initializable {
     {
         PrisonerDAO prisonerDAO = new PrisonerDAO();
         RadioButton selectedGender = (RadioButton) tgGender.getSelectedToggle();
-        int selectedRadioButtonText = Integer.parseInt(selectedGender.getText());
+        String selectedRadioButtonText = selectedGender.getText();
+        int genderInputDb;
+        if (selectedRadioButtonText.equals("Male"))
+        {
+            genderInputDb = 1;
+        }
+        else if (selectedRadioButtonText.equals("Female"))
+        {
+            genderInputDb = 2;
+        }
+        else
+        {
+            genderInputDb = 3;
+        }
         String fullName = txtPrisonerFNAdd.getText();
         LocalDate Dob = datePrisonerDOBAdd.getValue();
         String contactName = txtContactName.getText();
         String contactPhone = txtContactPhone.getText();
+        String identityCard = txtIdentityCard.getText();
         String code = lbPrisonerId.getText();
-        boolean status = true;
+        boolean status = false;
+        int userIdDb = this.userId;
+        System.out.println("User Id Add: " + userIdDb);
         Prisoner prisoner = new Prisoner();
         prisoner.setPrisonerCode(String.valueOf(code));
         prisoner.setPrisonerName(fullName);
         prisoner.setDOB(String.valueOf(Dob));
         prisoner.setContactName(contactName);
         prisoner.setContactPhone(contactPhone);
-        prisoner.setGender(selectedRadioButtonText);
+        prisoner.setGender(genderInputDb);
         prisoner.setImagePath(getRelativePath);
         prisoner.setStatus(status);
+        prisoner.setUser_id(userIdDb);
+        prisoner.setIdentityCard(identityCard);
         prisonerDAO.insertPrisonerDB(prisoner);
     }
+
+    public void setUserIdAdd(int userId)
+    {
+        this.userId=userId;
+    }
+
     public String selectImageFile() throws SQLException, IOException {
         if (!imageSelected) {
             FileChooser fileChooser = new FileChooser();
@@ -182,9 +218,6 @@ public class AddPrisonerController implements Initializable {
         return null;
     }
     public void back(ActionEvent event) throws IOException {
-//            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("PrisonerView.fxml"));
-//            Parent root = fxmlLoader.load();
-            // Lấy stage hiện tại từ sự kiện
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
 

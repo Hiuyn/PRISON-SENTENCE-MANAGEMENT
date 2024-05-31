@@ -101,18 +101,9 @@ public class EditPrisonerController  implements Initializable {
 
         }
     }
-    public void getGender()
-    {
-
-    }
     public void back(ActionEvent event) throws IOException {
-//            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("PrisonerView.fxml"));
-//            Parent root = fxmlLoader.load();
-
-        // Lấy stage hiện tại từ sự kiện
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currentStage.close();
-
     }
     public void setCbCrimes()
     {

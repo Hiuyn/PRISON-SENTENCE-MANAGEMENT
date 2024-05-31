@@ -3,15 +3,13 @@ package com.example.psmsystem.service.prisonerDAO;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.Sentence;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_name, date_birth, gender, identity_card, contacter_name, contacter_phone, image, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -19,8 +17,11 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners WHERE status = ? ";
 //    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_id FROM prisoners WHERE status = ? ORDER BY prisoner_id ASC LIMIT 1";
-    private static final String SELECT_MAX_VALUES_PRISONER_ID ="SELECT MAX(prisoner_id) AS max_prisoner_id FROM prisoners";
+    private  static final String DELETE_PRISONER_BY_ID = "DELETE FROM prisoners WHERE prisoner_id = ?";
+    private  static final String DELETE_SENTENCE_BY_ID = "DELETE FROM sentences WHERE prisoner_id = ?";
 
+    private static final String SELECT_MAX_VALUES_PRISONER_ID ="SELECT MAX(prisoner_id) AS max_prisoner_id FROM prisoners";
+    private static final String SELECT_YEAR_SENTENCE = "SELECT * FROM sentences ";
     private static final String SELECT_BY_CRIMES = "SELECT * FROM crimes";
     private static final String SELECT_BY_PRISONER_QUERY_COMBOBOX = "SELECT * FROM prisoners";
     private static final String COUNT_PRISONER_QUERY = "SELECT COUNT(*) FROM prisoners";
@@ -101,6 +102,28 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         return PrisonerList;
     }
 
+    public List<Sentence> getYearOfSentence()
+    {
+        List<Sentence> sentenceList = new ArrayList<>();
+        try{
+            Connection connection = DbConnection.getDatabaseConnection().getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECT_YEAR_SENTENCE);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Sentence sentence = new Sentence();
+                sentence.setPrisonerId(String.valueOf(rs.getInt("prisoner_id")));
+                sentence.setStartDate(rs.getString("start_date"));
+                sentence.setEndDate(rs.getString("end_date"));
+                sentenceList.add(sentence);
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return sentenceList;
+    }
+
+
     @Override
     public ObservableList<Prisoner> getPrisonerName() {
         List<Prisoner> prisoners = getItemComboboxPrisoner();
@@ -117,18 +140,17 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             ps.setString(2,prisoner.getPrisonerName());
             ps.setString(3, prisoner.getDOB());
             ps.setInt(4,prisoner.getGender());
-            ps.setInt(5,prisoner.getIdentityCard());
-            ps.setString(5,prisoner.getContactName());
-            ps.setString(6,prisoner.getContactPhone());
-            ps.setString(7,prisoner.getImagePath());
-            ps.setBoolean(8,prisoner.isStatus());
-            ps.setString(9,prisoner.getUser_id());
+            ps.setString(5,prisoner.getIdentityCard());
+            ps.setString(6,prisoner.getContactName());
+            ps.setString(7,prisoner.getContactPhone());
+            ps.setString(8,prisoner.getImagePath());
+            ps.setBoolean(9,prisoner.isStatus());
+            ps.setInt(10,prisoner.getUser_id());
 
             int rowAffected = ps.executeUpdate();
             if (rowAffected>0)
             {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//                alert.setTitle("");
                 alert.setHeaderText("Add prisoner");
                 alert.setContentText("Add prisoner success!");
                 alert.showAndWait();
@@ -141,7 +163,6 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             throw new RuntimeException(e);
         }
     }
-
 
     public List<String> getCrimes()
     {
@@ -185,7 +206,6 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return count;
     }
 
@@ -206,6 +226,31 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         }
 
         return genderCount;
+    }
+
+    public boolean deletePrisoner(String prisonerCode)
+    {
+
+        try {
+            Connection connection = DbConnection.getDatabaseConnection().getConnection();
+//            connection.setAutoCommit(false); // Bắt đầu giao dịch
+            PreparedStatement psSentence = connection.prepareStatement(DELETE_SENTENCE_BY_ID);
+            PreparedStatement psPrisoner = connection.prepareStatement(DELETE_PRISONER_BY_ID);
+
+            psSentence.setString(1,prisonerCode);
+            psPrisoner.setString(1,prisonerCode);
+
+            psSentence.executeUpdate();
+            psPrisoner.executeUpdate();
+
+
+//            connection.commit(); // Hoàn thành giao dịch
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

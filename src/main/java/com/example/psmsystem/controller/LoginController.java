@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller;
 
+import com.example.psmsystem.controller.prisoner.AddPrisonerController;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.user.IUserDao;
 import com.example.psmsystem.model.user.User;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
@@ -87,10 +89,10 @@ public class LoginController implements Initializable{
         }
     }
 
-    private boolean isValidated() {
 
+    private boolean isValidated() {
         window = loginButton.getScene().getWindow();
-        if (username.getText().equals("")) {
+        if (username.getText().isEmpty()) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "Username text field cannot be blank.");
             username.requestFocus();
@@ -98,7 +100,7 @@ public class LoginController implements Initializable{
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "Username text field cannot be less than 5 and greator than 25 characters.");
             username.requestFocus();
-        } else if (password.getText().equals("")) {
+        } else if (password.getText().isEmpty()) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "Password text field cannot be blank.");
             password.requestFocus();
@@ -112,12 +114,13 @@ public class LoginController implements Initializable{
         return false;
     }
 
+
     @FXML
     void showRegisterStage(MouseEvent event) throws IOException{
         Stage stage = (Stage) loginButton.getScene().getWindow();
         stage.close();
 
-        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath + "view/RegisterView.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/RegisterView.fxml")));
 
         Scene scene = new Scene(root);
 

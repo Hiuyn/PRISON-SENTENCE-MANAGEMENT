@@ -15,9 +15,9 @@
       <Label fx:id="prisonerId" layoutX="40.0" layoutY="13.0" prefHeight="18.0" prefWidth="94.0" text="Prisoner id" />
       <Label fx:id="prisonerName" layoutX="57.0" layoutY="41.0" prefHeight="18.0" prefWidth="111.0" styleClass="nameFont" stylesheets="@../../css/prisoner.css" text="Prisoner name" />
       <Button fx:id="btnEdit" layoutX="11.0" layoutY="100.0" mnemonicParsing="false" onAction="#loadEditPrisonerView" styleClass="btnControl" stylesheets="@../../css/itemPrisoner.css" text="Edit" />
-      <Button fx:id="btnDelete" layoutX="161.0" layoutY="100.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="69.0" styleClass="btnControl" stylesheets="@../../css/itemPrisoner.css" text="Delete" />
+      <Button fx:id="btnDelete" layoutX="161.0" layoutY="100.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="69.0" styleClass="btnControl" stylesheets="@../../css/itemPrisoner.css" text="Delete" onAction="#btnDeleteOnAction"/>
       <Button fx:id="btnDetail" layoutX="87.0" layoutY="100.0" mnemonicParsing="false" styleClass="btnControl" stylesheets="@../../css/itemPrisoner.css" text="Detail" />
-      <Label fx:id="prisonerName1" layoutX="11.0" layoutY="67.0" text="Serving year: xx ">
+      <Label fx:id="lblYearSentence" layoutX="11.0" layoutY="67.0" text="Serving year: xx ">
          <font>
             <Font name="Courier New" size="14.0" />
          </font></Label>

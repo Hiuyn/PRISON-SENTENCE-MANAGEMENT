@@ -1,5 +1,7 @@
 package com.example.psmsystem.controller;
 
+import com.example.psmsystem.controller.prisoner.AddPrisonerController;
+import com.example.psmsystem.controller.prisoner.PrisonerController;
 import com.example.psmsystem.model.user.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -62,38 +64,34 @@ public class MainPanelController implements Initializable {
     @FXML
     private AnchorPane centerPane;
     String fxmlPath = "/com/example/psmsystem/";
-
+    private int userId;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }
 
-//    private int doGet(HttpServletRequest request, HttpServletResponse response) {
-//        // Lấy session hiện tại hoặc tạo mới nếu chưa có
-//        HttpSession session = request.getSession();
-//
-//        // Đặt thuộc tính cho session
-//        session.setAttribute("userId", idLogin.getText());
-//    }
-
-
     public void initData(User user) {
         idLogin.setText(user.getFullName());
+        this.userId = user.getUserId();
         loadFXML("Dashboard");
     }
-
     private void loadFXML(String fileName) {
         try {
+            System.out.println("user id main: "+userId);
             nameView.setText(fileName);
             String pathFileName;
             if (fileName.equals("Dashboard")){
                 pathFileName = fxmlPath + "view/" + fileName + "View.fxml";
-            }
-            else{
+            }else{
 //                pathFileName = fxmlPath + "view/" + "Page01View.fxml";
                 pathFileName = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
             }
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pathFileName)));
-//            borderPane.setCenter(root);
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(pathFileName)));
+            Parent root = loader.load();
+
+            if (loader.getController() instanceof PrisonerController) {
+                PrisonerController prisonerController = loader.getController();
+                prisonerController.setUserId(this.userId);
+            }
             centerPane.getChildren().clear(); // Xóa các node con hiện có
             centerPane.getChildren().add(root);
             AnchorPane.setTopAnchor(root, 0.0);
@@ -116,7 +114,7 @@ public class MainPanelController implements Initializable {
         Stage stage = (Stage) borderPane.getScene().getWindow();
         stage.close();
 
-        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath + "view/LoginView.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/LoginView.fxml")));
 
         Scene scene = new Scene(root);
         stage.setMaximized(false);
@@ -158,7 +156,6 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadPrisonerView(MouseEvent event) {
-
         loadFXML("Prisoner");
         setButtonStyle(prisoner);
     }

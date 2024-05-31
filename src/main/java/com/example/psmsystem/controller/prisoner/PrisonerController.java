@@ -1,6 +1,8 @@
 package com.example.psmsystem.controller.prisoner;
 
+import com.example.psmsystem.controller.MainPanelController;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.user.User;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +23,9 @@ import javafx.stage.StageStyle;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -65,51 +70,21 @@ public class PrisonerController implements Initializable {
     @FXML
     private AnchorPane anchorPaneAddPrisoner;
 
-    String fxmlPath = "/com/example/psmsystem/";
+    private final String fxmlPath = "/com/example/psmsystem/";
+
+    private int userId;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        assert pgPagination != null : "fx:id=\"pgPagination\" was not injected: check your FXML file 'YourFXMLFileName.fxml'.";
+
         setupPagination();
-        // Lấy đối tượng Toolkit mặc định
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-
-        // Lấy kích thước màn hình
-        Dimension screenSize = toolkit.getScreenSize();
-
-        // In kích thước màn hình
-        System.out.println("Chiều rộng màn hình: " + screenSize.width);
-        System.out.println("Chiều cao màn hình: " + screenSize.height);
     }
-//    private void setupPagination() {
-//        int pageCount = (int) Math.ceil((double) prisonerList.size() / itemsPerPage);
-//        pgPagination.setPageCount(pageCount);
-//        pgPagination.setPageFactory(this::createPage);
-//    }
-//
-//    private HBox createPage(int pageIndex) {
-//        HBox pageBox = new HBox();
-//        int startIndex = pageIndex * itemsPerPage;
-//        int endIndex = Math.min(startIndex + itemsPerPage, prisonerList.size());
-//
-//        for (int i = startIndex; i < endIndex; i++) {
-//            Prisoner prisoner = prisonerList.get(i);
-//            try {
-////                FXMLLoader fxmlLoader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/" + "ItemPrisonerView.fxml")));
-//                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/" + "ItemPrisonerView.fxml"));
-//                AnchorPane prisonerItem = fxmlLoader.load();
-//
-////                VBox prisonerItem = fxmlLoader.load();
-//                ItemPrisonerViewController controller = fxmlLoader.getController();
-//                controller.setPrisonerItem(prisoner);
-//                pageBox.getChildren().add(prisonerItem);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return pageBox;
-//    }
 
+    public void setUserId(int userId)
+    {
+        this.userId = userId;
+    }
 
     private void setupPagination() {
         int pageCount = (int) Math.ceil((double) prisonerList.size() / (itemsPerPage * rowsPerPage));
@@ -131,6 +106,7 @@ public class PrisonerController implements Initializable {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/" + "ItemPrisonerView.fxml"));
                     AnchorPane prisonerItem = fxmlLoader.load();
                     ItemPrisonerViewController controller = fxmlLoader.getController();
+                    controller.setPrisonerController(this);
                     controller.setPrisonerItem(prisoner);
                     rowBox.getChildren().add(prisonerItem);
                 } catch (IOException e) {
@@ -142,54 +118,39 @@ public class PrisonerController implements Initializable {
         return pageBox;
     }
 
+    public void refreshPrisonerList() {
+        PrisonerDAO prisonerDAO = new PrisonerDAO();
+        prisonerList = prisonerDAO.getPrisonerInItem();
+        setupPagination();
+    }
 
     public void openAddWindow() {
         try {
-            // Load FXML file for the new window content
-            AnchorPane newWindowContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/prisoner/" + "addPrisonerView.fxml")));
-            // Create a new Stage
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/AddPrisonerView.fxml"));
+            AnchorPane newWindowContent = loader.load();
+
+            AddPrisonerController addPrisonerController = loader.getController();
+            addPrisonerController.setUserIdAdd(this.userId);
+            addPrisonerController.setPrisonerController(this);
+            System.out.println("User id add new : " + this.userId);
+
             Stage newStage = new Stage();
-            // Create a new Scene with the new window content
             Scene scene = new Scene(newWindowContent);
-            // Set the Scene to the Stage
             newStage.setScene(scene);
             newStage.initStyle(StageStyle.UNDECORATED);
-            // Set modality to APPLICATION_MODAL to block interactions with other windows
             newStage.initModality(Modality.APPLICATION_MODAL);
-            // Set the title of the Stage
             newStage.setTitle("New Window");
-            // Show the Stage
+
             newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-//    public void openAddWindow() {
-//        if (yourVariable != null) {
-//            try {
-//                // Thực hiện các thao tác khác tại đây
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            System.out.println("Biến yourVariable là null.");
-//        }
-//    }
-
-//    private void loadFXML(String fileName) {
-//        try {
-//            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath + "view/" + fileName + ".fxml")));
-//            anchorPaneAddPrisoner.getChildren().setAll(root);
-//        } catch (IOException ex) {
-//            Logger.getLogger(MainPanelController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-
-
     @FXML
     void loadAddPrisonerView(ActionEvent event) {
         openAddWindow();
     }
+
 
 }

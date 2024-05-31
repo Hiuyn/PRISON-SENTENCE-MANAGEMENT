@@ -5,17 +5,17 @@ public class Prisoner {
     private String prisonerName;
     private String DOB;
     private int Gender;
-    private int identityCard;
+    private String identityCard;
     private String contactName;
     private String contactPhone;
     private String imagePath;
     private boolean status;
-    private String user_id;
+    private int user_id;
 
 
     public Prisoner(){}
 
-    public Prisoner(String prisonerCode, String prisonerName, String DOB, int gender, int identityCard, String contactName, String contactPhone, String imagePath, boolean status, String user_id) {
+    public Prisoner(String prisonerCode, String prisonerName, String DOB, int gender, String identityCard, String contactName, String contactPhone, String imagePath, boolean status, int user_id) {
         this.prisonerCode = prisonerCode;
         this.prisonerName = prisonerName;
         this.DOB = DOB;
@@ -60,11 +60,11 @@ public class Prisoner {
         Gender = gender;
     }
 
-    public int getIdentityCard() {
+    public String getIdentityCard() {
         return identityCard;
     }
 
-    public void setIdentityCard(int identityCard) {
+    public void setIdentityCard(String identityCard) {
         this.identityCard = identityCard;
     }
 
@@ -100,11 +100,11 @@ public class Prisoner {
         this.status = status;
     }
 
-    public String getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 }

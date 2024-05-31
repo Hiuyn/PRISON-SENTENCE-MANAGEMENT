@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.controlsfx.control.*?>
 
-<?import org.controlsfx.control.CheckComboBox?>
-<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="667.0" prefWidth="631.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
+<AnchorPane fx:id="anchorPaneAddPrisoner" prefHeight="667.0" prefWidth="631.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.EditPrisonerController">
     <children>
         <AnchorPane layoutX="38.0" layoutY="110.0" prefHeight="250.0" prefWidth="492.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css">
             <children>
@@ -68,8 +63,7 @@
                 </Label>
                 <DatePicker fx:id="dateIn" layoutX="36.0" layoutY="128.0" prefHeight="26.0" prefWidth="152.0" promptText="Start date" />
                 <DatePicker fx:id="dateOut" layoutX="206.0" layoutY="128.0" prefHeight="26.0" prefWidth="152.0" promptText="End date" />
-                <TextField fx:id="txtCrimesAdd" layoutX="206.0" layoutY="176.0" prefHeight="26.0" prefWidth="103.0" promptText="Add cirimes " />
-                <Button fx:id="btnAddCrimes" layoutX="315.0" layoutY="176.0" maxHeight="27.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="63.0" styleClass="btnAddCrimes" stylesheets="@../../css/addPrisoner.css" text="Add" />
+                <TextField fx:id="txtCrimesAdd" layoutX="206.0" layoutY="176.0" prefHeight="26.0" prefWidth="152.0" promptText="Year of crime" />
             <Label layoutX="36.0" layoutY="56.0" text="ID: " />
             <Label fx:id="txtPrisonerId1" layoutX="70.0" layoutY="56.0" text="Sentence Id" />
             </children>
