@@ -1,7 +1,6 @@
 package com.example.psmsystem.service.sentenceDao;
 
 import com.example.psmsystem.database.DbConnection;
-import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
 
@@ -15,13 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 public class SentenceDao implements ISentenceDao<Sentence> {
-    private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_code, sentence_type, sentence_code, start_date, end_date, status, parole_eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET prisoner_code = ?, sentence_type = ?, sentence_code = ?, start_date = ?, end_date = ?, status = ?, parole_eligibility = ? WHERE sentence_id = ?";
+    private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_id, sentence_type, sentences_code, start_date, end_date, status, parole_eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET prisoner_code = ?, sentence_type = ?, sentences_code = ?, start_date = ?, end_date = ?, status = ?, parole_eligibility = ? WHERE sentence_id = ?";
     private static final String DELETE_SENTENCE_QUERY = "DELETE FROM sentences WHERE sentence_id = ?";
-    private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.prisoner_code, p.prisoner_name, s.sentence_type, s.sentence_code, s.start_date, s.end_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_code = s.prisoner_code";
-    private static final String SELECT_BY_CODE_SENTENCE_QUERY = "SELECT * FROM sentences WHERE prisoner_code = ?";
+    private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.prisoner_id, p.prisoner_name, s.sentence_type, s.sentences_code, s.start_date, s.end_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_id = s.prisoner_id";
+    private static final String SELECT_BY_CODE_SENTENCE_QUERY = "SELECT * FROM sentences WHERE prisoner_id = ?";
     private static final String COUNT_PRISONERS_BY_SENTENCE_TYPE_QUERY = "SELECT sentence_type, COUNT(*) AS prisoner_count FROM sentences GROUP BY sentence_type";
-
+    private static final String SELECT_SENTENCE_ID_MAX = "SELECT MAX(sentences_code) AS max_sentence_code FROM sentences";
 
     @Override
     public void addSentence(Sentence sentence) {
@@ -53,10 +52,10 @@ public class SentenceDao implements ISentenceDao<Sentence> {
 
             while (rs.next()) {
                 Sentence sentence = new Sentence();
-                sentence.setPrisonerCode(rs.getString("prisoner_code"));
+                sentence.setPrisonerCode(rs.getString("prisoner_id"));
                 sentence.setPrisonerName(rs.getString("prisoner_name"));
                 sentence.setSentenceType(rs.getString("sentence_type"));
-                sentence.setSentenceCode(rs.getString("sentence_code"));
+                sentence.setSentenceCode(rs.getString("sentences_code"));
                 sentence.setStartDate(rs.getString("start_date"));
                 sentence.setEndDate(rs.getString("end_date"));
                 sentence.setStatus(rs.getString("status"));
@@ -69,6 +68,23 @@ public class SentenceDao implements ISentenceDao<Sentence> {
         return sentenceList;
     }
 
+    public int getMaxIdSentence()
+    {
+        try {
+            Connection connection = DbConnection.getDatabaseConnection().getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECT_SENTENCE_ID_MAX);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("max_sentence_code")+1;
+            } else {
+                return -1;
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException();
+        }
+    }
     @Override
     public void updateSentence(Sentence sentence, int id) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {

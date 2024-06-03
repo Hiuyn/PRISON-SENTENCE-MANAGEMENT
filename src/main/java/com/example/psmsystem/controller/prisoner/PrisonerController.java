@@ -1,14 +1,12 @@
 package com.example.psmsystem.controller.prisoner;
 
-import com.example.psmsystem.controller.MainPanelController;
+
 import com.example.psmsystem.model.prisoner.Prisoner;
-import com.example.psmsystem.model.user.User;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -20,14 +18,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class PrisonerController implements Initializable {
@@ -110,7 +103,7 @@ public class PrisonerController implements Initializable {
                     controller.setPrisonerItem(prisoner);
                     rowBox.getChildren().add(prisonerItem);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
             pageBox.getChildren().add(rowBox);
@@ -143,7 +136,7 @@ public class PrisonerController implements Initializable {
 
             newStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println( "PrisonerController: " + e.getMessage());
         }
     }
 

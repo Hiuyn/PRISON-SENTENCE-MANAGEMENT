@@ -1,26 +1,33 @@
 package com.example.psmsystem.controller.prisoner;
 
-import com.example.psmsystem.controller.LoginController;
+
+import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
+
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.*;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,12 +91,17 @@ public class AddPrisonerController implements Initializable {
     private RadioButton rbtnLimited;
     @FXML
     private Label lbSentenceId;
+
+    @FXML
+    Button btnShowYearInput;
+
     private String getRelativePath;
     private int userId;
     private boolean imageSelected = false;
     private PrisonerController prisonerController;
+    private List<Integer> selectedCrimesId;
 
-    public void setBtnAddPrisonerFinal(ActionEvent event) throws SQLException, IOException {
+    public void setBtnAddPrisonerFinal(ActionEvent event) {
             if (imgPrisonerAdd.getImage() == null) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Add Prisoner");
@@ -110,13 +122,16 @@ public class AddPrisonerController implements Initializable {
     {
         RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
         String sentenceTypeText = selectedSentenceType.getText();
+        System.out.println("Sentence type: " + sentenceTypeText);
         new ArrayList<>(ccbCrimes.getCheckModel().getCheckedItems());
+
     }
 
     public void setIdSentence()
     {
-        String sentenceIdShow = lbPrisonerId.getText();
-        lbSentenceId.setText(sentenceIdShow);
+        SentenceDao sentenceDao = new SentenceDao();
+        int sentenceIdShow = sentenceDao.getMaxIdSentence();
+        lbSentenceId.setText(String.valueOf(sentenceIdShow));
     }
     public void setPrisonerId()
     {
@@ -184,7 +199,7 @@ public class AddPrisonerController implements Initializable {
         this.userId=userId;
     }
 
-    public String selectImageFile() throws SQLException, IOException {
+    public String selectImageFile() {
         if (!imageSelected) {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.gif"));
@@ -203,7 +218,7 @@ public class AddPrisonerController implements Initializable {
                 try (InputStream inputStream = new FileInputStream(selectedFile)) {
                     Files.copy(inputStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
                 System.out.println("Tệp đã chọn: " + relativePath);
                 Image image = new Image(selectedFile.toURI().toString());
@@ -217,17 +232,76 @@ public class AddPrisonerController implements Initializable {
         }
         return null;
     }
-    public void back(ActionEvent event) throws IOException {
+    public void back(ActionEvent event)  {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
-
     }
     public void setCbCrimes()
     {
-        PrisonerDAO prisonerDAO = new PrisonerDAO();
-        List<String> crimes;
-        crimes = prisonerDAO.getCrimes();
+        CrimeDao crimeDao = new CrimeDao();
+        List<Crime> crimeList = crimeDao.getCrime();
+        List<String> crimes = new ArrayList<>();
+        for (Crime crime : crimeList)
+        {
+            crimes.add(crime.getCrimeName());
+        }
         ccbCrimes.getItems().addAll(crimes);
+
+    }
+
+public void getSelectedCrimes() {
+    CrimeDao crimeDao = new CrimeDao();
+    List<Crime> crimeList = crimeDao.getCrime();
+    ObservableList<String> selectedCrimes = ccbCrimes.getCheckModel().getCheckedItems();
+    System.out.println("Selected Crimes: " + selectedCrimes);
+    List<Integer> idList = new ArrayList<>();
+    for (String selectedCrimeName : selectedCrimes) {
+        for (Crime crime : crimeList) {
+            if (selectedCrimeName.equals(crime.getCrimeName())) {
+                idList.add(crime.getCrimeId());
+                System.out.println("Crime Id: " + crime.getCrimeId());
+                break; // Đã tìm thấy tên tương ứng, thoát khỏi vòng lặp trong.
+            }
+        }
+    }
+    this.selectedCrimesId = idList;
+}
+
+
+    public void openInputYearWindow() {
+        try {
+            getSelectedCrimes();
+            System.out.println("List id add window: " + this.selectedCrimesId);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/psmsystem/view/prisoner/InputYearCrimesView.fxml"));
+            AnchorPane newWindowContent = loader.load();
+
+//            InputYearCrimes controller = loader.getController();
+//            controller.getIdCrimes(getSelectedCrimes());
+
+            InputYearCrimes controller = loader.getController();
+
+
+            // Truyền danh sách cho bộ điều khiển InputYearCrimes
+            controller.getIdCrimes(this.selectedCrimesId);
+
+            Stage newStage = new Stage();
+            Scene scene = new Scene(newWindowContent);
+            newStage.setScene(scene);
+            newStage.initStyle(StageStyle.UNDECORATED);
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.setTitle("Edit Prisoner");
+            newStage.show();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
+
+    @FXML
+    void loadInputYearCrimeView(ActionEvent event) {
+        openInputYearWindow();
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -242,5 +316,6 @@ public class AddPrisonerController implements Initializable {
         rbtnOther.setToggleGroup(tgGender);
         rbtnLimited.setToggleGroup(tgSentenceType);
         rbtnUnlimited.setToggleGroup(tgSentenceType);
+
     }
 }

@@ -74,3 +74,6 @@
 {
     -fx-background-color: White;
 }
+.vbNameCrime,.vbYOC {
+    spacing: 10px; /* Khoảng cách giữa các phần tử trong VBox */
+}

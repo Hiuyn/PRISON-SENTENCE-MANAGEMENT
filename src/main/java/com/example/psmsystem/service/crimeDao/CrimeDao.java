@@ -44,6 +44,8 @@ public class CrimeDao implements ICrimeDao<Crime> {
             while (rs.next()) {
                 Crime crime = new Crime();
                 crime.setSentenceCode(rs.getString("crime_name"));
+                crime.setCrimeName(rs.getString("crime_name"));
+                crime.setCrimeId(rs.getInt("crime_id"));
                 crimeList.add(crime);
             }
         } catch (SQLException e) {

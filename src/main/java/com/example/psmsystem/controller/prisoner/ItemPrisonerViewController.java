@@ -4,6 +4,7 @@ package com.example.psmsystem.controller.prisoner;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,12 +22,9 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
 
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -48,14 +46,12 @@ public class ItemPrisonerViewController {
     @FXML
     private ImageView imagePrisoner;
     @FXML
-    private Label testImage;
-    @FXML
     private Label prisonerId;
 
     @FXML
     private Label prisonerName;
 
-    private String fxmlPath = "/com/example/psmsystem/";
+    private final String fxmlPath = "/com/example/psmsystem/";
     private Prisoner prisonerShowEdit;
     private PrisonerController prisonerController;
 
@@ -74,7 +70,7 @@ public class ItemPrisonerViewController {
             newStage.setTitle("Edit Prisoner");
             newStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -86,20 +82,27 @@ public class ItemPrisonerViewController {
     public void setPrisonerItem(Prisoner prisoner) {
 
         prisonerShowEdit = prisoner;
-        PrisonerDAO prisonerDAO = new PrisonerDAO();
-        int prisonerIdDb = Integer.parseInt(prisoner.getPrisonerCode());
+        SentenceDao sentenceDao = new SentenceDao();
+        String prisonerIdDb = prisoner.getPrisonerCode();
 
-        List<Sentence> sentenceList = prisonerDAO.getYearOfSentence();
-        for (Sentence s : sentenceList) {
-            if (Integer.parseInt(s.getPrisonerId()) == prisonerIdDb) {
-                String start = s.getStartDate();
-                String end = s.getEndDate();
-                int years = calYearSentence(start, end);
-                lblYearSentence.setText("Year: " + years);
-                System.out.println(years);
-                break;
+        List<Sentence> sentenceList = sentenceDao.getSentence();
+        try
+        {
+            for (Sentence sentence : sentenceList) {
+                if (sentence.getPrisonerCode().equals(prisonerIdDb)) {
+                    String start = sentence.getStartDate();
+                    String end = sentence.getEndDate();
+                    int years = calYearSentence(start, end);
+                    lblYearSentence.setText("Year: " + years);
+                    System.out.println("Year of sentence: " + years);
+                    break;
+                }
             }
+        }catch (Exception e)
+        {
+            System.out.println("year od sentence: " + e.getMessage());
         }
+
         String defaultPath = "/com/example/psmsystem/assets/imagesPrisoner/default.png";
         String id = prisoner.getPrisonerCode();
         String name = prisoner.getPrisonerName();
@@ -144,6 +147,7 @@ public class ItemPrisonerViewController {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate start = LocalDate.parse(startDate, dateFormatter);
         LocalDate end = LocalDate.parse(endDate, dateFormatter);
+
 
         return Period.between(start, end).getYears();
     }

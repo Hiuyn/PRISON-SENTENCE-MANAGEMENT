@@ -1,7 +1,11 @@
 package com.example.psmsystem.controller.prisoner;
 
+import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -107,10 +111,16 @@ public class EditPrisonerController  implements Initializable {
     }
     public void setCbCrimes()
     {
-        PrisonerDAO prisonerDAO = new PrisonerDAO();
-        List<String> crimes;
-        crimes = prisonerDAO.getCrimes();
-        ccbCrimes.getItems().addAll(crimes);
+        CrimeDao crimeDao = new CrimeDao();
+        List<Crime> crimes;
+        crimes = crimeDao.getCrime();
+        List<String> crimesName = new ArrayList<>();
+        for (Crime crime : crimes)
+        {
+            String name = crime.getCrimeName();
+            crimesName.add(name);
+        }
+        ccbCrimes.getItems().addAll(crimesName);
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

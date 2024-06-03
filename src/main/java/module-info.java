@@ -12,6 +12,7 @@ module com.example.psmsystem {
     requires MaterialFX;
     requires java.sql.rowset;
     requires jdk.compiler;
+    requires mysql.connector.j;
 
     opens com.example.psmsystem to javafx.fxml;
     exports com.example.psmsystem;

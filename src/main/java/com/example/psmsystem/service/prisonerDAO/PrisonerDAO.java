@@ -102,26 +102,26 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         return PrisonerList;
     }
 
-    public List<Sentence> getYearOfSentence()
-    {
-        List<Sentence> sentenceList = new ArrayList<>();
-        try{
-            Connection connection = DbConnection.getDatabaseConnection().getConnection();
-            PreparedStatement ps = connection.prepareStatement(SELECT_YEAR_SENTENCE);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Sentence sentence = new Sentence();
-                sentence.setPrisonerId(String.valueOf(rs.getInt("prisoner_id")));
-                sentence.setStartDate(rs.getString("start_date"));
-                sentence.setEndDate(rs.getString("end_date"));
-                sentenceList.add(sentence);
-            }
-        }catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return sentenceList;
-    }
+//    public List<Sentence> getYearOfSentence()
+//    {
+//        List<Sentence> sentenceList = new ArrayList<>();
+//        try{
+//            Connection connection = DbConnection.getDatabaseConnection().getConnection();
+//            PreparedStatement ps = connection.prepareStatement(SELECT_YEAR_SENTENCE);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                Sentence sentence = new Sentence();
+//                sentence.setPrisonerCode(String.valueOf(rs.getInt("prisoner_id")));
+//                sentence.setStartDate(rs.getString("start_date"));
+//                sentence.setEndDate(rs.getString("end_date"));
+//                sentenceList.add(sentence);
+//            }
+//        }catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//        }
+//        return sentenceList;
+//    }
 
 
     @Override
@@ -164,22 +164,22 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         }
     }
 
-    public List<String> getCrimes()
-    {
-        List<String> crimesList = new ArrayList<>();
-        try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
-        {
-            PreparedStatement ps = connection.prepareStatement(SELECT_BY_CRIMES);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next())
-            {
-                crimesList.add(rs.getString("crime_name"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return crimesList;
-    }
+//    public List<String> getCrimes()
+//    {
+//        List<String> crimesList = new ArrayList<>();
+//        try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
+//        {
+//            PreparedStatement ps = connection.prepareStatement(SELECT_BY_CRIMES);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next())
+//            {
+//                crimesList.add(rs.getString("crime_name"));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return crimesList;
+//    }
     public int getIdEmpty() {
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             PreparedStatement ps = connection.prepareStatement(SELECT_MAX_VALUES_PRISONER_ID);
