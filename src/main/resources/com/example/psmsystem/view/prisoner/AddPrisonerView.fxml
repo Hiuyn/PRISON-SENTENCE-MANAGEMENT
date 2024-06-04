@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <?import org.controlsfx.control.*?>
 
-<AnchorPane fx:id="anchorPaneAddPrisoner" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="670.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
+<AnchorPane fx:id="anchorPaneAddPrisoner" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="670.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
    <children>
       <AnchorPane layoutX="85.0" layoutY="109.0" prefHeight="262.0" prefWidth="492.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css">
          <children>
@@ -83,7 +83,6 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Spinner layoutX="206.0" layoutY="28.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="457.0" layoutY="439.0" prefHeight="134.0" prefWidth="120.0">

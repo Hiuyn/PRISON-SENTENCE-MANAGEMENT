@@ -22,6 +22,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     private static final String COUNT_PRISONERS_BY_SENTENCE_TYPE_QUERY = "SELECT sentence_type, COUNT(*) AS prisoner_count FROM sentences GROUP BY sentence_type";
     private static final String SELECT_SENTENCE_ID_MAX = "SELECT MAX(sentences_code) AS max_sentence_code FROM sentences";
 
+    private static final String INSERT_SENTENCE_CRIME = "INSERT INTO sentence_crimes VALUE (?, ?, ?)";
     @Override
     public void addSentence(Sentence sentence) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
@@ -68,6 +69,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
         return sentenceList;
     }
 
+    @Override
     public int getMaxIdSentence()
     {
         try {
@@ -136,6 +138,20 @@ public class SentenceDao implements ISentenceDao<Sentence> {
         return sentenceId;
     }
 
+    public void insertSentenceCrimes(int sentenceId, int crimeId, int year)
+    {
+        try{
+            Connection connection = DbConnection.getDatabaseConnection().getConnection();
+            PreparedStatement ps = connection.prepareStatement(INSERT_SENTENCE_CRIME);
+            ps.setInt(1,sentenceId);
+            ps.setInt(2,crimeId);
+            ps.setInt(3,year);
+            ps.executeQuery();
+        }catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
     public Map<String, Integer> countPrisonersBySentenceType() {
         Map<String, Integer> prisonersBySentenceType = new HashMap<>();
 

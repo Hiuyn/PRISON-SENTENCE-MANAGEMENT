@@ -2,13 +2,42 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="283.0" prefWidth="389.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.InputYearCrimes">
-    <Button fx:id="btnAccept" layoutX="29.0" layoutY="117.0" mnemonicParsing="false" onAction="#back" text="Accept" />
-    <Button fx:id="btnBack" layoutX="29.0" layoutY="150.0" mnemonicParsing="false" onAction="#back" text="Back" />
-    <VBox fx:id="vbYOC" layoutX="108.0" layoutY="105.0" prefHeight="122.0" prefWidth="281.0" styleClass="vbYOC" stylesheets="@../../css/addPrisoner.css" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+<AnchorPane prefHeight="327.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.InputYearCrimes">
+   <AnchorPane layoutY="1.0" prefHeight="280.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-         <HBox fx:id="hbYear" prefHeight="41.0" prefWidth="281.0" />
+          <VBox fx:id="vbYOC" prefHeight="158.0" prefWidth="140.0" spacing="5" styleClass="vbYOC" stylesheets="@../../css/addPrisoner.css" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+            <children>
+               <HBox fx:id="hbYear" prefHeight="41.0" prefWidth="120.0" />
+            </children>
+         </VBox>
+          <VBox fx:id="vbNameCrime" layoutY="50.0" prefHeight="158.0" prefWidth="120.0" spacing="5" styleClass="vbYOC" stylesheets="@../../css/addPrisoner.css" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="100.0">
+            <children>
+                 <HBox fx:id="hbName" prefHeight="41.0" prefWidth="120.0" />
+            </children>
+          </VBox>
+         <AnchorPane layoutY="221.0" prefHeight="60.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <Button fx:id="btnBack" layoutX="90.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" prefWidth="60.0" text="Back" />
+                <Button fx:id="btnAccept" layoutX="150.0" layoutY="12.0" mnemonicParsing="false" onAction="#getYearOfCrime" prefWidth="60.0" text="Accept" />
+            </children>
+         </AnchorPane>
+         <Label layoutX="58.0" layoutY="14.0" prefHeight="26.0" prefWidth="184.0" text="INPUT YEAR OF CRIMES" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="20.0">
+            <font>
+               <Font name="System Bold Italic" size="16.0" />
+            </font>
+         </Label>
+         <Label layoutX="53.0" layoutY="70.0" prefHeight="26.0" prefWidth="74.0" text="Crime name" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="70.0">
+            <font>
+               <Font name="System Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label layoutX="154.0" layoutY="70.0" prefHeight="26.0" prefWidth="132.0" text="Input month ( integer )" AnchorPane.leftAnchor="154.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="70.0">
+            <font>
+               <Font name="System Bold Italic" size="12.0" />
+            </font>
+         </Label>
       </children>
-   </VBox>
+   </AnchorPane>
 </AnchorPane>

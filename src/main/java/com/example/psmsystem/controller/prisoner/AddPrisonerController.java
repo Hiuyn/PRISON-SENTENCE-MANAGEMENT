@@ -29,9 +29,8 @@ import org.controlsfx.control.CheckComboBox;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.ZoneId;
+import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -93,13 +92,17 @@ public class AddPrisonerController implements Initializable {
     private Label lbSentenceId;
 
     @FXML
-    Button btnShowYearInput;
-
+    private Button btnShowYearInput;
+    @FXML
+    private DatePicker dateIn;
+    @FXML
+    private DatePicker dateOut;
     private String getRelativePath;
     private int userId;
     private boolean imageSelected = false;
     private PrisonerController prisonerController;
     private List<Integer> selectedCrimesId;
+    private int sentenceId;
 
     public void setBtnAddPrisonerFinal(ActionEvent event) {
             if (imgPrisonerAdd.getImage() == null) {
@@ -120,10 +123,13 @@ public class AddPrisonerController implements Initializable {
     }
     public void getSentence()
     {
+
         RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
-        String sentenceTypeText = selectedSentenceType.getText();
-        System.out.println("Sentence type: " + sentenceTypeText);
         new ArrayList<>(ccbCrimes.getCheckModel().getCheckedItems());
+        String sentenceId = lbSentenceId.getText();
+        String sentenceTypeText = selectedSentenceType.getText();
+        LocalDate dateInPut = dateIn.getValue();
+        Date startDate = Date.from(dateInPut.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
     }
 
@@ -131,6 +137,7 @@ public class AddPrisonerController implements Initializable {
     {
         SentenceDao sentenceDao = new SentenceDao();
         int sentenceIdShow = sentenceDao.getMaxIdSentence();
+        this.sentenceId = sentenceIdShow;
         lbSentenceId.setText(String.valueOf(sentenceIdShow));
     }
     public void setPrisonerId()
@@ -246,7 +253,6 @@ public class AddPrisonerController implements Initializable {
             crimes.add(crime.getCrimeName());
         }
         ccbCrimes.getItems().addAll(crimes);
-
     }
 
 public void getSelectedCrimes() {
@@ -267,6 +273,15 @@ public void getSelectedCrimes() {
     this.selectedCrimesId = idList;
 }
 
+public String convertSelectedToString(List<Integer> idList)
+{
+    StringJoiner joiner = new StringJoiner(",");
+    for (Integer id : idList)
+    {
+        joiner.add(id.toString());
+    }
+    return joiner.toString();
+}
 
     public void openInputYearWindow() {
         try {
@@ -275,14 +290,8 @@ public void getSelectedCrimes() {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/psmsystem/view/prisoner/InputYearCrimesView.fxml"));
             AnchorPane newWindowContent = loader.load();
 
-//            InputYearCrimes controller = loader.getController();
-//            controller.getIdCrimes(getSelectedCrimes());
-
             InputYearCrimes controller = loader.getController();
-
-
-            // Truyền danh sách cho bộ điều khiển InputYearCrimes
-            controller.getIdCrimes(this.selectedCrimesId);
+            controller.getIdCrimes(this.selectedCrimesId, this.sentenceId);
 
             Stage newStage = new Stage();
             Scene scene = new Scene(newWindowContent);
