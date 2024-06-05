@@ -3,6 +3,7 @@ package com.example.psmsystem.controller.prisoner;
 
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
@@ -123,14 +124,17 @@ public class AddPrisonerController implements Initializable {
     }
     public void getSentence()
     {
-
+        Sentence sentence = new Sentence();
         RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
         new ArrayList<>(ccbCrimes.getCheckModel().getCheckedItems());
-        String sentenceId = lbSentenceId.getText();
+        int sentenceId = Integer.parseInt(lbSentenceId.getText());
         String sentenceTypeText = selectedSentenceType.getText();
         LocalDate dateInPut = dateIn.getValue();
         Date startDate = Date.from(dateInPut.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
+        Date endDate = null;
+        int prisoner_id = Integer.parseInt(lbPrisonerId.getText());
+        String parole =  " ";
+//        sentence = new Sentence(prisoner_id, sentenceTypeText, sentenceId, startDate, endDate, false, parole);
     }
 
     public void setIdSentence()

@@ -37,7 +37,7 @@ public class InputYearCrimes implements Initializable {
     private List<TextField> textFieldList = new ArrayList<>();
     private int sentenceId;
     private List<Integer> getIdList;
-    private Map<Integer, Integer> crimeMap;
+    private Map<Integer, Integer> monthCrimeMap;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (this.idList != null) {
@@ -61,32 +61,65 @@ public class InputYearCrimes implements Initializable {
         }
     }
 
-    public void getYearOfCrime(ActionEvent event)
-    {
-        SentenceDao sentenceDao = new SentenceDao();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        VBox vBox = new VBox(10);
-        int totalMonth = 0;
+//    public void insertMonthOfCrime(ActionEvent event)
+//    {
+//        SentenceDao sentenceDao = new SentenceDao();
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        VBox vBox = new VBox(10);
+//        int totalMonth = 0;
+//
+//        for (TextField textField : textFieldList)
+//        {
+//            Label labelName = new Label();
+//            int year = Integer.parseInt(textField.getText());
+//            String name = textField.getPromptText();
+//
+//            labelName.setText(name +": " + year + " month");
+//            totalMonth += year;
+//            vBox.getChildren().addAll(labelName);
+//        }
+//        sentenceDao.insertSentenceCrimes();
+//        System.out.println("Total month: " + totalMonth);
+//        alert.getDialogPane().setContent(vBox);
+//        alert.setOnCloseRequest(event1 -> {
+//            back();
+//        });
+//
+//        alert.showAndWait();
+//    }
+public void insertMonthOfCrime(ActionEvent event) {
+    SentenceDao sentenceDao = new SentenceDao();
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    VBox vBox = new VBox(10);
+    int totalMonth = 0;
+    for (int i = 0; i < textFieldList.size(); i++) {
+        TextField textField = textFieldList.get(i);
+        Label labelName = new Label();
+        int year = Integer.parseInt(textField.getText());
+        String name = textField.getPromptText();
 
-        for (TextField textField : textFieldList)
-        {
-            Label labelName = new Label();
-            int year = Integer.parseInt(textField.getText());
-            String name = textField.getPromptText();
+        labelName.setText(name + ": " + year + " month");
+        totalMonth += year;
+        vBox.getChildren().addAll(labelName);
 
-            labelName.setText(name +": " + year + " month");
-            totalMonth += year;
-            vBox.getChildren().addAll(labelName);
-        }
-
-        System.out.println("Total month: " + totalMonth);
-        alert.getDialogPane().setContent(vBox);
-        alert.setOnCloseRequest(event1 -> {
-            back();
-        });
-
-        alert.showAndWait();
+        int crimeId = idList.get(i); // Assuming getIdList stores crimeIds
+        System.out.println("Crime id: " + crimeId + " year: " + year);
+        this.monthCrimeMap.put(crimeId, year);
     }
+
+    System.out.println("Total month: " + totalMonth);
+    alert.getDialogPane().setContent(vBox);
+    alert.setOnCloseRequest(event1 -> {
+        back();
+    });
+
+    alert.showAndWait();
+}
+
+public Map<Integer, Integer> getMonthOfCrimes() {
+        return this.monthCrimeMap;
+}
+
     public void getYearOfCrimes(List<Integer> selectedCrimeIdList) {
         try {
             if (selectedCrimeIdList != null) {
@@ -95,7 +128,8 @@ public class InputYearCrimes implements Initializable {
                 for (Crime crime : crimeList) {
                     for (int id : selectedCrimeIdList) {
                         if (id == crime.getCrimeId()) {
-                            idList.add(id);
+                            HBox hbYear = new HBox();
+                            HBox hbName = new HBox();
                             TextField add = new TextField();
                             Label label = new Label();
                             String name = crime.getCrimeName();
@@ -105,12 +139,10 @@ public class InputYearCrimes implements Initializable {
                             label.setPrefWidth(120);
                             add.setPrefHeight(25);
                             add.setPrefWidth(120);
-                            label.setMinWidth(120);
                             label.setMinHeight(25);
-                            add.setMinWidth(120);
+                            label.setMinWidth(120);
                             add.setMinHeight(25);
-                            HBox hbYear = new HBox();
-                            HBox hbName = new HBox();
+                            add.setMinWidth(120);
                             hbName.getChildren().add(label);
                             hbYear.getChildren().add(add);
                             vbNameCrime.getChildren().add(hbName);
