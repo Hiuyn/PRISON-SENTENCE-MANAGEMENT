@@ -7,6 +7,7 @@ import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -115,8 +116,9 @@ public class AddPrisonerController implements Initializable {
             }
             getPrisoner();
             getSentence();
-            back(event);
-            prisonerController.refreshPrisonerList();
+//            back(event);
+//            prisonerController.refreshPrisonerList();
+        back(event, () -> prisonerController.refreshPrisonerList());
     }
 
     public void setPrisonerController(PrisonerController prisonerController) {
@@ -202,6 +204,7 @@ public class AddPrisonerController implements Initializable {
         prisoner.setStatus(status);
         prisoner.setUser_id(userIdDb);
         prisoner.setIdentityCard(identityCard);
+//        -------------------------------UPDATE-------------------------
         prisonerDAO.insertPrisonerDB(prisoner);
     }
 
@@ -243,9 +246,28 @@ public class AddPrisonerController implements Initializable {
         }
         return null;
     }
-    public void back(ActionEvent event)  {
+
+
+    public interface Callback {
+        void execute();
+    }
+
+    public void back(ActionEvent event, Callback callback)  {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
+        System.out.println("Cửa sổ đã được đóng");
+
+        // Thực hiện callback
+        if (callback != null) {
+            System.out.println("Thực hiện callback");
+            callback.execute();
+        }
+    }
+
+    public void backPrisoner(ActionEvent event)
+    {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
     public void setCbCrimes()
     {

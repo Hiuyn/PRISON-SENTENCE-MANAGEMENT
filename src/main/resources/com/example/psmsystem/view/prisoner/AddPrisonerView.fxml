@@ -87,7 +87,7 @@
       </AnchorPane>
       <AnchorPane layoutX="457.0" layoutY="439.0" prefHeight="134.0" prefWidth="120.0">
          <children>
-            <Button fx:id="btnBack" layoutX="24.0" layoutY="20.0" maxHeight="30.0" mnemonicParsing="false" onAction="#back" prefHeight="30.0" prefWidth="59.0" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Back">
+            <Button fx:id="btnBack" layoutX="24.0" layoutY="20.0" maxHeight="30.0" mnemonicParsing="false" onAction="#backPrisoner" prefHeight="30.0" prefWidth="59.0" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Back">
                <font>
                   <Font name="Arial Bold" size="16.0" />
                </font>

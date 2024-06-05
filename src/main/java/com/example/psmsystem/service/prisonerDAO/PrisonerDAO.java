@@ -150,6 +150,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             int rowAffected = ps.executeUpdate();
             if (rowAffected>0)
             {
+//                -------------------------------------------------------------------FIX------------------------------
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setHeaderText("Add prisoner");
                 alert.setContentText("Add prisoner success!");

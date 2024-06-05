@@ -164,16 +164,13 @@ public class ItemPrisonerViewController {
         if (prisonerShowEdit != null) {
             String prisonerCode = prisonerShowEdit.getPrisonerCode();
 
-            // Hiển thị thông báo xác nhận
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
             alert.setHeaderText(null);
             alert.setContentText("Are you sure you want to delete prisoner with code: " + prisonerCode + "?");
 
-            // Xử lý phản hồi của người dùng
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    // Xóa tù nhân khỏi cơ sở dữ liệu
                     PrisonerDAO prisonerDAO = new PrisonerDAO();
                     boolean isDeleted = prisonerDAO.deletePrisoner(prisonerCode);
 
