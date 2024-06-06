@@ -45,7 +45,7 @@
                      </children></AnchorPane>
                   <AnchorPane layoutX="821.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="101.0" prefWidth="151.0" styleClass="bgAnchorPane" stylesheets="@../../css/prisoner.css" AnchorPane.leftAnchor="841.0" AnchorPane.topAnchor="10.0">
                      <children>
-                        <Button fx:id="btnAdd3" layoutY="-1.0" mnemonicParsing="false" onAction="#loadAddPrisonerView" prefHeight="102.0" prefWidth="151.0" stylesheets="@../../css/prisoner.css" />
+                        <Button fx:id="btnAdd3" layoutY="-1.0" mnemonicParsing="false" onAction="#loadFilterView" prefHeight="102.0" prefWidth="151.0" stylesheets="@../../css/prisoner.css" />
                         <ImageView fitHeight="51.0" fitWidth="54.0" layoutX="49.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../imgsApp/filterIcon.png" />

@@ -1,0 +1,94 @@
+.bg
+{
+    -fx-text-fill: #afaeae;
+    -fx-background-color: #959595;
+    -fx-background-radius: 0px 0px 3px 0px;
+}
+.u18
+{
+    -fx-background-color: #faaaaa;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.u18:hover
+{
+    -fx-background-color: #ff6f6f;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.u40
+{
+    -fx-background-color: #5c9a5c;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.u40:hover
+ {
+    -fx-background-color: #007300;
+    -fx-background-radius: 0px 0px 0px 0px;
+ }
+.u70
+{
+    -fx-background-color: #ffff8e;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.u70:hover
+ {
+    -fx-background-color: #8e8e00;
+    -fx-background-radius: 0px 0px 0px 0px;
+ }
+.over70
+{
+    -fx-background-color: #fd4545;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.over70:hover
+ {
+    -fx-background-color: #930000;
+    -fx-background-radius: 0px 0px 0px 0px;
+ }
+.male
+{
+    -fx-background-color: #138dff;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.male:hover
+{
+    -fx-background-color: #0061bd;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.female
+{
+    -fx-background-color: #fb5dbc;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.female:hover
+{
+    -fx-background-color: #ff0095;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.other
+{
+    -fx-background-radius: 0px 0px 0px 0px;
+    -fx-background-color: linear-gradient(
+            to right,
+            red,
+            yellow,
+            orange,
+            green,
+            blue,
+            indigo,
+            violet
+    );
+}
+.other:hover
+{
+    -fx-background-radius: 0px 0px 0px 0px;
+    -fx-background-color: linear-gradient(
+            to right,
+            violet,
+            indigo,
+            blue,
+            green,
+            orange,
+            yellow,
+            red
+    );
+}

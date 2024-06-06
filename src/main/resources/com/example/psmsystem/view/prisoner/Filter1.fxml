@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="319.0" prefWidth="278.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.FilterController">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+
+    <!-- Title -->
+    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Filter Prisoner" />
+    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+        <children>
+
+            <Label layoutY="4.0" text="Prisoner Name:" />
+            <TextField fx:id="txtPrisonerName" layoutX="90.0" />
+        </children>
+    </AnchorPane>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+        <children>
+
+            <Label layoutY="4.0" text="Date of Birth:" />
+            <DatePicker fx:id="datePrisonerDOB" layoutX="90.0" prefHeight="25.0" prefWidth="149.0" />
+        </children>
+    </AnchorPane>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+        <children>
+
+            <Label layoutY="7.0" text="Gender:" />
+            <HBox layoutX="53.0" layoutY="1.0" prefHeight="30.0" prefWidth="188.0">
+                <children>
+                    <RadioButton fx:id="rbtnMale" mnemonicParsing="false" prefHeight="30.0" prefWidth="66.0" text="Male" />
+                    <RadioButton fx:id="rbtnFemale" mnemonicParsing="false" prefHeight="30.0" prefWidth="83.0" text="Female" />
+                    <RadioButton fx:id="rbtnOther" mnemonicParsing="false" prefHeight="30.0" prefWidth="68.0" text="Other" />
+                </children>
+            </HBox>
+        </children>
+    </AnchorPane>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+        <children>
+
+            <Label layoutY="4.0" text="Contact Name:" />
+            <TextField fx:id="txtContactName" layoutX="92.0" />
+        </children>
+    </AnchorPane>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+        <children>
+
+            <Label layoutY="4.0" text="Contact Phone:" />
+            <TextField fx:id="txtContactPhone" layoutX="92.0" />
+        </children>
+    </AnchorPane>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+        <children>
+            <Label layoutY="5.0" text="Identity Card:" />
+            <TextField fx:id="txtIdentityCard" layoutX="92.0" layoutY="1.0" />
+        </children>
+    </AnchorPane>
+    <AnchorPane prefHeight="41.0" prefWidth="239.0">
+        <children>
+            <Button layoutX="135.0" text="Filter" />
+            <Button fx:id="btnBack" layoutX="66.0" mnemonicParsing="false" onAction="#back" text="Back" />
+        </children>
+    </AnchorPane>
+</VBox>

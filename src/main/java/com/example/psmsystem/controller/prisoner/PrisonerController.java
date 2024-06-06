@@ -139,11 +139,37 @@ public class PrisonerController implements Initializable {
             System.out.println( "PrisonerController: " + e.getMessage());
         }
     }
+    public void openFilterWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/FilterView.fxml"));
+            VBox newWindowContent = loader.load();
+
+//            AddPrisonerController addPrisonerController = loader.getController();
+//            addPrisonerController.setUserIdAdd(this.userId);
+//            addPrisonerController.setPrisonerController(this);
+//            System.out.println("User id add new : " + this.userId);
+
+            Stage newStage = new Stage();
+            Scene scene = new Scene(newWindowContent);
+            newStage.setScene(scene);
+            newStage.initStyle(StageStyle.UNDECORATED);
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.setTitle("New Window");
+
+            newStage.show();
+        } catch (IOException e) {
+            System.out.println( "PrisonerController - openFilterWindow: " + e.getMessage());
+        }
+    }
 
     @FXML
     void loadAddPrisonerView(ActionEvent event) {
         openAddWindow();
     }
 
+    @FXML
+    void loadFilterView(ActionEvent event) {
+        openFilterWindow();
+    }
 
 }
