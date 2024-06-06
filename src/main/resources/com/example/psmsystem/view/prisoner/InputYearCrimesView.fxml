@@ -19,8 +19,8 @@
           </VBox>
          <AnchorPane layoutY="221.0" prefHeight="60.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <Button fx:id="btnBack" layoutX="90.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" prefWidth="60.0" text="Back" />
-                <Button fx:id="btnAccept" layoutX="150.0" layoutY="12.0" mnemonicParsing="false" onAction="#insertMonthOfCrime" prefWidth="60.0" text="Accept" />
+                <Button fx:id="btnBack" layoutX="84.0" layoutY="12.0" mnemonicParsing="false" onAction="#back" prefWidth="60.0" text="Back" />
+                <Button fx:id="btnAccept" layoutX="156.0" layoutY="12.0" mnemonicParsing="false" onAction="#insertMonthOfCrime" prefWidth="60.0" text="Accept" />
             </children>
          </AnchorPane>
          <Label layoutX="58.0" layoutY="14.0" prefHeight="26.0" prefWidth="184.0" text="INPUT YEAR OF CRIMES" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="20.0">

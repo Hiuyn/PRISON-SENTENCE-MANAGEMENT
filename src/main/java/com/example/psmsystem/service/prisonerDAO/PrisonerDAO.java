@@ -36,22 +36,25 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_PRISONER_QUERY);
+            statement.setBoolean(1,false);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
-                prisoner.setPrisonerCode(rs.getString("prisoner_code"));
+                prisoner.setPrisonerCode(rs.getString("prisoner_id"));
                 prisoner.setPrisonerName(rs.getString("prisoner_name"));
                 prisoner.setDOB(rs.getString("date_birth"));
                 prisoner.setGender(rs.getInt("gender"));
-                prisoner.setContactName(rs.getString("contact_name"));
-                prisoner.setContactPhone(rs.getString("contact_phone"));
-                prisoner.setImagePath(rs.getString("image_path"));
-
+                prisoner.setIdentityCard(rs.getString("identity_card"));
+                prisoner.setContactName(rs.getString("contacter_name"));
+                prisoner.setContactPhone(rs.getString("contacter_phone"));
+                prisoner.setImagePath(rs.getString("image"));
+                prisoner.setStatus(rs.getBoolean("status"));
+                prisoner.setUser_id(rs.getInt("user_id"));
                 prisonerList.add(prisoner);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("PrisonerDao getAllPrisoner : " + e.getMessage());
         }
         return prisonerList;
     }

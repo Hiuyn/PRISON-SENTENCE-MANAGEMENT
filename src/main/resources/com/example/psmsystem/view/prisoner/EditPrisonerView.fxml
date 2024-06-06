@@ -34,7 +34,7 @@
                         <ImageView fx:id="imgPrisonerAdd" fitHeight="137.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true" />
                     </children></AnchorPane>
             <Label layoutX="169.0" layoutY="64.0" text="ID: " />
-            <Label fx:id="txtPrisonerId" layoutX="203.0" layoutY="64.0" text="Prisoner Id" />
+            <Label fx:id="lbPrisonerId" layoutX="203.0" layoutY="64.0" text="Prisoner Id" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="195.0" layoutY="395.0" prefHeight="218.0" prefWidth="398.0" styleClass="sentenceForm" stylesheets="@../../css/addPrisoner.css">

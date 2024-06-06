@@ -10,7 +10,7 @@
    <children>
       <AnchorPane layoutX="85.0" layoutY="109.0" prefHeight="262.0" prefWidth="492.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css">
          <children>
-            <TextField fx:id="txtPrisonerFNAdd" layoutX="27.0" layoutY="59.0" prefHeight="26.0" prefWidth="146.0" promptText="Full name" stylesheets="@../../css/addPrisoner.css" />
+            <TextField fx:id="txtPrisonerFNAdd" layoutX="27.0" layoutY="111.0" prefHeight="26.0" prefWidth="128.0" promptText="Full name" stylesheets="@../../css/addPrisoner.css" />
             <HBox layoutX="80.0" layoutY="156.0" prefHeight="30.0" prefWidth="220.0">
                <children>
             <!--      <HBox fx:id="tnGender" layoutX="171.0" layoutY="169.0" prefHeight="30.0" prefWidth="226.0" >-->
@@ -28,25 +28,21 @@
                   <Font name="Agency FB Bold" size="21.0" />
                </font>
             </Label>
-            <DatePicker fx:id="datePrisonerDOBAdd" layoutX="27.0" layoutY="111.0" prefHeight="26.0" prefWidth="128.0" promptText="Date of birth" />
             <AnchorPane layoutX="330.0" layoutY="56.0" prefHeight="127.0" prefWidth="138.0" styleClass="imgView" stylesheets="@../../css/addPrisoner.css">
                <children>
                   <ImageView fx:id="imgPrisonerAdd" fitHeight="134.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true" />
                </children></AnchorPane>
-            <Label fx:id="lbPrisonerId" layoutX="227.0" layoutY="59.0" prefHeight="26.0" prefWidth="70.0" text="40000">
+            <Label fx:id="lbPrisonerId" layoutX="227.0" layoutY="14.0" prefHeight="26.0" prefWidth="70.0" text="40000">
                <font>
                   <Font name="Agency FB Bold" size="21.0" />
                </font>
             </Label>
-            <Label fx:id="lbPrisonerId1" layoutX="190.0" layoutY="59.0" prefHeight="26.0" prefWidth="31.0" text="ID: ">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtIdentityCard" layoutX="173.0" layoutY="111.0" prefHeight="26.0" prefWidth="128.0" promptText="Identity card" />
+            <TextField fx:id="txtIdentityCard" layoutX="27.0" layoutY="59.0" prefHeight="26.0" prefWidth="128.0" promptText="Identity card" />
+            <DatePicker fx:id="datePrisonerDOBAdd" layoutX="177.0" layoutY="111.0" prefHeight="26.0" prefWidth="120.0" promptText="Date of birth" />
+            <Button fx:id="btnCheckIdentity" layoutX="176.0" layoutY="59.0" mnemonicParsing="false" onAction="#checkIdentityCard" prefHeight="26.0" prefWidth="120.0" styleClass="buttonAddImg" stylesheets="@../../css/addPrisoner.css" text="Check" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="25.0" layoutY="405.0" prefHeight="236.0" prefWidth="403.0" styleClass="sentenceForm" stylesheets="@../../css/addPrisoner.css">
+      <AnchorPane layoutX="25.0" layoutY="398.0" prefHeight="236.0" prefWidth="403.0" styleClass="sentenceForm" stylesheets="@../../css/addPrisoner.css">
          <children>
             <CheckComboBox fx:id="ccbCrimes" layoutX="36.0" layoutY="181.0" prefHeight="26.0" prefWidth="152.0" title="Crimes" />
             <Button fx:id="btnShowYearInput" layoutX="204.0" layoutY="181.0" onAction="#loadInputYearCrimeView" prefHeight="26.0" prefWidth="152.0" text="Time of crime" />

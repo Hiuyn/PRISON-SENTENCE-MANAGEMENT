@@ -98,6 +98,10 @@ public class AddPrisonerController implements Initializable {
     private DatePicker dateIn;
     @FXML
     private DatePicker dateOut;
+    @FXML
+    private Button btnCheckIdentity;
+
+
     private String getRelativePath;
     private int userId;
     private boolean imageSelected = false;
@@ -119,6 +123,80 @@ public class AddPrisonerController implements Initializable {
             prisonerController.refreshPrisonerList();
     }
 
+
+    public void checkIdentityCard()
+    {
+        try {
+            List<Prisoner> prisonerList;
+            PrisonerDAO prisonerDAO = new PrisonerDAO();
+            prisonerList = prisonerDAO.getAllPrisoner();
+            boolean prisonerFound = false;
+            for (Prisoner prisoner : prisonerList) {
+                if (prisoner.getIdentityCard().equals(txtIdentityCard.getText())) {
+                    prisonerFound = true;
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Add Prisoner");
+                    alert.setHeaderText("INFORMATION");
+                    alert.setContentText("Prisoner already exists");
+                    alert.showAndWait();
+                    String defaultPath = "/com/example/psmsystem/assets/imagesPrisoner/default.png";
+                    String id = prisoner.getPrisonerCode();
+                    String name = prisoner.getPrisonerName();
+                    String DOB = prisoner.getDOB();
+                    int gender = prisoner.getGender();
+                    String contactName = prisoner.getContactName();
+                    String contactPhone = prisoner.getContactPhone();
+                    String imagePath = prisoner.getImagePath();
+                    lbPrisonerId.setText(id);
+                    txtPrisonerFNAdd.setText(name);
+                    datePrisonerDOBAdd.setValue(LocalDate.parse(DOB));
+                    if (gender == 1) {
+                        rbtnMale.setSelected(true);
+                    }
+                    else if (gender == 2) {
+                        rbtnFemale.setSelected(true);
+                    }else
+                    {
+                        rbtnOther.setSelected(true);
+                    }
+                    txtContactName.setText(contactName);
+                    txtContactPhone.setText(contactPhone);
+                    File imageFile;
+                    if (imagePath != null && !imagePath.isEmpty()) {
+                        imageFile = new File(imagePath);
+                    } else {
+                        imageFile = new File(defaultPath);
+                    }
+                    Image image = new Image(imageFile.toURI().toString());
+                    imgPrisonerAdd.setImage(image);
+//                    lbPrisonerId.setVisible(false);
+                     break;
+                }
+
+            }
+            if (!prisonerFound) {
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Add Prisoner");
+                alert.setHeaderText("INFORMATION");
+                alert.setContentText("Prisoner not already exists");
+                alert.showAndWait();
+                lbPrisonerId.setText("");
+                txtPrisonerFNAdd.setText("");
+                datePrisonerDOBAdd.setValue(null);
+                imgPrisonerAdd.setImage(null);
+                rbtnMale.setSelected(false);
+                rbtnFemale.setSelected(false);
+                rbtnOther.setSelected(false);
+                txtContactName.setText("");
+                txtContactPhone.setText("");
+            }
+
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
     public void setPrisonerController(PrisonerController prisonerController) {
         this.prisonerController = prisonerController;
     }
@@ -321,6 +399,7 @@ public String convertSelectedToString(List<Integer> idList)
         setPrisonerId();
         setIdSentence();
         setCbCrimes();
+        lbPrisonerId.setVisible(false);
         tgGender = new ToggleGroup();
         tgSentenceType = new ToggleGroup();
 
