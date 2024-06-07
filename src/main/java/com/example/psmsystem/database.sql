@@ -1,183 +1,180 @@
 drop database prisoner_sentence;
-create database if not exists prisoner_sentence;
+create database prisoner_sentence;
 use prisoner_sentence;
-
+-- 1
 create table users(
-  user_id int primary key auto_increment,
-  name nvarchar(50) not null,
-  username nvarchar(15) not null,
-  hash_password varchar(500) not null
+                      user_id int auto_increment primary key, -- id
+                      full_name nvarchar(50) not null, -- full name
+                      username nvarchar(15) not null, -- username
+                      password nvarchar(500) not null -- hash password
 );
 
-create table prisoners( 
-	 prisoner_id int primary key auto_increment,
-     prisoner_code int not null unique,
-     prisoner_name nvarchar(50) not null,
-     date_birth date not null,
-     gender enum('male','female','other') not null,
-     contact_name nvarchar(50),
-     contact_phone nvarchar(15),
-     image_path text not null
+-- 2
+create table prisoners(  -- tù nhân
+                          prisoner_id int primary key auto_increment, -- id
+                          prisoner_name nvarchar(50) not null, -- tên tù nhân
+                          date_birth date not null, -- ngày sinh
+                          gender int not null, -- 1: male,2:female,3:other
+                          identity_card nvarchar(12) not null,
+                          contacter_name nvarchar(50), -- người liên hệ
+                          contacter_phone nvarchar(15), -- số điện thoại người liên hệ
+                          image text not null, -- ảnh tù nhân
+                          status boolean default false -- false: tại giam, true: ra tù
 );
-INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path, status)
-VALUES
-(101, 'Nguyễn Văn A', '1980-05-12', 'female', 'Trần Thị B', '0123456789', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
-(102, 'Lê Thị B', '1990-08-20', 'male', 'Nguyễn Văn C', '0987654321', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-(103, 'Phạm Văn C', '1975-12-30', 'female', 'Nguyễn Thị D', '0345678901', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-(104, 'Trần Thị D', '1985-04-15', 'other', 'Trần Văn E', '0789123456', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
-(105, 'Nguyễn Văn E', '1965-01-25', 'female', 'Lê Thị F', '0456789012','src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png'),
-(106, 'Lê Thị F', '1995-07-10', 'male', 'Phạm Văn G', '0321654987', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png'),
-(107, 'Trần Văn G', '1987-02-22', 'other', 'Nguyễn Thị H', '0465789012','src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
-(108, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png'),
-(109, 'Phạm Văn I', '1983-11-17', 'female', 'Lê Thị J', '0654789123', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-(110, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png');
-use prisoner_sentence;
-INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path, status)
-VALUES
-(1, 'Nguyễn Văn A', '1980-05-12', 'female', 'Trần Thị B', '0123456789', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png','1'),
-(2, 'Lê Thị B', '1990-08-20', 'male', 'Nguyễn Văn C', '0987654321', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png','1'),
-(3, 'Phạm Văn C', '1975-12-30', 'female', 'Nguyễn Thị D', '0345678901', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png','1'),
-(4, 'Trần Thị D', '1985-04-15', 'other', 'Trần Văn E', '0789123456', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png','1'),
-(5, 'Nguyễn Văn E', '1965-01-25', 'female', 'Lê Thị F', '0456789012','src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png','1'),
-(6, 'Lê Thị F', '1995-07-10', 'male', 'Phạm Văn G', '0321654987', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png','1'),
-(7, 'Trần Văn G', '1987-02-22', 'other', 'Nguyễn Thị H', '0465789012','src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png','1'),
-(8, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png','1'),
-(9, 'Phạm Văn I', '1983-11-17', 'female', 'Lê Thị J', '0654789123', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png','1'),
-(10, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/imgPrison.png','1');
-
-create table prisoners(
-  prisoner_id int primary key auto_increment,
-  prisoner_code int not null unique,
-  prisoner_name nvarchar(50) not null,
-  date_birth date not null,
-  gender enum('male','female','other') not null,
-  contact_name nvarchar(50),
-  contact_phone nvarchar(15),
-  image_path text not null
+-- 3
+create table sentences( -- tù án
+                          sentence_id int primary key auto_increment, -- id
+                          prisoner_id int not null, -- id tù nhân
+                          sentences_code int not null, -- mã tù án
+                          sentence_type enum ("life_imprisonment",'limited_time'), -- kiểu tù án(chung thân hoặc có thời hạn)
+                          crimes_code text,
+                          start_date date, -- ngày bắt đầu
+                          end_date date, -- ngày kết thúc dự kiến
+                          release_date date, -- ngày kết thúc thực tế (chỉ khi đã ra tù)
+                          status boolean default false,  -- trạng thái tù án (false: đang hiệu lực, true: đã kết thúc)
+                          parole_eligibility nvarchar(500), -- đề xuất cho tù án: giảm án, tăng án, biệt giam...
+                          update_date date default (current_date()), -- ngày update
+                          foreign key (prisoner_id) references prisoners(prisoner_id)
 );
-INSERT INTO prisoners (prisoner_code, prisoner_name, date_birth, gender, contact_name, contact_phone, image_path)
-VALUES
-    (101, 'Nguyễn Văn A', '1980-05-12', 'female', 'Trần Thị B', '0123456789', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
-    (102, 'Lê Thị B', '1990-08-20', 'male', 'Nguyễn Văn C', '0987654321', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-    (103, 'Phạm Văn C', '1975-12-30', 'female', 'Nguyễn Thị D', '0345678901', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-    (104, 'Trần Thị D', '1985-04-15', 'other', 'Trần Văn E', '0789123456', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
-    (105, 'Nguyễn Văn E', '1965-01-25', 'female', 'Lê Thị F', '0456789012','src/main/resources/com/example/psmsystem/imagesPrisoner/img.png'),
-    (106, 'Lê Thị F', '1995-07-10', 'male', 'Phạm Văn G', '0321654987', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img.png'),
-    (107, 'Trần Văn G', '1987-02-22', 'other', 'Nguyễn Thị H', '0465789012','src/main/resources/com/example/psmsystem/imagesPrisoner/img_1.png'),
-    (108, 'Nguyễn Thị H', '1992-09-13', 'male', 'Trần Văn I', '0145678390', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img.png'),
-    (109, 'Phạm Văn I', '1983-11-17', 'female', 'Lê Thị J', '0654789123', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img_2.png'),
-    (110, 'Lê Thị J', '1988-03-04', 'female', 'Nguyễn Văn K', '0234567890', 'src/main/resources/com/example/psmsystem/imagesPrisoner/img.png');
-
-create table incareration_process(
-     process_id int primary key auto_increment,
-     prisoner_code int not null,
-     event_date date default (curdate()),
-     event_type enum("Vbreach of discipline","Bonus","Participate in renovation"),
-     desctiption nvarchar(200),
-     note text,
-     foreign key (prisoner_code) references prisoners(prisoner_code)
+-- 4
+create table crimes( -- tội danh
+                       crime_id int primary key auto_increment, -- id
+                       crime_name nvarchar(255) not null -- tên tội danh
 );
-INSERT INTO incareration_process (prisoner_code, event_date, event_type, desctiption, note)
-VALUES
-    (101, '2022-12-01', 'Vbreach of discipline', 'Vi phạm kỷ luật', 'Cảnh cáo'),
-    (102, '2023-01-15', 'Bonus', 'Được thưởng vì cải tạo tốt', 'Thêm giờ tham quan'),
-    (103, '2023-02-20', 'Participate in renovation', 'Tham gia cải tạo', 'Xây dựng tường'),
-    (104, '2023-03-10', 'Vbreach of discipline', 'Vi phạm kỷ luật', 'Phạt lao động'),
-    (105, '2023-04-05', 'Bonus', 'Được thưởng vì cải tạo tốt', 'Tặng quà'),
-    (106, '2023-05-12', 'Participate in renovation', 'Tham gia cải tạo', 'Trồng cây xanh'),
-    (107, '2023-06-15', 'Vbreach of discipline', 'Vi phạm kỷ luật', 'Tước quyền lợi'),
-    (108, '2023-07-20', 'Bonus', 'Được thưởng vì cải tạo tốt', 'Gia hạn quyền lợi'),
-    (109, '2023-08-30', 'Participate in renovation', 'Tham gia cải tạo', 'Làm vườn rau'),
-    (110, '2023-09-10', 'Vbreach of discipline', 'Vi phạm kỷ luật', 'Báo cáo kỷ luật');
-use prisoner_sentence;
-create table Visitation(
-   Visitation_id int primary key auto_increment,
-   prisoner_code int not null,
-   visitor_name nvarchar(50) not null,
-   national_identification_number nvarchar(15) not null,
-   relationship nvarchar(50) not null,
-   visit_date date default (curdate()),
-   notes text,
-   foreign key (prisoner_code) references prisoners(prisoner_code)
+-- 4
+create table disciplinary_measures( -- phê bình, khiển trách
+                                      disciplinary_measure_id int primary key auto_increment, -- id
+                                      sentence_id int not null, -- id tù án
+                                      date_of_occurrence date default (curdate()), -- ngày xảy ra
+                                      level int, -- 1: MILD, 2:MODERATE, 3:SEVERE, 4:EXTREMELY SEVERE
+                                      note text,
+                                      foreign key (sentence_id) references sentences(sentence_id)
 );
-INSERT INTO Visitation (prisoner_code, visitor_name, national_identification_number, relationship, visit_date, notes)
-VALUES
-    (101, 'Nguyễn Thị X', '0123456789', 'vợ', '2023-01-10', 'Thăm nom hàng tháng'),
-    (102, 'Trần Văn Y', '0987654321', 'chồng', '2023-02-15', 'Mang đồ dùng cá nhân'),
-    (103, 'Lê Văn Z', '0345678901', 'anh trai', '2023-03-20', 'Mang thực phẩm'),
-    (104, 'Phạm Thị W', '0789123456', 'em gái', '2023-04-25', 'Thăm định kỳ'),
-    (105, 'Nguyễn Văn V', '0456789012', 'cha', '2023-05-05', 'Thăm nom'),
-    (106, 'Trần Thị U', '0321654987', 'mẹ', '2023-06-10', 'Thăm định kỳ'),
-    (107, 'Lê Văn T', '0465789012', 'anh trai', '2023-07-15', 'Mang quà'),
-    (108, 'Nguyễn Thị S', '0145678390', 'chị gái', '2023-08-20', 'Thăm nom hàng tháng'),
-    (109, 'Trần Văn R', '0654789123', 'bạn bè', '2023-09-25', 'Mang quà và thực phẩm'),
-    (110, 'Lê Thị Q', '0234567890', 'bạn bè', '2023-10-10', 'Thăm định kỳ');
-
-create table healths(
-    health_id int primary key auto_increment,
-    prisoner_code int not null,
-    weight double not null, -- kg
-    height double not null, -- mét
-    checkup_date date default (curdate()),
-    physical_condition text,
-    psychological_signs text,
-    situation text,
-    notes text,
-    foreign key (prisoner_code) references prisoners(prisoner_code)
+-- 4
+create table commendations( -- tuyên dương, khen thưởng
+                              commendation_id int primary key auto_increment, -- id
+                              sentence_id int not null, -- id tù án
+                              date_of_occurrence date default (curdate()), -- ngày xảy ra
+                              level int, -- 1: MILD,2:MODERATE,3:Good,4:very good
+                              note text,
+                              foreign key (sentence_id) references sentences(sentence_id)
 );
-INSERT INTO healths (prisoner_code, weight, height, checkup_date, physical_condition, psychological_signs, situation, notes)
-VALUES
-    (101, 70, 1.75, '2023-03-15', 'Khỏe mạnh', 'Ổn định', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ'),
-    (102, 55, 1.60, '2023-04-10', 'Ổn định', 'Bình thường', 'Không vấn đề gì', 'Kiểm tra sức khỏe'),
-    (103, 80, 1.85, '2023-05-20', 'Khỏe mạnh', 'Ổn định', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ'),
-    (104, 60, 1.65, '2023-06-05', 'Ổn định', 'Bình thường', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ'),
-    (105, 90, 1.80, '2023-07-15', 'Khỏe mạnh', 'Ổn định', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ'),
-    (106, 50, 1.55, '2023-08-10', 'Ổn định', 'Bình thường', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ'),
-    (107, 85, 1.90, '2023-09-25', 'Khỏe mạnh', 'Ổn định', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ'),
-    (108, 45, 1.50, '2023-10-05', 'Ổn định', 'Bình thường', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ'),
-    (109, 100, 2.00, '2023-11-10', 'Khỏe mạnh', 'Ổn định', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ'),
-    (110, 65, 1.70, '2023-12-15', 'Khỏe mạnh', 'Ổn định', 'Không vấn đề gì', 'Kiểm tra sức khỏe định kỳ');
-
-create table sentences(
-  sentence_id int primary key auto_increment,
-  prisoner_code int not null,
-  sentence_type enum ("life_imprisonment",'limited_time'),
-  start_date date default (curdate()),
-  end_date date,   
-  status nvarchar(50),
-  parole_eligibility text,
-  foreign key (prisoner_code) references prisoners(prisoner_code)
+-- 4
+create table visit_log(
+                          Visit_log_id int primary key auto_increment, -- id
+                          sentence_id int not null, -- id tù án
+                          prisoner_id int not null, -- id tù nhân
+                          visitor_name nvarchar(50) not null, -- tên người thăm
+                          identity_card nvarchar(15) not null, -- CCCD
+                          relationship nvarchar(50) not null, -- quan hệ
+                          visit_date date default (curdate()), -- ngày thăm
+                          start_time time not null , -- giờ bắt đầu thăm
+                          end_time time not null, -- giờ kết thúc
+                          notes text,
+                          foreign key (sentence_id) references sentences(sentence_id),
+                          foreign key (prisoner_id) references prisoners(prisoner_id)
 );
-INSERT INTO sentences (sentence_code, prisoner_code, sentence_type, start_date, end_date, status, parole_eligibility)
-VALUES
-    (1, 101, 'life imprisonment', '2020-01-01', NULL, 'Đang chấp hành án', 'Không đủ điều kiện'),
-    (2, 102, 'limited time', '2021-02-15', '2031-02-15', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 5 năm'),
-    (3, 103, 'limited time', '2022-03-20', '2027-03-20', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 3 năm'),
-    (4, 104, 'life imprisonment', '2023-04-05', NULL, 'Đang chấp hành án', 'Không đủ điều kiện'),
-    (5, 105, 'limited time', '2024-05-10', '2034-05-10', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 6 năm'),
-    (6, 106, 'limited time', '2025-06-15', '2035-06-15', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 4 năm'),
-    (7, 107, 'limited time', '2026-07-20', '2036-07-20', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 5 năm'),
-    (8, 108, 'limited time', '2027-08-30', '2037-08-30', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 7 năm'),
-    (9, 109, 'limited time', '2028-09-10', '2038-09-10', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 6 năm'),
-    (10, 110, 'limited time', '2029-10-15', '2039-10-15', 'Đang chấp hành án', 'Có thể đủ điều kiện sau 4 năm');
-use prisoner_sentence
-ALTER TABLE sentences
-    ADD INDEX idx_sentence_code (sentence_code);
-create table crimes(
-   crime_id int primary key auto_increment,
-   crime_name nvarchar(255),
-   note text
+-- 4
+create table healths( -- lịch sử khám sức khỏe
+                        health_id int primary key auto_increment, -- id
+                        sentence_id int not null, -- id tù án
+                        prisoner_id int not null, -- id tù nhân
+                        weight double not null, -- kg
+                        height double not null, -- mét
+                        checkup_date date default (curdate()), -- ngày kiểm tra
+                        status boolean default false,-- false: khỏe, true: bệnh
+                        level int default 0,-- 0: không bệnh, 1: nhẹ, 2: nặng, 3: cần can thiệp
+                        foreign key (prisoner_id) references prisoners(prisoner_id),
+                        foreign key (sentence_id) references sentences(sentence_id)
 );
 
-INSERT INTO crimes (crime_name)
-VALUES
-    ('Cướp của'),
-    ('Giết người'),
-    ('Hành hung'),
-    ('Trộm'),
-    ('Bạo hành'),
-    ('Cố ý gây thương tích'),
-    ('Nhận hối lộ'),
-    ('Tội danh 8'),
-    ('Tội danh 9'),
-    ('Tội danh 10');
+-- Thêm dữ liệu vào bảng prisoners
+INSERT INTO prisoners (prisoner_name, date_birth, gender, identity_card, contacter_name, contacter_phone, image, status) VALUES
+                                                                                                                             ('Nguyen Van A', '1980-05-15', 1, '123456789012', 'Nguyen Van B', '0987654321', 'image_url_1', false),
+                                                                                                                             ('Tran Thi B', '1992-07-20', 2, '987654321012', 'Tran Van C', '0912345678', 'image_url_2', false),
+                                                                                                                             ('Le Van C', '1978-03-10', 1, '112233445566', 'Le Thi D', '0908765432', 'image_url_3', false),
+                                                                                                                             ('Pham Thi D', '1985-11-22', 2, '665544332211', 'Pham Van E', '0923456789', 'image_url_4', false),
+                                                                                                                             ('Hoang Van E', '1990-01-01', 1, '998877665544', 'Hoang Thi F', '0934567890', 'image_url_5', false),
+                                                                                                                             ('Vu Thi F', '1988-06-30', 2, '556677889900', 'Vu Van G', '0945678901', 'image_url_6', false),
+                                                                                                                             ('Ngo Van G', '1975-09-18', 1, '334455667788', 'Ngo Thi H', '0956789012', 'image_url_7', false),
+                                                                                                                             ('Dang Thi H', '1993-12-25', 2, '223344556677', 'Dang Van I', '0967890123', 'image_url_8', false),
+                                                                                                                             ('Bui Van I', '1982-07-07', 1, '445566778899', 'Bui Thi J', '0978901234', 'image_url_9', false),
+                                                                                                                             ('Tran Van J', '1991-03-15', 1, '778899112233', 'Tran Thi K', '0989012345', 'image_url_10', false);
+
+-- Thêm dữ liệu vào bảng sentences
+INSERT INTO sentences (prisoner_id, sentences_code, sentence_type, crimes_code, start_date, end_date, status, parole_eligibility) VALUES
+                                                                                                                                      (1, 101, 'life imprisonment', 'Theft', '2020-01-01', '9999-12-31', false, 'Eligible for parole after 20 years'),
+                                                                                                                                      (2, 102, 'limited time', 'Fraud', '2021-05-10', '2031-05-10', false, 'Good behavior may reduce sentence'),
+                                                                                                                                      (3, 103, 'limited time', 'Assault', '2019-08-15', '2029-08-15', false, 'May apply for parole after 5 years'),
+                                                                                                                                      (4, 104, 'life imprisonment', 'Robbery', '2018-12-01', '9999-12-31', false, 'Parole possible after 25 years'),
+                                                                                                                                      (5, 105, 'limited time', 'Drug Trafficking', '2022-03-20', '2032-03-20', false, 'Parole eligibility in 3 years'),
+                                                                                                                                      (6, 106, 'life imprisonment', 'Murder', '2023-07-10', '9999-12-31', false, 'Parole possible after 15 years'),
+                                                                                                                                      (7, 107, 'limited time', 'Burglary', '2020-02-25', '2030-02-25', false, 'Good behavior may reduce sentence'),
+                                                                                                                                      (8, 108, 'life imprisonment', 'Kidnapping', '2017-06-30', '9999-12-31', false, 'Eligible for parole after 30 years'),
+                                                                                                                                      (9, 109, 'limited time', 'Arson', '2016-09-10', '2026-09-10', false, 'May apply for parole after 4 years'),
+                                                                                                                                      (10, 110, 'life imprisonment', 'Embezzlement', '2015-11-15', '9999-12-31', false, 'Parole possible after 20 years');
+
+-- Thêm dữ liệu vào bảng crimes
+INSERT INTO crimes (crime_name) VALUES
+                                    ('Theft'),
+                                    ('Fraud'),
+                                    ('Assault'),
+                                    ('Robbery'),
+                                    ('Drug Trafficking'),
+                                    ('Murder'),
+                                    ('Burglary'),
+                                    ('Kidnapping'),
+                                    ('Arson'),
+                                    ('Embezzlement');
+
+-- Thêm dữ liệu vào bảng disciplinary_measures
+INSERT INTO disciplinary_measures (sentence_id, date_of_occurrence, level, note) VALUES
+                                                                                     (1, '2022-03-15', 2, 'Insubordination'),
+                                                                                     (2, '2023-01-20', 3, 'Violent behavior'),
+                                                                                     (3, '2021-06-10', 1, 'Minor misconduct'),
+                                                                                     (4, '2020-12-05', 4, 'Severe violation of rules'),
+                                                                                     (5, '2019-07-25', 2, 'Disobeying orders'),
+                                                                                     (6, '2018-04-30', 3, 'Fighting with other inmates'),
+                                                                                     (7, '2022-10-15', 1, 'Late for roll call'),
+                                                                                     (8, '2021-02-28', 4, 'Attempted escape'),
+                                                                                     (9, '2020-08-20', 2, 'Possession of contraband'),
+                                                                                     (10, '2019-11-10', 3, 'Threatening staff');
+
+-- Thêm dữ liệu vào bảng commendations
+INSERT INTO commendations (sentence_id, date_of_occurrence, level, note) VALUES
+                                                                             (1, '2022-06-30', 4, 'Helped in prison work'),
+                                                                             (2, '2023-02-25', 3, 'Good behavior'),
+                                                                             (3, '2021-09-15', 2, 'Assisted in a charity event'),
+                                                                             (4, '2020-05-10', 1, 'Maintained cleanliness'),
+                                                                             (5, '2019-03-25', 4, 'Prevented an escape attempt'),
+                                                                             (6, '2018-08-30', 3, 'Participated in educational program'),
+                                                                             (7, '2022-11-15', 2, 'Showed leadership among inmates'),
+                                                                             (8, '2021-01-28', 1, 'Completed vocational training'),
+                                                                             (9, '2020-06-20', 4, 'Provided medical assistance'),
+                                                                             (10, '2019-12-10', 3, 'Good conduct during lockdown');
+
+-- Thêm dữ liệu vào bảng visit_log
+INSERT INTO visit_log (sentence_id, prisoner_id, visitor_name, identity_card, relationship, visit_date, start_time, end_time, notes) VALUES
+                                                                                                                                         (1, 1, 'Nguyen Van B', '111122223333', 'Brother', '2023-04-10', '09:00:00', '10:00:00', 'Brought food and clothes'),
+                                                                                                                                         (2, 2, 'Tran Van C', '444455556666', 'Father', '2023-05-15', '14:00:00', '15:00:00', 'Discussed legal matters'),
+                                                                                                                                         (3, 3, 'Le Thi D', '777788889999', 'Wife', '2023-03-20', '10:00:00', '11:00:00', 'Discussed family issues'),
+                                                                                                                                         (4, 4, 'Pham Van E', '000011112222', 'Husband', '2023-02-25', '15:00:00', '16:00:00', 'Brought documents'),
+                                                                                                                                         (5, 5, 'Hoang Thi F', '333344445555', 'Sister', '2023-01-15', '11:00:00', '12:00:00', 'Provided moral support'),
+                                                                                                                                         (6, 6, 'Vu Van G', '666677778888', 'Brother', '2023-06-10', '09:30:00', '10:30:00', 'Discussed health issues'),
+                                                                                                                                         (7, 7, 'Ngo Thi H', '999900001111', 'Wife', '2023-07-20', '13:00:00', '14:00:00', 'Brought clothes'),
+                                                                                                                                         (8, 8, 'Dang Van I', '222233334444', 'Father', '2023-08-30', '14:30:00', '15:30:00', 'Discussed parole options'),
+                                                                                                                                         (9, 9, 'Bui Thi J', '555566667777', 'Mother', '2023-09-25', '10:00:00', '11:00:00', 'Discussed family matters'),
+                                                                                                                                         (10, 10, 'Tran Thi K', '888899990000', 'Wife', '2023-10-15', '16:00:00', '17:00:00', 'Brought legal documents');
+
+-- Thêm dữ liệu vào bảng healths
+INSERT INTO healths (sentence_id, prisoner_id, weight, height, checkup_date, status, level) VALUES
+                                                                                                (1, 1, 70, 1.75, '2023-03-10', false, 0),
+                                                                                                (2, 2, 65, 1.60, '2023-04-20', true, 1),
+                                                                                                (3, 3, 80, 1.80, '2023-05-15', false, 0),
+                                                                                                (4, 4, 55, 1.55, '2023-06-10', true, 2),
+                                                                                                (5, 5, 75, 1.70, '2023-07-20', false, 0),
+                                                                                                (6, 6, 68, 1.65, '2023-08-30', true, 1),
+                                                                                                (7, 7, 85, 1.85, '2023-09-25', true, 3),
+                                                                                                (8, 8, 60, 1.60, '2023-10-15', false, 0),
+                                                                                                (9, 9, 72, 1.78, '2023-11-10', true, 2),
+                                                                                                (10, 10, 67, 1.67, '2023-12-05', false, 0);

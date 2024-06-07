@@ -22,7 +22,7 @@
             <String fx:value="shadow" />
          </styleClass>
          <children>
-            <Button layoutX="1240.0" layoutY="241.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CREATE">
+            <Button disable="true" layoutX="1240.0" layoutY="241.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CREATE">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="success" />
@@ -40,14 +40,14 @@
                   <String fx:value="clear" />
                </styleClass>
             </Button>
-            <Button layoutX="1473.0" layoutY="241.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="DELETE">
+            <Button disable="true" layoutX="1473.0" layoutY="241.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="DELETE">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="danger" />
                </styleClass>
             </Button>
-            <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="87.0" text="Prisoner Code:" />
-            <SearchableComboBox fx:id="filterCombo" layoutX="122.0" layoutY="14.0" prefHeight="40.0" prefWidth="241.0" promptText="Select Prisoner ID" />
+            <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="87.0" text="Sentence Code:" />
+            <SearchableComboBox fx:id="filterCombo" layoutX="122.0" layoutY="14.0" prefHeight="40.0" prefWidth="241.0" promptText="Select Sentence Code" />
             <Label alignment="CENTER_RIGHT" layoutX="26.0" layoutY="87.0" prefHeight="40.0" prefWidth="80.0" text="Years served:" />
             <TextField fx:id="txtYear" alignment="CENTER_RIGHT" layoutX="122.0" layoutY="87.0" prefHeight="40.0" prefWidth="241.0" />
             <Label alignment="CENTER_RIGHT" layoutX="26.0" layoutY="152.0" prefHeight="40.0" prefWidth="80.0" text="Status:" />
@@ -59,7 +59,7 @@
             <TextField fx:id="txtParoleEligibility" layoutX="504.0" layoutY="152.0" prefHeight="40.0" prefWidth="241.0" />
             <Label alignment="CENTER_RIGHT" layoutX="789.0" layoutY="14.0" prefHeight="40.0" prefWidth="87.0" text="Crimes:" />
             <Label alignment="CENTER_RIGHT" layoutX="801.0" layoutY="87.0" prefHeight="40.0" prefWidth="80.0" text="Start Date:" />
-            <CheckComboBox fx:id="ccbSentenceCode" layoutX="897.0" layoutY="14.0" prefHeight="40.0" prefWidth="241.0" />
+            <CheckComboBox fx:id="ccbSentenceCode" layoutX="897.0" layoutY="14.0" prefHeight="40.0" prefWidth="241.0" title="Select Crimes" />
             <Button layoutX="1148.0" layoutY="14.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0">
                <graphic>
                   <FontAwesomeIcon glyphName="GEAR" onMouseClicked="#onCrimeSetting" size="20" />
@@ -80,16 +80,16 @@
             <TextField fx:id="txtSearch" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="367.0" promptText="Search..." />
             <FontAwesomeIcon glyphName="SEARCH" layoutX="350.0" layoutY="41.0" size="22" />
             <TableView fx:id="dataTable" layoutX="14.0" layoutY="73.0" onMouseClicked="#getItem" prefHeight="433.0" prefWidth="1676.0">
-              <columns>
-                <TableColumn fx:id="prisonerCodeColumn" prefWidth="118.0" styleClass="text-center" text="Prisoner Code" />
+               <columns>
+                  <TableColumn fx:id="prisonerCodeColumn" prefWidth="118.0" styleClass="text-center" text="Sentence Code:" />
                   <TableColumn fx:id="prisonerNameColumn" prefWidth="118.0" styleClass="text-center" text="Prisoner Name" />
-                <TableColumn fx:id="sentenceTypeColumn" prefWidth="109.0" styleClass="text-center" text="Sentence Type" />
+                  <TableColumn fx:id="sentenceTypeColumn" prefWidth="109.0" styleClass="text-center" text="Sentence Type" />
                   <TableColumn fx:id="crimesColumn" prefWidth="117.0" styleClass="text-center" text="Crimes" />
                   <TableColumn fx:id="startDateColumn" minWidth="0.0" prefWidth="86.0" styleClass="text-center" text="Start Date" />
                   <TableColumn fx:id="endDateColumn" prefWidth="81.0" styleClass="text-center" text="End Date" />
                   <TableColumn fx:id="statusColumn" minWidth="2.0" prefWidth="106.0" styleClass="text-center" text="Status" />
                   <TableColumn fx:id="paroleEligibilityColumn" prefWidth="146.0" styleClass="text-center" text="Parole Eligibility" />
-              </columns>
+               </columns>
             </TableView>
             <Pagination fx:id="pagination" layoutX="14.0" layoutY="71.0" prefHeight="483.0" prefWidth="1676.0" />
          </children>

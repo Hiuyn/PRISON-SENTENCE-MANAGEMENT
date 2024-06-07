@@ -3,6 +3,8 @@ package com.example.psmsystem.service.sentenceDao;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,11 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 public class SentenceDao implements ISentenceDao<Sentence> {
-    private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_id, sentence_type, sentences_code, start_date, end_date, status, parole_eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET prisoner_code = ?, sentence_type = ?, sentences_code = ?, start_date = ?, end_date = ?, status = ?, parole_eligibility = ? WHERE sentence_id = ?";
+    private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_id, sentences_code, sentence_type, crimes_code, start_date, end_date, release_date, status, parole_eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET prisoner_id = ?, sentences_code = ?, sentence_type = ?, crimes_code = ?, start_date = ?, end_date = ?, release_date = ?, status = ?, parole_eligibility = ?WHERE sentence_id = ?";
     private static final String DELETE_SENTENCE_QUERY = "DELETE FROM sentences WHERE sentence_id = ?";
-    private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.prisoner_id, p.prisoner_name, s.sentence_type, s.sentences_code, s.start_date, s.end_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_id = s.prisoner_id";
-    private static final String SELECT_BY_CODE_SENTENCE_QUERY = "SELECT * FROM sentences WHERE prisoner_id = ?";
+    private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.prisoner_id, p.prisoner_name, s.sentence_type, s.sentences_code, s.crimes_code, s.start_date, s.end_date, s.release_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_id = s.prisoner_id";
+    private static final String SELECT_BY_CODE_SENTENCE_QUERY = "SELECT * FROM sentences WHERE sentences_code = ?";
     private static final String COUNT_PRISONERS_BY_SENTENCE_TYPE_QUERY = "SELECT sentence_type, COUNT(*) AS prisoner_count FROM sentences GROUP BY sentence_type";
     private static final String SELECT_SENTENCE_ID_MAX = "SELECT MAX(sentences_code) AS max_sentence_code FROM sentences";
 
@@ -28,13 +30,15 @@ public class SentenceDao implements ISentenceDao<Sentence> {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
-            ps.setString(1,sentence.getPrisonerCode());
-            ps.setString(2,sentence.getSentenceType());
-            ps.setString(3,sentence.getSentenceCode());
-            ps.setString(4,sentence.getStartDate());
-            ps.setString(5,sentence.getEndDate());
-            ps.setString(6,sentence.getStatus());
-            ps.setString(7,sentence.getParoleEligibility());
+            ps.setString(1,sentence.getPrisonerId());
+            ps.setString(2,sentence.getSentenceCode());
+            ps.setString(3,sentence.getSentenceType());
+            ps.setString(4,sentence.getCrimesCode());
+            ps.setString(5,sentence.getStartDate());
+            ps.setString(6,sentence.getEndDate());
+            ps.setString(7,sentence.getReleaseDate());
+            ps.setString(8,sentence.getStatus());
+            ps.setString(9,sentence.getParoleEligibility());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -53,12 +57,14 @@ public class SentenceDao implements ISentenceDao<Sentence> {
 
             while (rs.next()) {
                 Sentence sentence = new Sentence();
-                sentence.setPrisonerCode(rs.getString("prisoner_id"));
+                sentence.setPrisonerId(rs.getString("prisoner_id"));
                 sentence.setPrisonerName(rs.getString("prisoner_name"));
-                sentence.setSentenceType(rs.getString("sentence_type"));
                 sentence.setSentenceCode(rs.getString("sentences_code"));
+                sentence.setSentenceType(rs.getString("sentence_type"));
+                sentence.setCrimesCode(rs.getString("crimes_code"));
                 sentence.setStartDate(rs.getString("start_date"));
                 sentence.setEndDate(rs.getString("end_date"));
+                sentence.setReleaseDate(rs.getString("release_date"));
                 sentence.setStatus(rs.getString("status"));
                 sentence.setParoleEligibility(rs.getString("parole_eligibility"));
                 sentenceList.add(sentence);
@@ -91,14 +97,16 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     public void updateSentence(Sentence sentence, int id) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_SENTENCE_QUERY)) {
-                ps.setString(1,sentence.getPrisonerCode());
-                ps.setString(2,sentence.getSentenceType());
-                ps.setString(3,sentence.getSentenceCode());
-                ps.setString(4,sentence.getStartDate());
-                ps.setString(5,sentence.getEndDate());
-                ps.setString(6,sentence.getStatus());
-                ps.setString(7,sentence.getParoleEligibility());
-                ps.setInt(8, id);
+                ps.setString(1,sentence.getPrisonerId());
+                ps.setString(2,sentence.getSentenceCode());
+                ps.setString(3,sentence.getSentenceType());
+                ps.setString(4,sentence.getCrimesCode());
+                ps.setString(5,sentence.getStartDate());
+                ps.setString(6,sentence.getEndDate());
+                ps.setString(7,sentence.getReleaseDate());
+                ps.setString(8,sentence.getStatus());
+                ps.setString(9,sentence.getParoleEligibility());
+                ps.setInt(10, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -119,12 +127,12 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     }
 
     @Override
-    public int getSentenceId(String prisonerCode) {
+    public int getSentenceId(String sentenceCode) {
         int sentenceId = -1;
 
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try (PreparedStatement ps = connection.prepareStatement(SELECT_BY_CODE_SENTENCE_QUERY)) {
-                ps.setString(1, prisonerCode);
+                ps.setString(1, sentenceCode);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         sentenceId = rs.getInt("sentence_id");
@@ -169,5 +177,12 @@ public class SentenceDao implements ISentenceDao<Sentence> {
         }
 
         return prisonersBySentenceType;
+    }
+
+    @Override
+    public ObservableList<Sentence> getPrisonerName() {
+        List<Sentence> sentence = getSentence();
+        ObservableList<Sentence> prisonerList = FXCollections.observableArrayList(sentence);
+        return prisonerList;
     }
 }

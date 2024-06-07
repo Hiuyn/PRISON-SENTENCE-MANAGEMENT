@@ -1,45 +1,39 @@
 package com.example.psmsystem.model.sentence;
 
 public class Sentence {
-    private String prisonerCode;
+    private String prisonerId;
     private String prisonerName;
-    private String sentenceType;
     private String sentenceCode;
+    private String sentenceType;
+    private String crimesCode;
     private String startDate;
     private String endDate;
+    private String releaseDate;
     private String status;
     private String paroleEligibility;
 
     public Sentence() {
     }
 
-    public Sentence(String prisonerCode, String prisonerName, String sentenceType, String sentenceCode, String startDate, String endDate, String status, String paroleEligibility) {
-        this.prisonerCode = prisonerCode;
+    public Sentence(String prisonerId, String prisonerName, String sentenceCode, String sentenceType, String crimesCode, String startDate, String endDate, String releaseDate, String status, String paroleEligibility) {
+        this.prisonerId = prisonerId;
         this.prisonerName = prisonerName;
-        this.sentenceType = sentenceType;
         this.sentenceCode = sentenceCode;
+        this.sentenceType = sentenceType;
+        this.crimesCode = crimesCode;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.releaseDate = releaseDate;
         this.status = status;
         this.paroleEligibility = paroleEligibility;
     }
 
-    public Sentence(String prisonerCode, String sentenceType, String sentenceCode, String startDate, String endDate, String status, String paroleEligibility) {
-        this.prisonerCode = prisonerCode;
-        this.sentenceType = sentenceType;
-        this.sentenceCode = sentenceCode;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.paroleEligibility = paroleEligibility;
+    public String getPrisonerId() {
+        return prisonerId;
     }
 
-    public String getPrisonerCode() {
-        return prisonerCode;
-    }
-
-    public void setPrisonerCode(String prisonerCode) {
-        this.prisonerCode = prisonerCode;
+    public void setPrisonerId(String prisonerId) {
+        this.prisonerId = prisonerId;
     }
 
     public String getPrisonerName() {
@@ -50,6 +44,14 @@ public class Sentence {
         this.prisonerName = prisonerName;
     }
 
+    public String getSentenceCode() {
+        return sentenceCode;
+    }
+
+    public void setSentenceCode(String sentenceCode) {
+        this.sentenceCode = sentenceCode;
+    }
+
     public String getSentenceType() {
         return sentenceType;
     }
@@ -58,12 +60,12 @@ public class Sentence {
         this.sentenceType = sentenceType;
     }
 
-    public String getSentenceCode() {
-        return sentenceCode;
+    public String getCrimesCode() {
+        return crimesCode;
     }
 
-    public void setSentenceCode(String sentenceCode) {
-        this.sentenceCode = sentenceCode;
+    public void setCrimesCode(String crimesCode) {
+        this.crimesCode = crimesCode;
     }
 
     public String getStartDate() {
@@ -82,6 +84,14 @@ public class Sentence {
         this.endDate = endDate;
     }
 
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -98,110 +108,3 @@ public class Sentence {
         this.paroleEligibility = paroleEligibility;
     }
 }
-//public class Sentence {
-//    private int prisonerId;
-//    private int sentenceCode;
-//    private String sentenceType;
-//    private Date startDate;
-//    private Date endDate;
-//    private Date updateDate;
-//    private Date releaseDate;
-//    private boolean status;
-//    private String parole;
-//    private int userId;
-//
-//
-//    public Sentence(){}
-//    public Sentence(int prisonerId, int sentenceCode, String sentenceType, Date startDate, Date endDate, Date updateDate, Date releaseDate, boolean status, String parole, int userId) {
-//        this.prisonerId = prisonerId;
-//        this.sentenceCode = sentenceCode;
-//        this.sentenceType = sentenceType;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.updateDate = updateDate;
-//        this.releaseDate = releaseDate;
-//        this.status = status;
-//        this.parole = parole;
-//        this.userId = userId;
-//    }
-//
-//    public int getPrisonerId() {
-//        return prisonerId;
-//    }
-//
-//    public void setPrisonerId(int prisonerId) {
-//        this.prisonerId = prisonerId;
-//    }
-//
-//    public int getSentenceCode() {
-//        return sentenceCode;
-//    }
-//
-//    public void setSentenceCode(int sentenceCode) {
-//        this.sentenceCode = sentenceCode;
-//    }
-//
-//    public String getSentenceType() {
-//        return sentenceType;
-//    }
-//
-//    public void setSentenceType(String sentenceType) {
-//        this.sentenceType = sentenceType;
-//    }
-//
-//    public java.sql.Date getStartDate() {
-//        return (java.sql.Date) startDate;
-//    }
-//
-//    public void setStartDate(Date startDate) {
-//        this.startDate = startDate;
-//    }
-//
-//    public java.sql.Date getEndDate() {
-//        return endDate;
-//    }
-//
-//    public void setEndDate(Date endDate) {
-//        this.endDate = endDate;
-//    }
-//
-//    public Date getUpdateDate() {
-//        return updateDate;
-//    }
-//
-//    public void setUpdateDate(Date updateDate) {
-//        this.updateDate = updateDate;
-//    }
-//
-//    public Date getReleaseDate() {
-//        return releaseDate;
-//    }
-//
-//    public void setReleaseDate(Date releaseDate) {
-//        this.releaseDate = releaseDate;
-//    }
-//
-//    public boolean isStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(boolean status) {
-//        this.status = status;
-//    }
-//
-//    public String getParole() {
-//        return parole;
-//    }
-//
-//    public void setParole(String parole) {
-//        this.parole = parole;
-//    }
-//
-//    public int getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(int userId) {
-//        this.userId = userId;
-//    }
-//}
