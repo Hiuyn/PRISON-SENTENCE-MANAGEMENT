@@ -63,6 +63,7 @@ public class UserDao implements IUserDao<User> {
                     user.setUsername(rs.getString("username"));
                     user.setPassword(rs.getString("password"));
                 }
+
             }
         } catch (SQLException e) {
             e.printStackTrace();

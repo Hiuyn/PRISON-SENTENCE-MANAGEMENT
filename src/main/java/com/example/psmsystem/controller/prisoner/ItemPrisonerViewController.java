@@ -153,11 +153,6 @@ public class ItemPrisonerViewController {
 
         return Period.between(start, end).getYears();
     }
-
-
-
-
-
     public void setPrisonerController(PrisonerController prisonerController) {
         this.prisonerController = prisonerController;
     }

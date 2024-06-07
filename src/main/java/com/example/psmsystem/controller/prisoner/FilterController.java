@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -68,19 +70,35 @@ public class FilterController implements Initializable {
 
             List<Prisoner> prisonerListByAge = prisonerDAO.getPrisonerByAge(this.ageFilter, this.genderFilter);
 
-//            if (sortNameType == 1)
-            if (!prisonerListByAge.isEmpty())
+            if (sortNameType == 0   && sortTimeType ==0)
             {
-                System.out.println("prisonerListByAge and gender :" + prisonerListByAge.size());
+                getPrisonerListFilter(prisonerListByAge);
             }
+            else if (sortNameType == 1) {
+                Collections.sort(prisonerListByAge, (p1, p2) -> p1.getPrisonerName().compareTo(p2.getPrisonerName()));
+            } else if (sortNameType == 2) {
+
+            }
+
+            for (Prisoner prisoner : prisonerListByAge) {
+                System.out.println("prisoner id sort test : " + prisoner.getPrisonerCode());
+                System.out.println("prisoner name sort test : " + prisoner.getPrisonerName());
+            }
+
+//            if (!prisonerListByAge.isEmpty())
+//            {
+//                System.out.println("prisonerListByAge and gender :" + prisonerListByAge.size());
+//            }
         }catch (Exception e)
         {
             System.out.println("Filter controller - onFilter : "+ e.getMessage());
         }
-
-
     }
 
+    public void getPrisonerListFilter (List<Prisoner> prisonerList)
+    {
+
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tgGender = new ToggleGroup();
@@ -89,23 +107,6 @@ public class FilterController implements Initializable {
         rbtnOther.setToggleGroup(tgGender);
     }
 
-    public void getGender() {
-        RadioButton selectedGender = (RadioButton) tgGender.getSelectedToggle();
-        String selectedRadioButtonText = selectedGender.getText();
-        int genderInt;
-        if (selectedRadioButtonText.equals("Male"))
-        {
-            genderInt = 1;
-        }
-        else if (selectedRadioButtonText.equals("Female"))
-        {
-            genderInt = 2;
-        }
-        else
-        {
-            genderInt = 3;
-        }
-    }
 
     @FXML
     public void getAgeFilter(ActionEvent event) {
