@@ -1,7 +1,7 @@
 .bg
 {
     -fx-text-fill: #afaeae;
-    -fx-background-color: #959595;
+    -fx-background-color: #c3c1c1;
     -fx-background-radius: 0px 0px 3px 0px;
 }
 .u18
@@ -91,4 +91,16 @@
             yellow,
             red
     );
+}
+
+.btn
+{
+    -fx-background-color: #8f8f8f;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
+.btn:hover
+{
+    -fx-text-fill: white;
+    -fx-background-color: #4c4c4c;
+    -fx-background-radius: 3px;
 }

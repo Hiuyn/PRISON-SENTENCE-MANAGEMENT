@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="573.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.DetailController">
+   <children>
+      <AnchorPane layoutX="54.0" layoutY="38.0" prefHeight="497.0" prefWidth="492.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="35.0">
+         <children>
+            <Label layoutX="159.0" layoutY="14.0" prefHeight="34.0" prefWidth="206.0" text="Prisoner information">
+               <font>
+                  <Font name="Agency FB Bold" size="28.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutX="319.0" layoutY="109.0" prefHeight="120.0" prefWidth="140.0" styleClass="imgView" stylesheets="@../../css/addPrisoner.css" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="110.0">
+               <children>
+                  <ImageView fx:id="imgPrisonerAdd" fitHeight="134.0" fitWidth="136.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <Label fx:id="lbPrisonerId" layoutX="169.0" layoutY="110.0" prefHeight="26.0" prefWidth="70.0" text="40000" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="110.0">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="109.0" prefHeight="26.0" prefWidth="110.0" text="PRISONER ID :" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="110.0">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="25.0" layoutY="357.0" prefHeight="26.0" prefWidth="120.0" text="PHONE NUMBER: " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="350.0">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbIdentityCard" layoutX="169.0" layoutY="150.0" prefHeight="26.0" prefWidth="120.0" text="024289082009" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="150.0">
+               <font>
+                  <Font name="Agency FB" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="25.0" layoutY="310.0" prefHeight="26.0" prefWidth="120.0" text="CONTACT NAME" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="310.0">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="195.0" prefHeight="26.0" prefWidth="120.0" text="FULL NAME :" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="190.0">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="151.0" prefHeight="26.0" prefWidth="120.0" text="IDENTITY CARD : " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="150.0">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="250.0" prefHeight="26.0" prefWidth="120.0" text="GENDER : " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="230.0">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbContactName" layoutX="169.0" layoutY="310.0" prefHeight="26.0" prefWidth="120.0" text="NGUYEN THI HONG" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="310.0">
+               <font>
+                  <Font name="Agency FB" size="21.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbGender" layoutX="170.0" layoutY="230.0" prefHeight="26.0" prefWidth="120.0" text="MALE" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="230.0">
+               <font>
+                  <Font name="Agency FB" size="21.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbFullName" layoutX="169.0" layoutY="190.0" prefHeight="26.0" prefWidth="120.0" text="NGUYEN VAN BAY" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="190.0">
+               <font>
+                  <Font name="Agency FB" size="21.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbContactPhone" layoutX="164.0" layoutY="357.0" prefHeight="26.0" prefWidth="95.0" text="0248721287" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="350.0">
+               <font>
+                  <Font name="Agency FB" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="25.0" layoutY="270.0" prefHeight="26.0" prefWidth="120.0" text="DATE OF BIRTH : " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="270.0">
+               <font>
+                  <Font name="Agency FB Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbDOB" layoutX="169.0" layoutY="270.0" prefHeight="26.0" prefWidth="120.0" text="21/10/1999" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="270.0">
+               <font>
+                  <Font name="Agency FB" size="21.0" />
+               </font>
+            </Label>
+            <Button layoutX="170.0" layoutY="449.0" mnemonicParsing="false" onAction="#back" prefWidth="60.0" text="BACK" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="170.0" />
+            <Button layoutX="264.0" layoutY="449.0" mnemonicParsing="false" prefWidth="60.0" text="EXPORT" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="170.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -54,6 +55,7 @@ public class ItemPrisonerViewController {
     private final String fxmlPath = "/com/example/psmsystem/";
     private Prisoner prisonerShowEdit;
     private PrisonerController prisonerController;
+    private int prisonerIdDetail;
 
     public void btnEditOnAction() {
         try {
@@ -108,7 +110,7 @@ public class ItemPrisonerViewController {
         String name = prisoner.getPrisonerName();
         String imagePath = prisoner.getImagePath();
         int idShow = Integer.parseInt(id);
-
+        this.prisonerIdDetail = idShow;
         try {
             File imageFile;
             if (imagePath != null && !imagePath.isEmpty()) {
@@ -204,4 +206,29 @@ public class ItemPrisonerViewController {
         }
     }
 
+    public void openDetailWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/DetailView.fxml"));
+            AnchorPane newWindowContent = loader.load();
+
+            DetailController detailController = loader.getController();
+            detailController.setPrisoner(this.prisonerIdDetail);
+
+            Stage newStage = new Stage();
+            Scene scene = new Scene(newWindowContent);
+            newStage.setScene(scene);
+            newStage.initStyle(StageStyle.UNDECORATED);
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.setTitle("New Window");
+
+            newStage.show();
+        } catch (IOException e) {
+            System.out.println( "PrisonerController - openDetailWindow: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void loadDetailView(ActionEvent event) {
+        openDetailWindow();
+    }
 }

@@ -19,7 +19,9 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 //    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_id FROM prisoners WHERE status = ? ORDER BY prisoner_id ASC LIMIT 1";
     private  static final String DELETE_PRISONER_BY_ID = "DELETE FROM prisoners WHERE prisoner_id = ?";
     private  static final String DELETE_SENTENCE_BY_ID = "DELETE FROM sentences WHERE prisoner_id = ?";
-
+    private static final String SELECT_PRISONER_BY_AGE = "SELECT * FROM prisoners " +
+            "WHERE TIMESTAMPDIFF(YEAR, date_birth, CURDATE()) BETWEEN ? AND ? " +
+            "AND gender = ?";
     private static final String SELECT_MAX_VALUES_PRISONER_ID ="SELECT MAX(prisoner_id) AS max_prisoner_id FROM prisoners";
     private static final String SELECT_YEAR_SENTENCE = "SELECT * FROM sentences ";
     private static final String SELECT_BY_CRIMES = "SELECT * FROM crimes";
@@ -68,18 +70,58 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
-                prisoner.setPrisonerCode(rs.getString("prisoner_code"));
+                prisoner.setPrisonerCode(rs.getString("prisoner_id"));
                 prisoner.setPrisonerName(rs.getString("prisoner_name"));
                 prisoner.setDOB(rs.getString("date_birth"));
                 prisoner.setGender(rs.getInt("gender"));
-                prisoner.setContactName(rs.getString("contact_name"));
-                prisoner.setContactPhone(rs.getString("contact_phone"));
-                prisoner.setImagePath(rs.getString("image_path"));
+                prisoner.setContactName(rs.getString("contacter_name"));
+                prisoner.setContactPhone(rs.getString("contacter_phone"));
+                prisoner.setImagePath(rs.getString("image"));
 
                 prisonerList.add(prisoner);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return prisonerList;
+    }
+    public List<Prisoner> getPrisonerByAge(int age, int gender) {
+        List<Prisoner> prisonerList = new ArrayList<>();
+        try{
+            Connection conn = DbConnection.getDatabaseConnection().getConnection();
+            PreparedStatement ps = conn.prepareStatement(SELECT_PRISONER_BY_AGE);
+            if (age == 1)
+            {
+                ps.setInt(1,14);
+                ps.setInt(2,18);
+            } else if (age == 2) {
+                ps.setInt(1,18);
+                ps.setInt(2,40);
+            }else if(age == 3){
+                ps.setInt(1,40);
+                ps.setInt(2,60);
+            }else if(age == 4){
+                ps.setInt(1,60);
+                ps.setInt(2,120);
+            }
+            ps.setInt(3,gender);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Prisoner prisoner = new Prisoner();
+                prisoner.setPrisonerCode(rs.getString("prisoner_id"));
+                prisoner.setPrisonerName(rs.getString("prisoner_name"));
+                prisoner.setDOB(rs.getString("date_birth"));
+                prisoner.setGender(rs.getInt("gender"));
+                prisoner.setIdentityCard(rs.getString("identity_card"));
+                prisoner.setContactName(rs.getString("contacter_name"));
+                prisoner.setContactPhone(rs.getString("contacter_phone"));
+                prisoner.setImagePath(rs.getString("image"));
+                prisoner.setStatus(rs.getBoolean("status"));
+                prisoner.setUser_id(rs.getInt("user_id"));
+                prisonerList.add(prisoner);
+            }
+        }catch (Exception e){
+            System.out.println("PrisonerDao getPrisonerByAge : " + e.getMessage());
         }
         return prisonerList;
     }

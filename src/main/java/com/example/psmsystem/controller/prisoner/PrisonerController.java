@@ -142,13 +142,7 @@ public class PrisonerController implements Initializable {
     public void openFilterWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/FilterView.fxml"));
-            VBox newWindowContent = loader.load();
-
-//            AddPrisonerController addPrisonerController = loader.getController();
-//            addPrisonerController.setUserIdAdd(this.userId);
-//            addPrisonerController.setPrisonerController(this);
-//            System.out.println("User id add new : " + this.userId);
-
+            AnchorPane newWindowContent = loader.load();
             Stage newStage = new Stage();
             Scene scene = new Scene(newWindowContent);
             newStage.setScene(scene);
@@ -171,5 +165,4 @@ public class PrisonerController implements Initializable {
     void loadFilterView(ActionEvent event) {
         openFilterWindow();
     }
-
 }

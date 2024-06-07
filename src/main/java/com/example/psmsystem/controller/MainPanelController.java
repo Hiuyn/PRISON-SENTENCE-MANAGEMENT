@@ -82,7 +82,6 @@ public class MainPanelController implements Initializable {
             if (fileName.equals("Dashboard")){
                 pathFileName = fxmlPath + "view/" + fileName + "View.fxml";
             }else{
-//                pathFileName = fxmlPath + "view/" + "Page01View.fxml";
                 pathFileName = fxmlPath + "view/" + fileName.toLowerCase() + "/" + fileName + "View.fxml";
             }
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(pathFileName)));
@@ -150,7 +149,7 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadReportView(MouseEvent event) {
-        loadFXML("Dashboard");
+        loadFXML("Report");
         setButtonStyle(report);
     }
 
@@ -162,7 +161,6 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void loadSentenceView(MouseEvent event) {
-
         loadFXML("Sentence");
         setButtonStyle(sentence);
     }
@@ -179,8 +177,13 @@ public class MainPanelController implements Initializable {
         label.getStyleClass().add("selected");
     }
 
-    public void onBtnCloseClick(ActionEvent event) throws IOException {
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close();
+    public void onBtnCloseClick(ActionEvent event) {
+        try{
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
+        }catch(Exception e){
+            System.out.println("MainPanel - close : " + e.getMessage());
+        }
+
     }
 }
