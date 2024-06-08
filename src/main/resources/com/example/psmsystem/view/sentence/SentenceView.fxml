@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import org.controlsfx.control.*?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckComboBox?>
+<?import org.controlsfx.control.SearchableComboBox?>
 
 <!--<?import org.controlsfx.control.CheckComboBox?>-->
 <!--<?import org.controlsfx.control.*?>-->
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="388.0" prefWidth="1035.0" style="-fx-background-color: gray;" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.sentence.SentenceController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="1270.0" style="-fx-background-color: gray;" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.sentence.SentenceController">
    <children>
       <AnchorPane layoutX="11.0" prefHeight="200.0" prefWidth="430.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
          <children>
-            <AnchorPane layoutX="64.0" layoutY="132.0" prefHeight="240.0" prefWidth="879.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="63.0" AnchorPane.rightAnchor="63.0">
+            <AnchorPane layoutX="64.0" layoutY="132.0" prefHeight="454.0" prefWidth="879.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="160.0">
                <children>
-                  <TableView fx:id="dataTable" layoutY="35.0" onMouseClicked="#getItem" prefHeight="205.0" prefWidth="879.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+                  <Pagination fx:id="pagination" layoutY="67.0" prefHeight="287.0" prefWidth="879.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="67.0" />
+                  <TableView fx:id="dataTable" layoutY="67.0" onMouseClicked="#getItem" prefHeight="287.0" prefWidth="879.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="67.0">
                      <columns>
                         <TableColumn fx:id="prisonerCodeColumn" prefWidth="118.0" styleClass="text-center" text="Sentence Code:" />
                         <TableColumn fx:id="prisonerNameColumn" prefWidth="118.0" styleClass="text-center" text="Prisoner Name" />
-                        <TableColumn fx:id="sentenceTypeColumn" prefWidth="109.0" styleClass="text-center" text="Sentence Type" />
-                        <TableColumn fx:id="crimesColumn" prefWidth="117.0" styleClass="text-center" text="Crimes" />
-                        <TableColumn fx:id="startDateColumn" minWidth="0.0" prefWidth="86.0" styleClass="text-center" text="Start Date" />
-                        <TableColumn fx:id="endDateColumn" prefWidth="81.0" styleClass="text-center" text="End Date" />
-                        <TableColumn fx:id="statusColumn" minWidth="2.0" prefWidth="106.0" styleClass="text-center" text="Status" />
-                        <TableColumn fx:id="paroleEligibilityColumn" prefWidth="146.0" styleClass="text-center" text="Parole Eligibility" />
+                        <TableColumn fx:id="sentenceTypeColumn" prefWidth="120.80001831054688" styleClass="text-center" text="Sentence Type" />
+                        <TableColumn fx:id="crimesColumn" prefWidth="92.79998779296875" styleClass="text-center" text="Crimes" />
+                        <TableColumn fx:id="startDateColumn" minWidth="0.0" prefWidth="120.79998779296875" styleClass="text-center" text="Start Date" />
+                        <TableColumn fx:id="endDateColumn" prefWidth="124.79998779296875" styleClass="text-center" text="End Date" />
+                        <TableColumn fx:id="statusColumn" minWidth="2.0" prefWidth="86.4000244140625" styleClass="text-center" text="Status" />
+                        <TableColumn fx:id="paroleEligibilityColumn" prefWidth="183.199951171875" styleClass="text-center" text="Parole Eligibility" />
                      </columns>
                   </TableView>
-                  <Pagination fx:id="pagination" layoutY="35.0" prefHeight="205.0" prefWidth="879.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
-                  <TextField fx:id="txtSearch" layoutX="14.0" layoutY="2.0" prefHeight="25.0" prefWidth="150.0" promptText="Search" />
+                  <TextField fx:id="txtSearch" layoutY="14.0" prefHeight="25.0" prefWidth="150.0" promptText="Search" />
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="63.0" prefHeight="138.0" prefWidth="879.0" styleClass="shadow" stylesheets="@../../css/mainpanel.css">
+            <AnchorPane layoutX="63.0" prefHeight="140.0" prefWidth="879.0" styleClass="card" stylesheets="@../../css/mainpanel.css" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <Label alignment="CENTER_RIGHT" layoutX="11.0" layoutY="17.0" prefHeight="25.0" prefWidth="87.0" text="Sentence Code:" AnchorPane.leftAnchor="10.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="19.0" layoutY="56.0" prefHeight="25.0" prefWidth="72.0" text="Years served:" AnchorPane.leftAnchor="10.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="18.0" layoutY="95.0" prefHeight="25.0" prefWidth="40.0" text="Status:" AnchorPane.leftAnchor="10.0" />
-                  <TextField fx:id="txtYear" alignment="CENTER_RIGHT" layoutX="102.0" layoutY="57.0" prefHeight="25.0" prefWidth="150.0" />
-                  <TextField fx:id="txtStatus" layoutX="102.0" layoutY="95.0" prefHeight="25.0" prefWidth="150.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="269.0" layoutY="17.0" prefHeight="25.0" prefWidth="87.0" text="Sentence Type:" />
-                  <ComboBox fx:id="cbSentenceType" layoutX="368.0" layoutY="17.0" prefHeight="25.0" prefWidth="150.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="272.0" layoutY="57.0" prefHeight="25.0" prefWidth="80.0" text="Month served:" />
-                  <TextField fx:id="txtMonth" alignment="CENTER_RIGHT" layoutX="368.0" layoutY="56.0" prefHeight="25.0" prefWidth="150.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="276.0" layoutY="88.0" prefHeight="40.0" prefWidth="87.0" text="Parole Eligibility:" />
-                  <TextField fx:id="txtParoleEligibility" layoutX="368.0" layoutY="95.0" prefHeight="25.0" prefWidth="150.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="544.0" layoutY="17.0" prefHeight="25.0" prefWidth="40.0" text="Crimes:" AnchorPane.leftAnchor="545.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="546.0" layoutY="58.0" prefHeight="25.0" prefWidth="59.0" text="Start Date:" AnchorPane.leftAnchor="545.0" />
-                  <DatePicker fx:id="dateStartDate" layoutX="612.0" layoutY="56.0" prefHeight="25.0" prefWidth="150.0" promptText="YYYY-MM-DD" />
-                  <CheckComboBox fx:id="ccbSentenceCode" layoutX="612.0" layoutY="17.0" prefHeight="25.0" prefWidth="150.0" title="Select Crimes" />
-                  <Label alignment="CENTER_RIGHT" layoutX="549.0" layoutY="96.0" prefHeight="25.0" prefWidth="53.0" text="End Date:" AnchorPane.leftAnchor="545.0" />
-                  <DatePicker fx:id="dateEndDate" disable="true" layoutX="612.0" layoutY="95.0" prefHeight="25.0" prefWidth="150.0" promptText="YYYY-MM-DD" />
-                  <Button disable="true" layoutX="787.0" layoutY="14.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="25.0" prefWidth="80.0" stylesheets="@../../css/mainpanel.css" text="CREATE" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                  <Label alignment="CENTER_RIGHT" layoutX="11.0" layoutY="17.0" prefHeight="30.0" prefWidth="100.0" text="SENTENCE CODE  :" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="15.0" />
+                  <TextField fx:id="txtYear" alignment="CENTER_RIGHT" layoutX="127.0" layoutY="55.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="55.0" />
+                  <TextField fx:id="txtStatus" layoutX="127.0" layoutY="95.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="95.0" />
+                  <ComboBox fx:id="cbSentenceType" layoutX="450.0" layoutY="15.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.leftAnchor="455.0" AnchorPane.topAnchor="15.0" />
+                  <TextField fx:id="txtMonth" alignment="CENTER_RIGHT" layoutX="450.0" layoutY="60.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.leftAnchor="455.0" AnchorPane.topAnchor="55.0" />
+                  <TextField fx:id="txtParoleEligibility" layoutX="426.0" layoutY="95.0" prefHeight="30.0" prefWidth="175.0" AnchorPane.leftAnchor="455.0" AnchorPane.topAnchor="95.0" />
+                  <DatePicker fx:id="dateStartDate" layoutX="612.0" layoutY="56.0" prefHeight="30.0" prefWidth="175.0" promptText="YYYY-MM-DD" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="55.0" />
+                  <CheckComboBox fx:id="ccbSentenceCode" layoutX="612.0" layoutY="17.0" prefHeight="30.0" prefWidth="175.0" title="Select Crimes" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="15.0" />
+                  <DatePicker fx:id="dateEndDate" disable="true" layoutX="612.0" layoutY="95.0" prefHeight="30.0" prefWidth="175.0" promptText="YYYY-MM-DD" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="95.0" />
+                  <Button disable="true" layoutX="783.0" layoutY="34.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="30.0" prefWidth="80.0" stylesheets="@../../css/mainpanel.css" text="CREATE" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="35.0">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="success" />
@@ -59,7 +59,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button layoutX="787.0" layoutY="46.0" maxHeight="25.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="25.0" prefWidth="80.0" stylesheets="@../../css/mainpanel.css" text="EDIT" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0">
+                  <Button layoutX="875.0" layoutY="34.0" maxHeight="25.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="30.0" prefWidth="80.0" stylesheets="@../../css/mainpanel.css" text="EDIT" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="infor" />
@@ -68,19 +68,27 @@
                         <Font size="8.0" />
                      </font>
                   </Button>
-                  <Button disable="true" layoutX="801.0" layoutY="77.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="25.0" prefWidth="80.0" stylesheets="@../../css/mainpanel.css" text="DELETE" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
+                  <Button disable="true" layoutX="783.0" layoutY="75.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="30.0" prefWidth="80.0" stylesheets="@../../css/mainpanel.css" text="DELETE" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="75.0">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="danger" />
                      </styleClass>
                   </Button>
-                  <Button layoutX="801.0" layoutY="110.0" mnemonicParsing="false" onAction="#onClean" prefHeight="25.0" prefWidth="80.0" stylesheets="@../../css/mainpanel.css" text="CLEAN" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+                  <Button layoutX="875.0" layoutY="74.0" mnemonicParsing="false" onAction="#onClean" prefHeight="30.0" prefWidth="80.0" stylesheets="@../../css/mainpanel.css" text="CLEAN" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="75.0">
                      <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="clear" />
                      </styleClass>
                   </Button>
-                  <SearchableComboBox fx:id="filterCombo" layoutX="102.0" layoutY="17.0" prefHeight="25.0" prefWidth="150.0" promptText="Select Sentence Code" />
+                  <SearchableComboBox fx:id="filterCombo" layoutX="127.0" layoutY="15.0" prefHeight="30.0" prefWidth="175.0" promptText="Select Sentence Code" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="15.0" />
+                  <Label layoutX="648.0" layoutY="14.0" prefHeight="30.0" prefWidth="70.0" text="CRIMES : " AnchorPane.rightAnchor="420.0" AnchorPane.topAnchor="15.0" />
+                  <Label layoutX="628.0" layoutY="56.0" prefHeight="30.0" prefWidth="80.0" text="START DATE  :" AnchorPane.rightAnchor="410.0" AnchorPane.topAnchor="55.0" />
+                  <Label layoutX="628.0" layoutY="95.0" prefHeight="30.0" prefWidth="80.0" text="END DATE : " AnchorPane.rightAnchor="410.0" AnchorPane.topAnchor="95.0" />
+                  <Label layoutX="11.0" layoutY="64.0" prefHeight="30.0" prefWidth="100.0" text="YEARS SERVED :" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="55.0" />
+                  <Label layoutX="11.0" layoutY="95.0" prefHeight="30.0" prefWidth="100.0" text="STATUS : " AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="95.0" />
+                  <Label layoutX="346.0" layoutY="22.0" prefHeight="30.0" prefWidth="100.0" text="SENTENCE TYPE : " AnchorPane.leftAnchor="345.0" AnchorPane.topAnchor="15.0" />
+                  <Label layoutX="345.0" layoutY="62.0" prefHeight="30.0" prefWidth="100.0" text="MONTH SERVED : " AnchorPane.leftAnchor="345.0" AnchorPane.topAnchor="55.0" />
+                  <Label layoutX="323.0" layoutY="116.0" prefHeight="30.0" prefWidth="100.0" text="ELIGIBLE : " AnchorPane.leftAnchor="345.0" AnchorPane.topAnchor="95.0" />
                </children>
             </AnchorPane>
          </children>
