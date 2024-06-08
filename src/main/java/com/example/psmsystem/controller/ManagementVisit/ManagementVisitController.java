@@ -475,6 +475,12 @@ public class ManagementVisitController implements Initializable {
                     return true;
                 }
 
+                List<String> startTime = setComboBoxValues(managementVisit.getStartTime());
+                List<String> endTime = setComboBoxValues(managementVisit.getEndTime());
+
+                String startTimeString = startTime.get(0) + ":" + startTime.get(1);
+                String endTimeString = endTime.get(0) + ":" + endTime.get(1);
+
                 String lowerCaseFilter = newValue.toLowerCase();
 
                 if (managementVisit.getSentenceCode().toLowerCase().contains(lowerCaseFilter)) {
@@ -496,6 +502,12 @@ public class ManagementVisitController implements Initializable {
                     return true;
                 }
                 else if (managementVisit.getNotes().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (startTimeString.contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (endTimeString.contains(lowerCaseFilter)) {
                     return true;
                 }
                 return false;
