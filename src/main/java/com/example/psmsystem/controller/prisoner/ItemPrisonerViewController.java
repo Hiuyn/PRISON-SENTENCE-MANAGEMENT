@@ -91,7 +91,7 @@ public class ItemPrisonerViewController {
         try
         {
             for (Sentence sentence : sentenceList) {
-                if (sentence.getPrisonerCode().equals(prisonerIdDb)) {
+                if (sentence.getPrisonerId().equals(prisonerIdDb)) {
                     String start = sentence.getStartDate();
                     String end = sentence.getEndDate();
                     int years = calYearSentence(start, end);

@@ -1,8 +1,6 @@
 .bgAnchorPane
 {
     -fx-background-color: #7e8c8f;
-    -fx-background-radius: 5px;
-    -fx-font-family: "Courier New";
     -fx-font-size: 14px;
 }
 .btnSearch

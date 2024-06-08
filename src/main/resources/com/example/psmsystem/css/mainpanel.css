@@ -39,7 +39,8 @@ and open the template in the editor.
 
 .btn{
     -fx-cursor: HAND;
-    -fx-font-size: 16px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
 }
 .btn.success{
     -fx-text-fill: #fff;
@@ -59,9 +60,9 @@ and open the template in the editor.
 }
 .btn.clear{
     -fx-border-color: #00cfe8;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-text-fill: #00cfe8;
-    -fx-background-color: #fff;
+    /*-fx-background-color: #fff;*/
 }
 .btn.success:hover{
     -fx-background-color: #33d67c;

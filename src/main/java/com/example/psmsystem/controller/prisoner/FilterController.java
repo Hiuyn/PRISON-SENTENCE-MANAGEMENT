@@ -98,6 +98,7 @@ public class FilterController implements Initializable {
     public void getPrisonerListFilter (List<Prisoner> prisonerList)
     {
 
+
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
