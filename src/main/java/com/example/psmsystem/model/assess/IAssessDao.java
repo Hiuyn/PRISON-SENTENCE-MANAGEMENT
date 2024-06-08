@@ -8,4 +8,5 @@ public interface IAssessDao<T> {
     void updateAssess(T t, int id);
     void deleteAssess(int id);
     int getAssessId(String prisonerCode, String eventDate);
+    int getCountAssess();
 }

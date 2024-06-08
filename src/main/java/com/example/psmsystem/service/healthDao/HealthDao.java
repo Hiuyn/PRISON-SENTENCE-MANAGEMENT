@@ -13,10 +13,10 @@ import java.util.List;
 
 public class HealthDao implements IHealthDao<Health> {
     private static final String INSERT_QUERY = "INSERT INTO healths (health_code, sentence_id, prisoner_id, weight, height, checkup_date, status, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_HEALTH_QUERY = "UPDATE healths SET sentence_id = ?, prisoner_id = ?, weight = ?, height = ?, checkup_date = ?, status = ?, level = ? WHERE health_id = ?";
+    private static final String UPDATE_HEALTH_QUERY = "UPDATE healths SET hearthCode, sentence_id = ?, prisoner_id = ?, weight = ?, height = ?, checkup_date = ?, status = ?, level = ? WHERE health_id = ?";
     private static final String DELETE_HEALTH_QUERY = "DELETE FROM healths WHERE health_id = ?";
     private static final String SELECT_BY_HEALTH_QUERY = "SELECT h.health_code, h.sentence_id, s.sentences_code, h.prisoner_id, p.prisoner_name, h.weight, h.height, h.checkup_date, h.status, h.level FROM healths h JOIN sentences s ON s.sentence_id = h.sentence_id JOIN prisoners p ON p.prisoner_id = h.prisoner_id ORDER BY checkup_date";
-    private static final String SELECT_BY_CODE_DATE_HEALTH_QUERY = "SELECT * FROM healths WHERE sentence_id = ? AND checkup_date = ?";
+    private static final String SELECT_BY_CODE_DATE_HEALTH_QUERY = "SELECT * FROM healths WHERE hearthCode = ? AND checkup_date = ?";
     private static final String COUNT_HEALTH_QUERY = "SELECT COUNT(*) FROM healths";
 
     @Override
@@ -72,14 +72,15 @@ public class HealthDao implements IHealthDao<Health> {
     public void updateHealth(Health health, int id) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_HEALTH_QUERY)) {
-                ps.setString(1,health.getSentenceId());
-                ps.setString(2,health.getPrisonerId());
-                ps.setDouble(3,health.getWeight());
-                ps.setDouble(4,health.getHeight());
-                ps.setString(5,health.getCheckupDate());
-                ps.setBoolean(6,health.getStatus());
-                ps.setInt(7,health.getLevel());
-                ps.setInt(8, id);
+                ps.setString(1,health.getHealthCode());
+                ps.setString(2,health.getSentenceId());
+                ps.setString(3,health.getPrisonerId());
+                ps.setDouble(4,health.getWeight());
+                ps.setDouble(5,health.getHeight());
+                ps.setString(6,health.getCheckupDate());
+                ps.setBoolean(7,health.getStatus());
+                ps.setInt(8,health.getLevel());
+                ps.setInt(9, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -127,7 +128,7 @@ public class HealthDao implements IHealthDao<Health> {
             PreparedStatement ps = connection.prepareStatement(COUNT_HEALTH_QUERY);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                count = rs.getInt(1);
+                count = rs.getInt(1); // Lấy giá trị của cột đầu tiên (đếm tổng số bản ghi)
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

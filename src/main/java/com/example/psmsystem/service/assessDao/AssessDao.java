@@ -12,22 +12,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AssessDao implements IAssessDao<Assess> {
-    private static final String INSERT_QUERY = "INSERT INTO incareration_process (prisoner_code, event_date, event_type, desctiption, note) VALUES (?, ?, ?, ?, ?)";
-    private static final String UPDATE_ASSESS_QUERY = "UPDATE incareration_process SET prisoner_code = ?, event_date = ?, event_type = ?, desctiption = ?, note = ? WHERE process_id = ?";
+    private static final String INSERT_QUERY = "INSERT INTO incareration_process (process_code, sentence_id, prisoner_id, date_of_occurrence, event_type, level, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_ASSESS_QUERY = "UPDATE incareration_process SET process_code = ?, sentence_id = ?, prisoner_id = ?, date_of_occurrence = ?, event_type = ?, level = ?, note = ? WHERE process_id = ?";
     private static final String DELETE_ASSESS_QUERY = "DELETE FROM incareration_process WHERE process_id = ?";
-    private static final String SELECT_BY_ASSESS_QUERY = "SELECT ip.prisoner_code, p.prisoner_name,ip.event_date, ip.event_type, ip.desctiption, ip.note FROM incareration_process ip JOIN prisoners p ON p.prisoner_code = ip.prisoner_code";
-    private static final String SELECT_BY_CODE_DATE_ASSESS_QUERY = "SELECT * FROM incareration_process WHERE prisoner_code = ? AND event_date = ?";
+    private static final String SELECT_BY_ASSESS_QUERY = "SELECT ip.process_code, ip.sentence_id, s.sentences_code, ip.prisoner_id, p.prisoner_name,ip.date_of_occurrence, ip.event_type, ip.level, ip.note FROM incareration_process ip JOIN sentences s ON s.sentence_id = ip.sentence_id JOIN prisoners p ON p.prisoner_id = ip.prisoner_id ORDER BY date_of_occurrence";
+    private static final String SELECT_BY_CODE_DATE_ASSESS_QUERY = "SELECT * FROM incareration_process WHERE process_code = ? AND date_of_occurrence = ?";
+    private static final String COUNT_ASSESS_QUERY = "SELECT COUNT(*) FROM incareration_process";
 
     @Override
     public void addAssess(Assess assess) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
-            ps.setString(1,assess.getPrisonerCode());
-            ps.setString(2,assess.getEventDate());
-            ps.setString(3,assess.getEventType());
-            ps.setString(4,assess.getDesctiption());
-            ps.setString(5,assess.getNote());
+            ps.setString(1,assess.getProcessCode());
+            ps.setString(2,assess.getSentencesId());
+            ps.setString(3,assess.getPrisonerId());
+            ps.setString(4,assess.getDateOfOccurrence());
+            ps.setString(5,assess.getEventType());
+            ps.setInt(6,assess.getLevel());
+            ps.setString(7,assess.getNote());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -46,11 +49,14 @@ public class AssessDao implements IAssessDao<Assess> {
 
             while (rs.next()) {
                 Assess assess = new Assess();
-                assess.setPrisonerCode(rs.getString("prisoner_code"));
+                assess.setProcessCode(rs.getString("process_code"));
+                assess.setSentencesId(rs.getString("sentence_id"));
+                assess.setSentencesCode(rs.getString("sentences_code"));
+                assess.setPrisonerId(rs.getString("prisoner_id"));
                 assess.setPrisonerName(rs.getString("prisoner_name"));
-                assess.setEventDate(rs.getString("event_date"));
+                assess.setDateOfOccurrence(rs.getString("date_of_occurrence"));
                 assess.setEventType(rs.getString("event_type"));
-                assess.setDesctiption(rs.getString("desctiption"));
+                assess.setLevel(rs.getInt("level"));
                 assess.setNote(rs.getString("note"));
                 assessList.add(assess);
             }
@@ -64,12 +70,14 @@ public class AssessDao implements IAssessDao<Assess> {
     public void updateAssess(Assess assess, int id) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_ASSESS_QUERY)) {
-                ps.setString(1,assess.getPrisonerCode());
-                ps.setString(2,assess.getEventDate());
-                ps.setString(3,assess.getEventType());
-                ps.setString(4,assess.getDesctiption());
-                ps.setString(5,assess.getNote());
-                ps.setInt(6, id);
+                ps.setString(1,assess.getProcessCode());
+                ps.setString(2,assess.getSentencesId());
+                ps.setString(3,assess.getPrisonerId());
+                ps.setString(4,assess.getDateOfOccurrence());
+                ps.setString(5,assess.getEventType());
+                ps.setInt(6,assess.getLevel());
+                ps.setString(7,assess.getNote());
+                ps.setInt(8, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -108,5 +116,21 @@ public class AssessDao implements IAssessDao<Assess> {
         }
 
         return assessId;
+    }
+
+    @Override
+    public int getCountAssess() {
+        int count = 0;
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(COUNT_ASSESS_QUERY);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1); // Lấy giá trị của cột đầu tiên (đếm tổng số bản ghi)
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return count;
     }
 }

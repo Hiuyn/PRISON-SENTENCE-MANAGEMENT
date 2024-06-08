@@ -3,11 +3,15 @@ package com.example.psmsystem.controller.assess;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.assess.Assess;
 import com.example.psmsystem.model.assess.IAssessDao;
+import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.ISentenceDao;
+import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.service.assessDao.AssessDao;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,12 +31,15 @@ import org.controlsfx.control.SearchableComboBox;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AssessController implements Initializable {
     private IPrisonerDao<Prisoner> prisonerDao;
     private IAssessDao<Assess> assessDao;
+    private ISentenceDao<Sentence> sentenceDao;
 
     @FXML
     private ComboBox<String> cbEventType;
@@ -44,7 +51,7 @@ public class AssessController implements Initializable {
     private DatePicker dateEventDate;
 
     @FXML
-    private TableColumn<Assess, String> desctiptionColumn;
+    private TableColumn<Assess, Integer> desctiptionColumn;
 
     @FXML
     private TableColumn<Assess, String> eventDateColumn;
@@ -53,7 +60,7 @@ public class AssessController implements Initializable {
     private TableColumn<Assess, String> eventTypeColumn;
 
     @FXML
-    private SearchableComboBox<Prisoner> filterCombo;
+    private SearchableComboBox<Sentence> filterCombo;
 
     @FXML
     private TableColumn<Assess, String> noteColumn;
@@ -74,29 +81,53 @@ public class AssessController implements Initializable {
     private TextField txtNote;
 
     @FXML
+    private ComboBox<String> cbLevel;
+
+    @FXML
+    private TableColumn<Assess, String> assessColumn;
+
+    @FXML
     private TextField txtSearch;
     private final int itemsPerPage = 12;
 
     Integer index;
     Window window;
     int visitationId;
-
+    private final Map<Integer, String> levelMap = new HashMap<>();
     ObservableList<Assess> listTable = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         prisonerDao = new PrisonerDAO();
         assessDao = new AssessDao();
+        sentenceDao = new SentenceDao();
 
         listTable.addAll(assessDao.getAssess());
         dataTable.setFixedCellSize(42);
 
-        StringConverter<Prisoner> converter = FunctionalStringConverter.to(prisoner -> (prisoner == null) ? "" : prisoner.getPrisonerCode() + ": " + prisoner.getPrisonerName());
-        filterCombo.setItems(prisonerDao.getPrisonerName());
+        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": " + sentence.getPrisonerName());
+        filterCombo.setItems(sentenceDao.getPrisonerName());
         filterCombo.setConverter(converter);
 
-        cbEventType.setItems(FXCollections.observableArrayList("Bonus", "Participate in renovation", "Vbreach of discipline"));
-        cbEventType.getSelectionModel().select("Participate in renovation");
+        cbEventType.setItems(FXCollections.observableArrayList("Bonus",  "Breach of discipline"));
+        cbEventType.getSelectionModel().select("Bonus");
+        cbLevel.setItems(FXCollections.observableArrayList("MILD", "MODERATE", "GOOD", "VERY GOOD"));
+        cbLevel.getSelectionModel().selectFirst();
+
+        cbEventType.valueProperty().addListener((observable, oldValue, newValue) -> {
+            updateLevelMap(newValue);
+            if (newValue.equals("Bonus")) {
+                cbLevel.setItems(FXCollections.observableArrayList("MILD", "MODERATE", "GOOD", "VERY GOOD"));
+            } else {
+                cbLevel.setItems(FXCollections.observableArrayList("MILD", "MODERATE", "SEVERE", "EXTREMELY SEVERE"));
+            }
+            cbLevel.getSelectionModel().selectFirst();
+        });
+        updateLevelMap("Bonus");
+        levelMap.put(1, "MILD");
+        levelMap.put(2, "MODERATE");
+        levelMap.put(3, "GOOD");
+        levelMap.put(4, "VERY GOOD");
 
         loadDataTable();
         setupPagination();
@@ -105,12 +136,28 @@ public class AssessController implements Initializable {
     }
 
     private void loadDataTable() {
-        prisonerCodeColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerCode"));
+        assessColumn.setCellValueFactory(new PropertyValueFactory<>("processCode"));
+        prisonerCodeColumn.setCellValueFactory(new PropertyValueFactory<>("sentencesCode"));
         prisonerNameColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerName"));
-        eventDateColumn.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
+        eventDateColumn.setCellValueFactory(new PropertyValueFactory<>("dateOfOccurrence"));
         eventTypeColumn.setCellValueFactory(new PropertyValueFactory<>("eventType"));
-        desctiptionColumn.setCellValueFactory(new PropertyValueFactory<>("desctiption"));
+        desctiptionColumn.setCellValueFactory(new PropertyValueFactory<>("level"));
         noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
+
+
+        desctiptionColumn.setCellFactory(col -> new TableCell<Assess, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    String eventType = getTableView().getItems().get(getIndex()).getEventType();
+                    String description = getDescription(eventType, item);
+                    setText(description);
+                }
+            }
+        });
 
         dataTable.setItems(listTable);
         dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -127,23 +174,30 @@ public class AssessController implements Initializable {
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (assess.getPrisonerCode().toLowerCase().contains(lowerCaseFilter)) {
+                if (assess.getProcessCode().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (assess.getSentencesCode().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (assess.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (assess.getEventDate().toLowerCase().contains(lowerCaseFilter)) {
+                else if (assess.getDateOfOccurrence().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (assess.getEventType().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (assess.getDesctiption().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
                 else if (assess.getNote().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
+                }
+                else {
+                    Integer levelValue = Integer.valueOf(assess.getLevel());
+                    String levelString = levelMap.get(levelValue);
+                    if (levelString != null && levelString.toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    }
                 }
 
                 return false;
@@ -227,36 +281,47 @@ public class AssessController implements Initializable {
             return;
         }
 
-        for (Prisoner prisoner : filterCombo.getItems()) {
-            if (prisoner.getPrisonerCode().contains(prisonerCodeColumn.getCellData(index))) {
-                filterCombo.setValue(prisoner);
+        for (Sentence sentence : filterCombo.getItems()) {
+            if (sentence.getSentenceCode().contains(prisonerCodeColumn.getCellData(index))) {
+                filterCombo.setValue(sentence);
                 break;
             }
         }
-        Prisoner selectedValue = filterCombo.getValue();
-        String prisonerCode = selectedValue.getPrisonerCode();
+        Sentence selectedValue = filterCombo.getValue();
+//        String prisonerCode = selectedValue.getPrisonerCode();
         LocalDate date = LocalDate.parse(eventDateColumn.getCellData(index).toString());
         dateEventDate.setValue(date);
         cbEventType.setValue(eventTypeColumn.getCellData(index).toString());
-        txtDesctiption.setText(desctiptionColumn.getCellData(index).toString());
+//        txtDesctiption.setText(desctiptionColumn.getCellData(index).toString());
         txtNote.setText(noteColumn.getCellData(index).toString());
+
+        String assessCode = assessColumn.getCellData(index).toString();
 
         LocalDate selectedDate = dateEventDate.getValue();
         String dateString = selectedDate.toString();
 
-        visitationId = assessDao.getAssessId(prisonerCode, dateString);
+        Integer levelDescription = Integer.parseInt(desctiptionColumn.getCellData(index).toString());
+
+        String levelValue = levelMap.get(levelDescription);
+        if (levelValue != null) {
+            cbLevel.setValue(levelValue);
+        } else {
+            System.out.println("Level description not found in map.");
+        }
+
+        visitationId = assessDao.getAssessId(assessCode, dateString);
     }
 
     @FXML
     void onClean(ActionEvent event) {
         filterCombo.setValue(null);
-        filterCombo.setPromptText("Select Prisoner ID");
-        cbEventType.getSelectionModel().select("Participate in renovation");
-        txtDesctiption.clear();
+        filterCombo.setPromptText("Select Sentence Code");
+        cbEventType.getSelectionModel().select("Bonus");
+//        txtDesctiption.clear();
         txtNote.clear();
         dateEventDate.setValue(null);
         dateEventDate.setPromptText("YYYY-MM-DD");
-
+//        updateLevelMap("Bonus");
         dataTable.getSelectionModel().clearSelection();
     }
 
@@ -266,16 +331,27 @@ public class AssessController implements Initializable {
             return;
         }
 
-        Prisoner selectedValue = filterCombo.getValue();
-        String prisonerCode = selectedValue.getPrisonerCode();
+        Sentence selectedValue = filterCombo.getValue();
+        String prisonerId = selectedValue.getPrisonerId();
+        String sentenceCode = selectedValue.getSentenceCode();
+        String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
         String prisonerName = selectedValue.getPrisonerName();
         String eventType = cbEventType.getValue();
         LocalDate selectedStartDate = dateEventDate.getValue();
         String eventDate = selectedStartDate.toString();
-        String desctiption = txtDesctiption.getText();
+        String level = cbLevel.getValue();
         String note = txtNote.getText();
 
-        Assess assess = new Assess(prisonerCode, prisonerName, eventDate, eventType, desctiption, note);
+        Integer levelValue = null;
+        for (Map.Entry<Integer, String> entry : levelMap.entrySet()) {
+            if (entry.getValue().equals(level)) {
+                levelValue = entry.getKey();
+            }
+        }
+
+        String processCode = getProcessCode();
+
+        Assess assess = new Assess(processCode, sentenceId, sentenceCode, prisonerId, prisonerName, eventDate, eventType, levelValue, note);
         assessDao.addAssess(assess);
         listTable.add(assess);
         dataTable.setItems(listTable);
@@ -285,10 +361,16 @@ public class AssessController implements Initializable {
         onClean(event);
     }
 
+    private String getProcessCode() {
+        int code = assessDao.getCountAssess();
+        code ++;
+        return "P"+code;
+    }
+
     @FXML
     void onDelete(ActionEvent event) {
         try {
-            Prisoner selectedValue = filterCombo.getValue();
+            Sentence selectedValue = filterCombo.getValue();
             if (selectedValue == null) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                         "Please select a prisoner.");
@@ -317,13 +399,13 @@ public class AssessController implements Initializable {
 
                 if (selected != null) {
 
-                        assessDao.deleteAssess(visitationId);
-                        listTable.remove(selected);
-                        dataTable.setItems(listTable);
-                        resetValue();
-                        AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
-                                "Assess deleted successfully.");
-                    }
+                    assessDao.deleteAssess(visitationId);
+                    listTable.remove(selected);
+                    dataTable.setItems(listTable);
+                    resetValue();
+                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
+                            "Assess deleted successfully.");
+                }
 
 
 
@@ -340,36 +422,39 @@ public class AssessController implements Initializable {
         if (!isValidate()) {
             return;
         }
-
-        Prisoner selectedValue = filterCombo.getValue();
-        String eventType = cbEventType.getValue();
-
-        String prisonerCode = selectedValue.getPrisonerCode();
+        Sentence selectedValue = filterCombo.getValue();
+        String prisonerId = selectedValue.getPrisonerId();
+        String sentenceCode = selectedValue.getSentenceCode();
+        String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
         String prisonerName = selectedValue.getPrisonerName();
+        String eventType = cbEventType.getValue();
         LocalDate selectedStartDate = dateEventDate.getValue();
         String eventDate = selectedStartDate.toString();
-
-        String desctiption = txtDesctiption.getText();
+        String level = cbLevel.getValue();
         String note = txtNote.getText();
 
-        if (visitationId == -1) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "No sentence found for the selected prisoner.");
-            return;
+        Integer levelValue = null;
+        for (Map.Entry<Integer, String> entry : levelMap.entrySet()) {
+            if (entry.getValue().equals(level)) {
+                levelValue = entry.getKey();
+            }
         }
 
-        Assess sentence = new Assess(prisonerCode, prisonerName, eventDate, eventType, desctiption, note);
-        assessDao.updateAssess(sentence, visitationId);
+        String processCode = getProcessCode();
+
+        Assess assess = new Assess(processCode, sentenceId, sentenceCode, prisonerId, prisonerName, eventDate, eventType, levelValue, note);
+        assessDao.updateAssess(assess, visitationId);
 
         index = dataTable.getSelectionModel().getSelectedIndex();
 
         if (index >= 0) {
             Assess s = listTable.get(index);
-            s.setPrisonerCode(prisonerCode);
+            s.setProcessCode(processCode);
+            s.setSentencesCode(sentenceCode);
             s.setPrisonerName(prisonerName);
-            s.setEventDate(eventDate);
+            s.setDateOfOccurrence(eventDate);
             s.setEventType(eventType);
-            s.setDesctiption(desctiption);
+            s.setLevel(levelValue);
             s.setNote(note);
 
             dataTable.setItems(listTable);
@@ -386,11 +471,59 @@ public class AssessController implements Initializable {
 
     private void resetValue(){
         filterCombo.setValue(null);
-        filterCombo.setPromptText("Select Prisoner ID");
-        cbEventType.getSelectionModel().select("Participate in renovation");
-        txtDesctiption.clear();
+        filterCombo.setPromptText("Select Sentence Code");
+        cbEventType.getSelectionModel().select("Bonus");
+//        txtDesctiption.clear();
         txtNote.clear();
         dateEventDate.setValue(null);
         dateEventDate.setPromptText("YYYY-MM-DD");
+//        updateLevelMap("Bonus");
+    }
+
+    private void updateLevelMap(String eventType) {
+        levelMap.clear();
+        if ("Bonus".equals(eventType)) {
+            levelMap.put(1, "MILD");
+            levelMap.put(2, "MODERATE");
+            levelMap.put(3, "GOOD");
+            levelMap.put(4, "VERY GOOD");
+        } else {
+            levelMap.put(1, "MILD");
+            levelMap.put(2, "MODERATE");
+            levelMap.put(3, "SEVERE");
+            levelMap.put(4, "EXTREMELY SEVERE");
+        }
+    }
+    private String getDescription(String eventType, int level) {
+        switch (eventType) {
+            case "Bonus":
+                switch (level) {
+                    case 1:
+                        return "MILD";
+                    case 2:
+                        return "MODERATE";
+                    case 3:
+                        return "GOOD";
+                    case 4:
+                        return "VERY GOOD";
+                    default:
+                        return "UNKNOWN";
+                }
+            case "Breach of discipline":
+                switch (level) {
+                    case 1:
+                        return "MILD";
+                    case 2:
+                        return "MODERATE";
+                    case 3:
+                        return "SEVERE";
+                    case 4:
+                        return "EXTREMELY SEVERE";
+                    default:
+                        return "UNKNOWN";
+                }
+            default:
+                return "UNKNOWN";
+        }
     }
 }

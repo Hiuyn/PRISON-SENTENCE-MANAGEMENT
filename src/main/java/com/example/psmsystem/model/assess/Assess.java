@@ -1,31 +1,61 @@
 package com.example.psmsystem.model.assess;
 
 public class Assess {
-    private String prisonerCode;
+    private String processCode;
+    private String sentencesId;
+    private String sentencesCode;
+    private String prisonerId;
     private String prisonerName;
-    private String eventDate;
+    private String dateOfOccurrence;
     private String eventType;
-    private String desctiption;
+    private int level;
     private String note;
 
     public Assess() {
     }
 
-    public Assess(String prisonerCode, String prisonerName, String eventDate, String eventType, String desctiption, String note) {
-        this.prisonerCode = prisonerCode;
+    public Assess(String processCode, String sentencesId, String sentencesCode, String prisonerId, String prisonerName, String dateOfOccurrence, String eventType, int level, String note) {
+        this.processCode = processCode;
+        this.sentencesId = sentencesId;
+        this.sentencesCode = sentencesCode;
+        this.prisonerId = prisonerId;
         this.prisonerName = prisonerName;
-        this.eventDate = eventDate;
+        this.dateOfOccurrence = dateOfOccurrence;
         this.eventType = eventType;
-        this.desctiption = desctiption;
+        this.level = level;
         this.note = note;
     }
 
-    public String getPrisonerCode() {
-        return prisonerCode;
+    public String getProcessCode() {
+        return processCode;
     }
 
-    public void setPrisonerCode(String prisonerCode) {
-        this.prisonerCode = prisonerCode;
+    public void setProcessCode(String processCode) {
+        this.processCode = processCode;
+    }
+
+    public String getSentencesId() {
+        return sentencesId;
+    }
+
+    public void setSentencesId(String sentencesId) {
+        this.sentencesId = sentencesId;
+    }
+
+    public String getSentencesCode() {
+        return sentencesCode;
+    }
+
+    public void setSentencesCode(String sentencesCode) {
+        this.sentencesCode = sentencesCode;
+    }
+
+    public String getPrisonerId() {
+        return prisonerId;
+    }
+
+    public void setPrisonerId(String prisonerId) {
+        this.prisonerId = prisonerId;
     }
 
     public String getPrisonerName() {
@@ -36,12 +66,12 @@ public class Assess {
         this.prisonerName = prisonerName;
     }
 
-    public String getEventDate() {
-        return eventDate;
+    public String getDateOfOccurrence() {
+        return dateOfOccurrence;
     }
 
-    public void setEventDate(String eventDate) {
-        this.eventDate = eventDate;
+    public void setDateOfOccurrence(String dateOfOccurrence) {
+        this.dateOfOccurrence = dateOfOccurrence;
     }
 
     public String getEventType() {
@@ -52,12 +82,12 @@ public class Assess {
         this.eventType = eventType;
     }
 
-    public String getDesctiption() {
-        return desctiption;
+    public int getLevel() {
+        return level;
     }
 
-    public void setDesctiption(String desctiption) {
-        this.desctiption = desctiption;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public String getNote() {

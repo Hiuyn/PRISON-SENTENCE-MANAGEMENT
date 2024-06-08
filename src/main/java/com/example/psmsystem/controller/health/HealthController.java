@@ -148,6 +148,7 @@ public class HealthController implements Initializable {
         LocalDate selectedDate = dateCheckupDate.getValue();
         String dateString = selectedDate.toString();
         cbLevel.setValue(levelColumn.getCellData(index).toString());
+        String healthCode = healthcodeColumn.getCellData(index).toString();
 
         Integer levelDescription = Integer.parseInt(levelColumn.getCellData(index).toString());
 
@@ -158,7 +159,7 @@ public class HealthController implements Initializable {
             System.out.println("Level description not found in map.");
         }
 
-        visitationId = healthDao.getVisitationId(prisonerId, dateString);
+        visitationId = healthDao.getVisitationId(healthCode, dateString);
     }
 
     private void resetValue(){
@@ -269,7 +270,10 @@ public class HealthController implements Initializable {
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (health.getSentenceCode().toLowerCase().contains(lowerCaseFilter)) {
+                if (health.getHealthCode().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (health.getSentenceCode().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (health.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
