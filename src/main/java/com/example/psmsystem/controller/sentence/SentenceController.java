@@ -371,7 +371,7 @@ public class SentenceController implements Initializable {
     @FXML
     void onClean(ActionEvent event) {
         filterCombo.setValue(null);
-        filterCombo.setPromptText("Select Prisoner ID");
+        filterCombo.setPromptText("Select Sentence Code");
         cbSentenceType.getSelectionModel().select("limited time");
         ccbSentenceCode.getCheckModel().clearChecks();
         txtYear.clear();
@@ -506,7 +506,7 @@ public class SentenceController implements Initializable {
 
     private void resetValue(){
         filterCombo.setValue(null);
-        filterCombo.setPromptText("Select Prisoner ID");
+        filterCombo.setPromptText("Select Sentence Code");
         cbSentenceType.getSelectionModel().select("limited time");
         ccbSentenceCode.getCheckModel().clearChecks();
         txtYear.clear();

@@ -77,6 +77,7 @@ create table visit_log(
 -- 4
 create table healths( -- lịch sử khám sức khỏe
                         health_id int primary key auto_increment, -- id
+                        health_code varchar(10),
                         sentence_id int not null, -- id tù án
                         prisoner_id int not null, -- id tù nhân
                         weight double not null, -- kg
@@ -167,14 +168,14 @@ INSERT INTO visit_log (sentence_id, prisoner_id, visitor_name, identity_card, re
                                                                                                                                          (10, 10, 'Tran Thi K', '888899990000', 'Wife', '2023-10-15', '16:00:00', '17:00:00', 'Brought legal documents');
 
 -- Thêm dữ liệu vào bảng healths
-INSERT INTO healths (sentence_id, prisoner_id, weight, height, checkup_date, status, level) VALUES
-                                                                                                (1, 1, 70, 1.75, '2023-03-10', false, 0),
-                                                                                                (2, 2, 65, 1.60, '2023-04-20', true, 1),
-                                                                                                (3, 3, 80, 1.80, '2023-05-15', false, 0),
-                                                                                                (4, 4, 55, 1.55, '2023-06-10', true, 2),
-                                                                                                (5, 5, 75, 1.70, '2023-07-20', false, 0),
-                                                                                                (6, 6, 68, 1.65, '2023-08-30', true, 1),
-                                                                                                (7, 7, 85, 1.85, '2023-09-25', true, 3),
-                                                                                                (8, 8, 60, 1.60, '2023-10-15', false, 0),
-                                                                                                (9, 9, 72, 1.78, '2023-11-10', true, 2),
-                                                                                                (10, 10, 67, 1.67, '2023-12-05', false, 0);
+INSERT INTO healths (health_code, sentence_id, prisoner_id, weight, height, checkup_date, status, level) VALUES
+                                                                                                ('H1',1, 1, 70, 1.75, '2023-03-10', false, 0),
+                                                                                                ('H2', 2, 2, 65, 1.60, '2023-04-20', true, 1),
+                                                                                                ('H3', 3, 3, 80, 1.80, '2023-05-15', false, 0),
+                                                                                                ('H4', 4, 4, 55, 1.55, '2023-06-10', true, 2),
+                                                                                                ('H5', 5, 5, 75, 1.70, '2023-07-20', false, 0),
+                                                                                                ('H6', 6, 6, 68, 1.65, '2023-08-30', true, 1),
+                                                                                                ('H7', 7, 7, 85, 1.85, '2023-09-25', true, 3),
+                                                                                                ('H8', 8, 8, 60, 1.60, '2023-10-15', false, 0),
+                                                                                                ('H9', 9, 9, 72, 1.78, '2023-11-10', true, 2),
+                                                                                                ('H10', 10, 10, 67, 1.67, '2023-12-05', false, 0);

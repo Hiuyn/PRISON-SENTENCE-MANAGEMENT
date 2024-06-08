@@ -8,4 +8,5 @@ public interface IHealthDao<T> {
     void updateHealth(T t, int id);
     void deleteHealth(int id);
     int getVisitationId(String prisonerCode, String checkupDate);
+    int getCountHealth();
 }
