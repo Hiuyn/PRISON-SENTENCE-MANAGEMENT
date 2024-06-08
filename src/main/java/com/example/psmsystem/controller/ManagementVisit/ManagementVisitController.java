@@ -5,8 +5,11 @@ import com.example.psmsystem.model.managementvisit.IManagementVisitDao;
 import com.example.psmsystem.model.managementvisit.ManagementVisit;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.ISentenceDao;
+import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.service.managementvisitDao.ManagementVisitDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
@@ -36,10 +39,11 @@ import javafx.util.StringConverter;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import javafx.stage.Window;
@@ -48,6 +52,7 @@ import org.controlsfx.control.SearchableComboBox;
 public class ManagementVisitController implements Initializable {
     private static IPrisonerDao<Prisoner> prisonerDao;
     private static IManagementVisitDao<ManagementVisit> managementVisitDao;
+    private ISentenceDao<Sentence> sentenceDao;
 
     @FXML
     private TableView<ManagementVisit> dataTable;
@@ -56,7 +61,7 @@ public class ManagementVisitController implements Initializable {
     private DatePicker dateVisitDate;
 
     @FXML
-    private SearchableComboBox<Prisoner> filterCombo;
+    private SearchableComboBox<Sentence> filterCombo;
 
     @FXML
     private TableColumn<ManagementVisit, String> noteColumn;
@@ -65,7 +70,7 @@ public class ManagementVisitController implements Initializable {
     private Pagination pagination;
 
     @FXML
-    private TableColumn<ManagementVisit, String> prisonercodeColumn;
+    private TableColumn<ManagementVisit, String> sentenceCodeColumn;
 
     @FXML
     private TableColumn<ManagementVisit, String> prisonernameColumn;
@@ -95,7 +100,25 @@ public class ManagementVisitController implements Initializable {
     private TableColumn<ManagementVisit, String> visitdateColumn;
 
     @FXML
+    private TableColumn<ManagementVisit, String> startTimeColumn;
+
+    @FXML
+    private TableColumn<ManagementVisit, String> endTimeColumn;
+
+    @FXML
     private TableColumn<ManagementVisit, String> visitnameColumn;
+
+    @FXML
+    private ComboBox<String> endTimeHour;
+
+    @FXML
+    private ComboBox<String> endTimeMinute;
+
+    @FXML
+    private ComboBox<String> startTimeHour;
+
+    @FXML
+    private ComboBox<String> startTimeMinute;
 
     private final int itemsPerPage = 20;
 
@@ -104,7 +127,8 @@ public class ManagementVisitController implements Initializable {
     int visitationId;
 
     ObservableList<ManagementVisit> listTable = FXCollections.observableArrayList();
-//    ObservableList<Prisoner> getPrisonerList = FXCollections.observableArrayList();
+    ObservableList<String> hours = FXCollections.observableArrayList();
+    ObservableList<String> minutes = FXCollections.observableArrayList();
 
     String fxmlPath = "/com/example/psmsystem/";
 
@@ -112,14 +136,33 @@ public class ManagementVisitController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         prisonerDao = new PrisonerDAO();
         managementVisitDao = new ManagementVisitDao();
+        sentenceDao = new SentenceDao();
 
         listTable.addAll(managementVisitDao.getManagementVisits());
         dataTable.setFixedCellSize(37);
-        StringConverter<Prisoner> converter = FunctionalStringConverter.to(prisoner -> (prisoner == null) ? "" : prisoner.getPrisonerCode() + ": " + prisoner.getPrisonerName());
-//        Function<String, Predicate<Prisoner>> filterFunction = s -> prisoner -> StringUtils.containsIgnoreCase(converter.toString(prisoner), s);
-        filterCombo.setItems(prisonerDao.getPrisonerName());
+        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": " + sentence.getPrisonerName());
+        filterCombo.setItems(sentenceDao.getPrisonerName());
         filterCombo.setConverter(converter);
-//        filterCombo.setFilterFunction(filterFunction);
+
+        for (int i = 0; i < 24; i++) {
+            hours.add(String.format("%02d", i));
+        }
+
+        for (int i = 0; i < 60; i++) {
+            minutes.add(String.format("%02d", i));
+        }
+
+        // Đặt các giá trị cho các ComboBox
+        startTimeHour.setItems(hours);
+        startTimeMinute.setItems(minutes);
+        endTimeHour.setItems(hours);
+        endTimeMinute.setItems(minutes);
+
+        // Thiết lập giá trị mặc định nếu cần
+        startTimeHour.getSelectionModel().selectFirst();
+        startTimeMinute.getSelectionModel().selectFirst();
+        endTimeHour.getSelectionModel().selectFirst();
+        endTimeMinute.getSelectionModel().selectFirst();
 
         loadDataTable();
         setupPagination();
@@ -154,12 +197,14 @@ public class ManagementVisitController implements Initializable {
     }
 
     private void loadDataTable() {
-        prisonercodeColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerCode"));
+        sentenceCodeColumn.setCellValueFactory(new PropertyValueFactory<>("sentenceCode"));
         prisonernameColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerName"));
         visitnameColumn.setCellValueFactory(new PropertyValueFactory<>("visitorName"));
-        cccdColumn.setCellValueFactory(new PropertyValueFactory<>("nationalIdentificationNumber"));
+        cccdColumn.setCellValueFactory(new PropertyValueFactory<>("identityCard"));
         relationshipColumn.setCellValueFactory(new PropertyValueFactory<>("relationship"));
         visitdateColumn.setCellValueFactory(new PropertyValueFactory<>("visitDate"));
+        startTimeColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        endTimeColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         noteColumn.setCellValueFactory(new PropertyValueFactory<>("notes"));
 
         dataTable.setItems(listTable);
@@ -182,26 +227,35 @@ public class ManagementVisitController implements Initializable {
     @FXML
     void onClean(ActionEvent event) {
         filterCombo.setValue(null);
-        filterCombo.setPromptText("Select Prisoner ID");
+        filterCombo.setPromptText("Select Sentence Code");
         txtVisitorName.clear();
         txtcccd.clear();
         txtRelationship.clear();
         dateVisitDate.setValue(null);
         dateVisitDate.setPromptText("YYYY-MM-DD");
         txtaNote.clear();
+        startTimeHour.getSelectionModel().selectFirst();
+        startTimeMinute.getSelectionModel().selectFirst();
+        endTimeHour.getSelectionModel().selectFirst();
+        endTimeMinute.getSelectionModel().selectFirst();
 
         dataTable.getSelectionModel().clearSelection();
     }
 
     @FXML
     void onCreate(ActionEvent event) {
+//        LocalDate selectedDate = dateVisitDate.getValue();
+//        Sentence selectedPrisoner = filterCombo.getValue();
 
         if (!isValidate()) {
             return;
         }
 
-        Prisoner selectedValue = filterCombo.getValue();
-        String prisonerCode = selectedValue.getPrisonerCode();
+        Sentence selectedValue = filterCombo.getValue();
+        String prisonerId = selectedValue.getPrisonerId();
+        String sentenceCode = selectedValue.getSentenceCode();
+        String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
+
         String prisonerName = selectedValue.getPrisonerName();
         String visitorName = txtVisitorName.getText();
         String cccd = txtcccd.getText();
@@ -210,7 +264,28 @@ public class ManagementVisitController implements Initializable {
         LocalDate selectedDate = dateVisitDate.getValue();
         String date = selectedDate.toString();
 
-        ManagementVisit mv = new ManagementVisit(prisonerCode, prisonerName, visitorName, cccd, relationship, date, note);
+
+        if (hasVisitorThisMonth(selectedValue.getSentenceCode(), selectedDate)) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Sentence code number " + selectedValue.getSentenceCode() + " has had visitors this month.");
+            filterCombo.requestFocus();
+            return;
+        }
+
+        String startHour = startTimeHour.getSelectionModel().getSelectedItem();
+        String startMinute = startTimeMinute.getSelectionModel().getSelectedItem();
+        String endHour = endTimeHour.getSelectionModel().getSelectedItem();
+        String endMinute = endTimeMinute.getSelectionModel().getSelectedItem();
+
+        String startTimeString = startHour + ":" + startMinute + ":00";
+        String endTimeString = endHour + ":" + endMinute + ":00";
+
+        LocalTime startTime = LocalTime.parse(startTimeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalTime endTime = LocalTime.parse(endTimeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        String formattedEndTime = endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        ManagementVisit mv = new ManagementVisit(sentenceId, sentenceCode, prisonerId, prisonerName, visitorName, cccd, relationship, date, formattedStartTime, formattedEndTime, note);
         managementVisitDao.addManagementVisit(mv);
         listTable.add(mv);
         dataTable.setItems(listTable);
@@ -223,7 +298,7 @@ public class ManagementVisitController implements Initializable {
     @FXML
     void onDelete(ActionEvent event) {
         try {
-            Prisoner selectedValue = filterCombo.getValue();
+            Sentence selectedValue = filterCombo.getValue();
             if (selectedValue == null) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                         "Please select a prisoner.");
@@ -278,17 +353,32 @@ public class ManagementVisitController implements Initializable {
             return;
         }
 
-        Prisoner selectedValue = filterCombo.getValue();
+        Sentence selectedValue = filterCombo.getValue();
+        String prisonerId = selectedValue.getPrisonerId();
+        String sentenceCode = selectedValue.getSentenceCode();
+        String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-        String prisonerCode = selectedValue.getPrisonerCode();
         String prisonerName = selectedValue.getPrisonerName();
         String visitorName = txtVisitorName.getText();
         String cccd = txtcccd.getText();
         String relationship = txtRelationship.getText();
         String note = txtaNote.getText();
         LocalDate selectedDate = dateVisitDate.getValue();
-
         String date = selectedDate.toString();
+
+        String startHour = startTimeHour.getSelectionModel().getSelectedItem();
+        String startMinute = startTimeMinute.getSelectionModel().getSelectedItem();
+        String endHour = endTimeHour.getSelectionModel().getSelectedItem();
+        String endMinute = endTimeMinute.getSelectionModel().getSelectedItem();
+
+        String startTimeString = startHour + ":" + startMinute + ":00";
+        String endTimeString = endHour + ":" + endMinute + ":00";
+
+        LocalTime startTime = LocalTime.parse(startTimeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalTime endTime = LocalTime.parse(endTimeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        String formattedEndTime = endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
         if (visitationId == -1) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
@@ -296,19 +386,21 @@ public class ManagementVisitController implements Initializable {
             return;
         }
 
-        ManagementVisit mv = new ManagementVisit(prisonerCode, prisonerName, visitorName, cccd, relationship, date, note);
+        ManagementVisit mv = new ManagementVisit(sentenceId, sentenceCode, prisonerId, prisonerName, visitorName, cccd, relationship, date, formattedStartTime, formattedEndTime, note);
         managementVisitDao.updateManagementVisit(mv, visitationId);
 
         index = dataTable.getSelectionModel().getSelectedIndex();
 
         if (index >= 0) {
             ManagementVisit visit = listTable.get(index);
-            visit.setPrisonerCode(prisonerCode);
+            visit.setSentenceCode(sentenceCode);
             visit.setPrisonerName(prisonerName);
             visit.setVisitorName(visitorName);
-            visit.setNationalIdentificationNumber(cccd);
+            visit.setIdentityCard(cccd);
             visit.setRelationship(relationship);
             visit.setVisitDate(date);
+            visit.setStartTime(formattedStartTime);
+            visit.setEndTime(formattedEndTime);
             visit.setNotes(note);
 
             dataTable.setItems(listTable);
@@ -330,14 +422,14 @@ public class ManagementVisitController implements Initializable {
             return;
         }
 
-        for (Prisoner prisoner : filterCombo.getItems()) {
-            if (prisoner.getPrisonerCode().contains(prisonercodeColumn.getCellData(index))) {
-                filterCombo.setValue(prisoner);
+        for (Sentence sentence : filterCombo.getItems()) {
+            if (sentence.getSentenceCode().contains(sentenceCodeColumn.getCellData(index))) {
+                filterCombo.setValue(sentence);
                 break;
             }
         }
-        Prisoner selectedValue = filterCombo.getValue();
-        String prisonerCode = selectedValue.getPrisonerCode();
+        Sentence selectedValue = filterCombo.getValue();
+        String prisonerId = selectedValue.getPrisonerId();
         txtVisitorName.setText(visitnameColumn.getCellData(index).toString());
         txtcccd.setText(cccdColumn.getCellData(index).toString());
         txtRelationship.setText(relationshipColumn.getCellData(index).toString());
@@ -348,17 +440,29 @@ public class ManagementVisitController implements Initializable {
         String dateString = selectedDate.toString();
         txtaNote.setText(noteColumn.getCellData(index).toString());
 
-        visitationId = managementVisitDao.getVisitationId(prisonerCode, dateString);
+        List<String> startTime = setComboBoxValues(startTimeColumn.getCellData(index).toString());
+        List<String> endTime = setComboBoxValues(endTimeColumn.getCellData(index).toString());
+
+        startTimeHour.getSelectionModel().select(startTime.get(0));
+        startTimeMinute.getSelectionModel().select(startTime.get(1));
+        endTimeHour.getSelectionModel().select(endTime.get(0));
+        endTimeMinute.getSelectionModel().select(endTime.get(1));
+
+        visitationId = managementVisitDao.getVisitationId(prisonerId, dateString);
 
     }
     private void resetValue(){
         filterCombo.setValue(null);
-        filterCombo.setPromptText("Select Prisoner ID");
+        filterCombo.setPromptText("Select Sentence Code");
         txtVisitorName.clear();
         txtcccd.clear();
         txtRelationship.clear();
         dateVisitDate.setValue(null);
         dateVisitDate.setPromptText("YYYY-MM-DD");
+        startTimeHour.getSelectionModel().selectFirst();
+        startTimeMinute.getSelectionModel().selectFirst();
+        endTimeHour.getSelectionModel().selectFirst();
+        endTimeMinute.getSelectionModel().selectFirst();
         txtaNote.clear();
     }
 
@@ -371,9 +475,15 @@ public class ManagementVisitController implements Initializable {
                     return true;
                 }
 
+                List<String> startTime = setComboBoxValues(managementVisit.getStartTime());
+                List<String> endTime = setComboBoxValues(managementVisit.getEndTime());
+
+                String startTimeString = startTime.get(0) + ":" + startTime.get(1);
+                String endTimeString = endTime.get(0) + ":" + endTime.get(1);
+
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (managementVisit.getPrisonerCode().toLowerCase().contains(lowerCaseFilter)) {
+                if (managementVisit.getSentenceCode().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (managementVisit.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
@@ -382,7 +492,7 @@ public class ManagementVisitController implements Initializable {
                 else if (managementVisit.getVisitorName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (managementVisit.getNationalIdentificationNumber().toLowerCase().contains(lowerCaseFilter)) {
+                else if (managementVisit.getIdentityCard().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (managementVisit.getRelationship().toLowerCase().contains(lowerCaseFilter)) {
@@ -392,6 +502,12 @@ public class ManagementVisitController implements Initializable {
                     return true;
                 }
                 else if (managementVisit.getNotes().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (startTimeString.contains(lowerCaseFilter)) {
+                    return true;
+                }
+                else if (endTimeString.contains(lowerCaseFilter)) {
                     return true;
                 }
                 return false;
@@ -414,8 +530,6 @@ public class ManagementVisitController implements Initializable {
     }
 
     private boolean isValidate() {
-        LocalDate selectedDate = dateVisitDate.getValue();
-        Prisoner selectedPrisoner = filterCombo.getValue();
 
         if (filterCombo.getValue() == null) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Please select a prisoner.");
@@ -447,9 +561,29 @@ public class ManagementVisitController implements Initializable {
             return false;
         }
 
-        if (hasVisitorThisMonth(selectedPrisoner.getPrisonerCode(), selectedDate)) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Prisoner code number " + selectedPrisoner.getPrisonerCode() + " has had visitors this month.");
-            filterCombo.requestFocus();
+        String startHour = startTimeHour.getSelectionModel().getSelectedItem();
+        String startMinute = startTimeMinute.getSelectionModel().getSelectedItem();
+        String endHour = endTimeHour.getSelectionModel().getSelectedItem();
+        String endMinute = endTimeMinute.getSelectionModel().getSelectedItem();
+
+        LocalTime startTime = LocalTime.of(Integer.parseInt(startHour), Integer.parseInt(startMinute));
+        LocalTime endTime = LocalTime.of(Integer.parseInt(endHour), Integer.parseInt(endMinute));
+
+        LocalTime morningStart = LocalTime.of(7, 30);
+        LocalTime morningEnd = LocalTime.of(11, 0);
+        LocalTime afternoonStart = LocalTime.of(14, 0);
+        LocalTime afternoonEnd = LocalTime.of(17, 0);
+
+        if (!((startTime.isAfter(morningStart.minusSeconds(1)) && endTime.isBefore(morningEnd.plusSeconds(1))) ||
+                (startTime.isAfter(afternoonStart.minusSeconds(1)) && endTime.isBefore(afternoonEnd.plusSeconds(1))))) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Visit time must be within 07:30-11:00 or 14:00-17:00.");
+            startTimeHour.requestFocus();
+            return false;
+        }
+
+        if (endTime.isBefore(startTime) || startTime.until(endTime, ChronoUnit.MINUTES) > 60) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Visit duration cannot be more than 60 minutes.");
+            endTimeHour.requestFocus();
             return false;
         }
 
@@ -461,7 +595,7 @@ public class ManagementVisitController implements Initializable {
         LocalDate endOfMonth = visitDate.withDayOfMonth(visitDate.lengthOfMonth());
 
         for (ManagementVisit visit : managementVisitDao.getManagementVisits()) {
-            if (visit.getPrisonerCode().equals(prisonerCode)) {
+            if (visit.getSentenceCode().equals(prisonerCode)) {
                 LocalDate visitLocalDate = LocalDate.parse(visit.getVisitDate());
                 if ((visitLocalDate.isEqual(startOfMonth) || visitLocalDate.isAfter(startOfMonth)) &&
                         (visitLocalDate.isEqual(endOfMonth) || visitLocalDate.isBefore(endOfMonth))) {
@@ -471,5 +605,20 @@ public class ManagementVisitController implements Initializable {
         }
 
         return false;
+    }
+
+    private List<String> setComboBoxValues(String timeString) {
+        // Split the time string into parts
+        String[] timeParts = timeString.split(":");
+        String hour = timeParts[0];
+        String minute = timeParts[1];
+
+        // Create a list and add the hour and minute
+        List<String> timeResult = new ArrayList<>();
+        timeResult.add(hour);
+        timeResult.add(minute);
+
+        // Return the list
+        return timeResult;
     }
 }
