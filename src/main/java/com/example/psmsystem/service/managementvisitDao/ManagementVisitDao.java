@@ -15,25 +15,28 @@ import java.util.List;
 import java.util.Map;
 
 public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> {
-    private static final String INSERT_QUERY = "INSERT INTO visitation (prisoner_code, visitor_name, national_identification_number, relationship, visit_date, notes) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_MANAGEMENTVISIT_QUERY = "UPDATE visitation SET prisoner_code = ?, visitor_name = ?, national_identification_number = ?, relationship = ?, visit_date = ?, notes = ? WHERE Visitation_id = ?";
-    private static final String DELETE_MANAGEMENTVISIT_QUERY = "DELETE FROM visitation WHERE Visitation_id = ?";
-    private static final String SELECT_BY_MANAGEMENTVISIT_QUERY = "SELECT v.prisoner_code, p.prisoner_name, v.visitor_name,  v.national_identification_number, v.relationship, v.visit_date, v.notes FROM visitation v JOIN prisoners p ON p.prisoner_code = v.prisoner_code";
-    private static final String SELECT_BY_CODE_DATE_MANAGEMENTVISIT_QUERY = "SELECT * FROM visitation WHERE prisoner_code = ? AND visit_date = ?";
-    private static final String COUNT_MANAGEMENTVISIT_QUERY = "SELECT COUNT(*) FROM visitation";
-    private static final String COUNT_VISITS_BY_MONTH_QUERY = "SELECT MONTH(visit_date) AS month, COUNT(*) AS visit_count FROM Visitation GROUP BY MONTH(visit_date)";
+    private static final String INSERT_QUERY = "INSERT INTO visit_log (sentence_id,  prisoner_id, visitor_name, identity_card, relationship, visit_date, start_time, end_time, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_MANAGEMENTVISIT_QUERY = "UPDATE visit_log SET sentence_id = ?, prisoner_id = ?, visitor_name = ?, identity_card = ?, relationship = ?, visit_date = ?, start_time = ?, end_time = ?, notes = ? WHERE Visit_log_id = ?";
+    private static final String DELETE_MANAGEMENTVISIT_QUERY = "DELETE FROM visit_log WHERE Visit_log_id  = ?";
+    private static final String SELECT_BY_MANAGEMENTVISIT_QUERY = "SELECT s.sentences_code, v.prisoner_id, p.prisoner_name, v.visitor_name,  v.identity_card, v.relationship, v.visit_date, v.start_time, v.end_time, v.notes FROM visit_log v JOIN prisoners p ON p.prisoner_id = v.prisoner_id JOIN sentences s ON s.sentence_id = v.sentence_id ORDER BY visit_date";
+    private static final String SELECT_BY_CODE_DATE_MANAGEMENTVISIT_QUERY = "SELECT * FROM visit_log WHERE prisoner_id = ? AND visit_date = ?";
+    private static final String COUNT_MANAGEMENTVISIT_QUERY = "SELECT COUNT(*) FROM visit_log";
+    private static final String COUNT_VISITS_BY_MONTH_QUERY = "SELECT MONTH(visit_date) AS month, COUNT(*) AS visit_count FROM visit_log GROUP BY MONTH(visit_date)";
 
     @Override
     public void addManagementVisit(ManagementVisit managementVisit) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
-            ps.setString(1,managementVisit.getPrisonerCode());
-            ps.setString(2,managementVisit.getVisitorName());
-            ps.setString(3,managementVisit.getNationalIdentificationNumber());
-            ps.setString(4,managementVisit.getRelationship());
-            ps.setString(5,managementVisit.getVisitDate());
-            ps.setString(6,managementVisit.getNotes());
+            ps.setString(1,managementVisit.getSentenceId());
+            ps.setString(2,managementVisit.getPrisonerId());
+            ps.setString(3,managementVisit.getVisitorName());
+            ps.setString(4,managementVisit.getIdentityCard());
+            ps.setString(5,managementVisit.getRelationship());
+            ps.setString(6,managementVisit.getVisitDate());
+            ps.setString(7,managementVisit.getStartTime());
+            ps.setString(8,managementVisit.getEndTime());
+            ps.setString(9,managementVisit.getNotes());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -52,12 +55,15 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
 
             while (rs.next()) {
                 ManagementVisit managementVisit = new ManagementVisit();
-                managementVisit.setPrisonerCode(rs.getString("prisoner_code"));
+                managementVisit.setSentenceCode(rs.getString("sentences_code"));
+                managementVisit.setPrisonerId(rs.getString("prisoner_id"));
                 managementVisit.setPrisonerName(rs.getString("prisoner_name"));
                 managementVisit.setVisitorName(rs.getString("visitor_name"));
-                managementVisit.setNationalIdentificationNumber(rs.getString("national_identification_number"));
+                managementVisit.setIdentityCard(rs.getString("identity_card"));
                 managementVisit.setRelationship(rs.getString("relationship"));
                 managementVisit.setVisitDate(rs.getString("visit_date"));
+                managementVisit.setStartTime(rs.getString("start_time"));
+                managementVisit.setEndTime(rs.getString("end_time"));
                 managementVisit.setNotes(rs.getString("notes"));
                 ManagementVisitList.add(managementVisit);
             }
@@ -71,14 +77,17 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
     public void updateManagementVisit(ManagementVisit managementVisit, int id) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_MANAGEMENTVISIT_QUERY)) {
-            ps.setString(1, managementVisit.getPrisonerCode());
-            ps.setString(2, managementVisit.getVisitorName());
-            ps.setString(3, managementVisit.getNationalIdentificationNumber());
-            ps.setString(4, managementVisit.getRelationship());
-            ps.setString(5, managementVisit.getVisitDate());
-            ps.setString(6, managementVisit.getNotes());
-            ps.setInt(7, id);
-            ps.executeUpdate();
+                ps.setString(1,managementVisit.getSentenceId());
+                ps.setString(2,managementVisit.getPrisonerId());
+                ps.setString(3,managementVisit.getVisitorName());
+                ps.setString(4,managementVisit.getIdentityCard());
+                ps.setString(5,managementVisit.getRelationship());
+                ps.setString(6,managementVisit.getVisitDate());
+                ps.setString(7,managementVisit.getStartTime());
+                ps.setString(8,managementVisit.getEndTime());
+                ps.setString(9,managementVisit.getNotes());
+                ps.setInt(10, id);
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -107,7 +116,7 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
                 ps.setString(2, visitDate);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        visitationId = rs.getInt("Visitation_id");
+                        visitationId = rs.getInt("Visit_log_id");
                     }
                 }
             }

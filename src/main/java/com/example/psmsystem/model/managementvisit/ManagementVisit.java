@@ -1,24 +1,56 @@
 package com.example.psmsystem.model.managementvisit;
 
 public class ManagementVisit {
-    private String prisonerCode;
+    private String sentenceId;
+    private String sentenceCode;
+    private String prisonerId;
     private String prisonerName;
     private String visitorName;
-    private String nationalIdentificationNumber;
+    private String identityCard;
     private String relationship;
     private String visitDate;
+    private String startTime;
+    private String endTime;
     private String notes;
 
     public ManagementVisit() {}
 
-    public ManagementVisit(String prisonerCode, String prisonerName, String visitorName, String nationalIdentificationNumber, String relationship, String visitDate, String notes) {
-        this.prisonerCode = prisonerCode;
+    public ManagementVisit(String sentenceId,String sentenceCode,String prisonerId, String prisonerName, String visitorName, String identityCard, String relationship, String visitDate, String startTime, String endTime, String notes) {
+        this.sentenceId = sentenceId;
+        this.sentenceCode = sentenceCode;
+        this.prisonerId = prisonerId;
         this.prisonerName = prisonerName;
         this.visitorName = visitorName;
-        this.nationalIdentificationNumber = nationalIdentificationNumber;
+        this.identityCard = identityCard;
         this.relationship = relationship;
         this.visitDate = visitDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.notes = notes;
+    }
+
+    public String getSentenceId() {
+        return sentenceId;
+    }
+
+    public void setSentenceId(String sentenceId) {
+        this.sentenceId = sentenceId;
+    }
+
+    public String getSentenceCode() {
+        return sentenceCode;
+    }
+
+    public void setSentenceCode(String sentenceCode) {
+        this.sentenceCode = sentenceCode;
+    }
+
+    public String getPrisonerId() {
+        return prisonerId;
+    }
+
+    public void setPrisonerId(String prisonerId) {
+        this.prisonerId = prisonerId;
     }
 
     public String getPrisonerName() {
@@ -29,14 +61,6 @@ public class ManagementVisit {
         this.prisonerName = prisonerName;
     }
 
-    public String getPrisonerCode() {
-        return prisonerCode;
-    }
-
-    public void setPrisonerCode(String prisonerCode) {
-        this.prisonerCode = prisonerCode;
-    }
-
     public String getVisitorName() {
         return visitorName;
     }
@@ -45,12 +69,12 @@ public class ManagementVisit {
         this.visitorName = visitorName;
     }
 
-    public String getNationalIdentificationNumber() {
-        return nationalIdentificationNumber;
+    public String getIdentityCard() {
+        return identityCard;
     }
 
-    public void setNationalIdentificationNumber(String nationalIdentificationNumber) {
-        this.nationalIdentificationNumber = nationalIdentificationNumber;
+    public void setIdentityCard(String identityCard) {
+        this.identityCard = identityCard;
     }
 
     public String getRelationship() {
@@ -67,6 +91,22 @@ public class ManagementVisit {
 
     public void setVisitDate(String visitDate) {
         this.visitDate = visitDate;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getNotes() {
