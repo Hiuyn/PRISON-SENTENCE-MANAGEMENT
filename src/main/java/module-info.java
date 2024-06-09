@@ -31,6 +31,9 @@ module com.example.psmsystem {
     opens com.example.psmsystem.model.health to javafx.base;
 
     exports com.example.psmsystem.controller.sentence;
+//    exports com.example.psmsystem.controller.sentence;
+
+    exports com.example.psmsystem.service.sentenceDao;
     opens com.example.psmsystem.controller.sentence to javafx.fxml;
     opens com.example.psmsystem.model.sentence to javafx.base;
 

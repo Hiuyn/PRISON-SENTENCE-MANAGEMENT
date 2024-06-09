@@ -85,15 +85,15 @@ public class ItemPrisonerViewController {
 
         prisonerShowEdit = prisoner;
         SentenceDao sentenceDao = new SentenceDao();
-        String prisonerIdDb = prisoner.getPrisonerCode();
+        int prisonerIdDb = Integer.parseInt(prisoner.getPrisonerCode());
 
         List<Sentence> sentenceList = sentenceDao.getSentence();
         try
         {
             for (Sentence sentence : sentenceList) {
-                if (sentence.getPrisonerId().equals(prisonerIdDb)) {
-                    String start = sentence.getStartDate();
-                    String end = sentence.getEndDate();
+                if (sentence.getPrisonerId() == prisonerIdDb) {
+                    String start = String.valueOf(sentence.getStartDate());
+                    String end = String.valueOf(sentence.getEndDate());
                     int years = calYearSentence(start, end);
                     lblYearSentence.setText("Year: " + years);
                     System.out.println("Year of sentence: " + years);
@@ -149,8 +149,6 @@ public class ItemPrisonerViewController {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate start = LocalDate.parse(startDate, dateFormatter);
         LocalDate end = LocalDate.parse(endDate, dateFormatter);
-
-
         return Period.between(start, end).getYears();
     }
     public void setPrisonerController(PrisonerController prisonerController) {

@@ -107,7 +107,8 @@ public class HealthController implements Initializable {
         listTable.addAll(healthDao.getHealth());
         dataTable.setFixedCellSize(37);
 
-        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": " + sentence.getPrisonerName());
+        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": "  );
+//        sentence.getPrisonerName()
         filterCombo.setItems(sentenceDao.getPrisonerName());
         filterCombo.setConverter(converter);
 
@@ -134,13 +135,13 @@ public class HealthController implements Initializable {
         }
 
         for (Sentence sentence : filterCombo.getItems()) {
-            if (sentence.getSentenceCode().contains(prisonercodeColumn.getCellData(index))) {
+            if (String.valueOf(sentence.getSentenceCode()).contains(prisonercodeColumn.getCellData(index))) {
                 filterCombo.setValue(sentence);
                 break;
             }
         }
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
+        int prisonerId = selectedValue.getPrisonerId();
         txtWeight.setText(weightColumn.getCellData(index).toString());
         txtHeight.setText(heightColumn.getCellData(index).toString());
         LocalDate date = LocalDate.parse(checkupDateColumn.getCellData(index).toString());
@@ -365,11 +366,12 @@ public class HealthController implements Initializable {
         }
 
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
-        String sentenceCode = selectedValue.getSentenceCode();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = "Quach Ngoc Hien";
+//        String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
         Double height = Double.valueOf(txtHeight.getText());
         Boolean status = false;
@@ -453,11 +455,12 @@ public class HealthController implements Initializable {
         }
 
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
-        String sentenceCode = selectedValue.getSentenceCode();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = "Quach Ngoc Hien onEdit-HealthController";
+//        String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
         Double height = Double.valueOf(txtHeight.getText());
         Boolean status = false;

@@ -3,10 +3,8 @@ package com.example.psmsystem.service.prisonerDAO;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
-import com.example.psmsystem.model.sentence.Sentence;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.util.*;
@@ -176,7 +174,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         return prisonerList;
     }
 
-    public void insertPrisonerDB(Prisoner prisoner)
+    public boolean insertPrisonerDB(Prisoner prisoner)
     {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
@@ -195,19 +193,12 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             int rowAffected = ps.executeUpdate();
             if (rowAffected>0)
             {
-//                -------------------------------------------------------------------FIX------------------------------
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setHeaderText("Add prisoner");
-                alert.setContentText("Add prisoner success!");
-                alert.showAndWait();
-            }else
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Add prisoner fail!");alert.show();
+                return true;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return false;
     }
 
 //    public List<String> getCrimes()

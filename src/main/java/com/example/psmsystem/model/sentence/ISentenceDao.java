@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ISentenceDao<T> {
-    void addSentence(T t);
+    boolean addSentence(T t);
     List<T> getSentence();
 
     int getMaxIdSentence();

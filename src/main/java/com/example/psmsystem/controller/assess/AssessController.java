@@ -105,7 +105,7 @@ public class AssessController implements Initializable {
         listTable.addAll(assessDao.getAssess());
         dataTable.setFixedCellSize(42);
 
-        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": " + sentence.getPrisonerName());
+        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": S " );
         filterCombo.setItems(sentenceDao.getPrisonerName());
         filterCombo.setConverter(converter);
 
@@ -282,7 +282,7 @@ public class AssessController implements Initializable {
         }
 
         for (Sentence sentence : filterCombo.getItems()) {
-            if (sentence.getSentenceCode().contains(prisonerCodeColumn.getCellData(index))) {
+            if (String.valueOf(sentence.getSentenceCode()).contains(prisonerCodeColumn.getCellData(index))) {
                 filterCombo.setValue(sentence);
                 break;
             }
@@ -332,10 +332,11 @@ public class AssessController implements Initializable {
         }
 
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
-        String sentenceCode = selectedValue.getSentenceCode();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
-        String prisonerName = selectedValue.getPrisonerName();
+//        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = "Hien onCreate-AssessController";
         String eventType = cbEventType.getValue();
         LocalDate selectedStartDate = dateEventDate.getValue();
         String eventDate = selectedStartDate.toString();
@@ -423,10 +424,11 @@ public class AssessController implements Initializable {
             return;
         }
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
-        String sentenceCode = selectedValue.getSentenceCode();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
-        String prisonerName = selectedValue.getPrisonerName();
+//        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = "Hien onEdit-AssessController";
         String eventType = cbEventType.getValue();
         LocalDate selectedStartDate = dateEventDate.getValue();
         String eventDate = selectedStartDate.toString();

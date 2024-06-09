@@ -140,7 +140,8 @@ public class ManagementVisitController implements Initializable {
 
         listTable.addAll(managementVisitDao.getManagementVisits());
         dataTable.setFixedCellSize(37);
-        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": " + sentence.getPrisonerName());
+        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ":  " );
+//        + sentence.getPrisonerName()
         filterCombo.setItems(sentenceDao.getPrisonerName());
         filterCombo.setConverter(converter);
 
@@ -252,11 +253,12 @@ public class ManagementVisitController implements Initializable {
         }
 
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
-        String sentenceCode = selectedValue.getSentenceCode();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-        String prisonerName = selectedValue.getPrisonerName();
+//        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = "Hien onCreate-ManagementVisitController";
         String visitorName = txtVisitorName.getText();
         String cccd = txtcccd.getText();
         String relationship = txtRelationship.getText();
@@ -265,7 +267,7 @@ public class ManagementVisitController implements Initializable {
         String date = selectedDate.toString();
 
 
-        if (hasVisitorThisMonth(selectedValue.getSentenceCode(), selectedDate)) {
+        if (hasVisitorThisMonth(String.valueOf(selectedValue.getSentenceCode()), selectedDate)) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Sentence code number " + selectedValue.getSentenceCode() + " has had visitors this month.");
             filterCombo.requestFocus();
             return;
@@ -354,11 +356,12 @@ public class ManagementVisitController implements Initializable {
         }
 
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
-        String sentenceCode = selectedValue.getSentenceCode();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-        String prisonerName = selectedValue.getPrisonerName();
+//        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = "Hien onEdit-ManagementVisitController";
         String visitorName = txtVisitorName.getText();
         String cccd = txtcccd.getText();
         String relationship = txtRelationship.getText();
@@ -423,13 +426,13 @@ public class ManagementVisitController implements Initializable {
         }
 
         for (Sentence sentence : filterCombo.getItems()) {
-            if (sentence.getSentenceCode().contains(sentenceCodeColumn.getCellData(index))) {
+            if (String.valueOf(sentence.getSentenceCode()).contains(sentenceCodeColumn.getCellData(index))) {
                 filterCombo.setValue(sentence);
                 break;
             }
         }
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
         txtVisitorName.setText(visitnameColumn.getCellData(index).toString());
         txtcccd.setText(cccdColumn.getCellData(index).toString());
         txtRelationship.setText(relationshipColumn.getCellData(index).toString());

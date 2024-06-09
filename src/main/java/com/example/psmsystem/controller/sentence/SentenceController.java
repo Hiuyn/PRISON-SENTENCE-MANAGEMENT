@@ -35,6 +35,8 @@ import org.controlsfx.control.SearchableComboBox;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -126,7 +128,8 @@ public class SentenceController implements Initializable {
 
         dataTable.setFixedCellSize(40);
 
-        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": " + sentence.getPrisonerName());
+        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": ");
+//        + sentence.getPrisonerName()
         filterCombo.setItems(sentenceDao.getPrisonerName());
         filterCombo.setConverter(converter);
 
@@ -197,7 +200,7 @@ public class SentenceController implements Initializable {
 
     private void setupSearch() {
         FilteredList<Sentence> filteredData = new FilteredList<>(listTable, p -> true);
-
+        String prisonerName = " Hien setupSearch-sentenceController";
         txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(sentence -> {
                 if (newValue == null || newValue.isEmpty()) {
@@ -206,10 +209,10 @@ public class SentenceController implements Initializable {
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (sentence.getSentenceCode().toLowerCase().contains(lowerCaseFilter)) {
+                if (String.valueOf(sentence.getSentenceCode()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (sentence.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
+                else if (prisonerName.toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (String.valueOf(sentence.getSentenceType()).toLowerCase().contains(lowerCaseFilter)) {
@@ -218,16 +221,16 @@ public class SentenceController implements Initializable {
                 else if (String.valueOf(sentence.getSentenceCode()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (sentence.getStartDate().toLowerCase().contains(lowerCaseFilter)) {
+                else if (String.valueOf(sentence.getStartDate()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (sentence.getEndDate().toLowerCase().contains(lowerCaseFilter)) {
+                else if (String.valueOf(sentence.getEndDate()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (sentence.getStatus().toLowerCase().contains(lowerCaseFilter)) {
+                else if (String.valueOf(sentence.isStatus()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (sentence.getParoleEligibility().toLowerCase().contains(lowerCaseFilter)) {
+                else if (sentence.getParole().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
 
@@ -298,13 +301,13 @@ public class SentenceController implements Initializable {
         }
 
         for (Sentence sentence : filterCombo.getItems()) {
-            if (sentence.getSentenceCode().contains(prisonerCodeColumn.getCellData(index))) {
+            if (String.valueOf(sentence.getSentenceCode()).contains(prisonerCodeColumn.getCellData(index))) {
                 filterCombo.setValue(sentence);
                 break;
             }
         }
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerCode = selectedValue.getSentenceCode();
+        String prisonerCode = String.valueOf(selectedValue.getSentenceCode());
         cbSentenceType.setValue(sentenceTypeColumn.getCellData(index).toString());
 
         ccbSentenceCode.getCheckModel().clearChecks();
@@ -405,9 +408,10 @@ public class SentenceController implements Initializable {
         }
 
         Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = selectedValue.getPrisonerId();
-        String sentenceCode = selectedValue.getSentenceCode();
-        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
+//        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = "Hien onCreate - SentenceController";
         String sentenceType = cbSentenceType.getValue();
         String crimeCode = listCrime();
         LocalDate selectedStartDate = dateStartDate.getValue();
@@ -418,9 +422,9 @@ public class SentenceController implements Initializable {
         String paroleeligibility = txtParoleEligibility.getText();
         String releaseDate = null;
 
-        Sentence sentence = new Sentence(prisonerId, prisonerName, sentenceCode, sentenceType, crimeCode, startDate, endDate, releaseDate, status, paroleeligibility);
-        sentenceDao.addSentence(sentence);
-        listTable.add(sentence);
+//        Sentence sentence = new Sentence( prisonerId, sentenceCode, sentenceType, startDate, endDate, releaseDate, status, paroleeligibility);
+//        sentenceDao.addSentence(sentence);
+//        listTable.add(sentence);
         dataTable.setItems(listTable);
 
         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Sentence created successfully.");
@@ -474,7 +478,7 @@ public class SentenceController implements Initializable {
 
                 if (selected != null) {
                     LocalDate today = LocalDate.now();
-                    String endDate = selected.getEndDate() != null ? selected.getEndDate() : null;
+                    String endDate = selected.getEndDate() != null ? String.valueOf(selected.getEndDate()) : null;
 
                     if (endDate == null) {
                         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
@@ -528,16 +532,26 @@ public class SentenceController implements Initializable {
 
         Sentence selectedValue = filterCombo.getValue();
         String sentenceType = cbSentenceType.getValue();
-        String sentenceCode = selectedValue.getSentenceCode();
+        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
         String crimeCode = listCrime();
 
-        String prisonerId = selectedValue.getPrisonerId();
-        String prisonerName = selectedValue.getPrisonerName();
-        LocalDate selectedStartDate = dateStartDate.getValue();
-        String startDate = selectedStartDate.toString();
+        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+//        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = "Hien  onEdit - sentenceController";
+//        LocalDate selectedStartDate = dateStartDate.getValue();
+//        Date startDate = selectedStartDate.toString();
 
-        LocalDate selectedEndDate = dateEndDate.getValue();
-        String endDate = selectedEndDate.toString();
+        LocalDate selectedStartDate = dateStartDate.getValue();
+        LocalDateTime startDateTime = selectedStartDate.atStartOfDay();
+        Date startDate = Date.from(startDateTime.atZone(ZoneId.systemDefault()).toInstant());
+
+//        LocalDate selectedEndDate = dateEndDate.getValue();
+//        String endDate = selectedEndDate.toString();
+
+        LocalDate selectedEndDate = dateStartDate.getValue();
+        LocalDateTime endDateTime = selectedEndDate.atStartOfDay();
+        Date endDate = Date.from(endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+
         String status = txtStatus.getText();
         String paroleEligibility = txtParoleEligibility.getText();
 
@@ -547,25 +561,25 @@ public class SentenceController implements Initializable {
             return;
         }
 
-        String releaseDate = null;
+        Date releaseDate = null;
 
-        Sentence sentence = new Sentence(prisonerId, prisonerName, sentenceCode, sentenceType, crimeCode, startDate, endDate, releaseDate, status, paroleEligibility);
-        sentenceDao.updateSentence(sentence, visitationId);
+//        Sentence sentence = new Sentence(prisonerId, prisonerName, sentenceCode, sentenceType, crimeCode, startDate, endDate, releaseDate, status, paroleEligibility);
+//        sentenceDao.updateSentence(sentence, visitationId);
 
         index = dataTable.getSelectionModel().getSelectedIndex();
 
         if (index >= 0) {
             Sentence s = listTable.get(index);
-            s.setPrisonerId(prisonerId);
-            s.setPrisonerName(prisonerName);
+            s.setPrisonerId(Integer.parseInt(prisonerId));
+//            s.setPrisonerName(prisonerName);
             s.setSentenceType(sentenceType);
-            s.setSentenceCode(sentenceCode);
-            s.setCrimesCode(crimeCode);
+            s.setSentenceCode(Integer.parseInt(sentenceCode));
+//            s.setCrimesCode(crimeCode);
             s.setStartDate(startDate);
             s.setEndDate(endDate);
-            s.setStatus(status);
+            s.setStatus(Boolean.parseBoolean(status));
             s.setReleaseDate(releaseDate);
-            s.setParoleEligibility(paroleEligibility);
+            s.setParole(paroleEligibility);
 
             dataTable.setItems(listTable);
             dataTable.refresh();
@@ -586,7 +600,7 @@ public class SentenceController implements Initializable {
             return false;
         }
 
-        String prisonerCode = filterCombo.getValue().getSentenceCode();
+        String prisonerCode = String.valueOf(filterCombo.getValue().getSentenceCode());
         int sentenceId = sentenceDao.getSentenceId(prisonerCode);
         if (sentenceId != -1) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Selected prisoner already has a sentence.");
