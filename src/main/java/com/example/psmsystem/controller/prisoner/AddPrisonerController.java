@@ -221,16 +221,15 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                 alert.setContentText("Prisoner not already exists");
                 alert.showAndWait();
                 setPrisonerId();
-                txtPrisonerFNAdd.setText(null);
-                datePrisonerDOBAdd.setValue(null);
-                imgPrisonerAdd.setImage(null);
-                rbtnMale.setSelected(false);
-                rbtnFemale.setSelected(false);
-                rbtnOther.setSelected(false);
-                txtContactName.setText(null);
-                txtContactPhone.setText(null);
+//                txtPrisonerFNAdd.setText(null);
+//                datePrisonerDOBAdd.setValue(null);
+//                imgPrisonerAdd.setImage(null);
+//                rbtnMale.setSelected(false);
+//                rbtnFemale.setSelected(false);
+//                rbtnOther.setSelected(false);
+//                txtContactName.setText(null);
+//                txtContactPhone.setText(null);
             }
-
         }catch (Exception e)
         {
             System.out.println(e.getMessage());
@@ -240,17 +239,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
         this.prisonerController = prisonerController;
     }
 
-//    public static Date convertStringToDate(String dateString) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-//        try {
-//            LocalDate localDate = LocalDate.parse(dateString, formatter);
-//            Date date  = java.sql.Date.valueOf(localDate);
-//            return date;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null; // Trả về null nếu có lỗi
-//        }
-//    }
     public static Date convertToDate(LocalDate localDate) {
         return Date.valueOf(localDate);
     }
@@ -273,42 +261,31 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
         return total;
     }
 
-
-public void setEndDate() {
-    if (dateIn.getValue() == null) {
-        showAlert("Start date cannot be empty");
-        return;
-    }
-    else
-    {
-        dateIn.setDisable(true);
-    }
-    if (getTimesOfCrimes() == null) {
-        showAlert("Select crime and input times");
-        return;
-    }
-    Date dateInValue = Date.valueOf(dateIn.getValue());
+public void setEndDate()
+{
+    RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
+    String sentenceTypeText = selectedSentenceType.getText();
     int totalTime = calculateTotal(getTimesOfCrimes());
-    Date calculatedDateOut = addMonths(dateInValue, totalTime);
-
-    // Đặt giá trị cho datePicker dateOut
-    dateOut.setValue(calculatedDateOut.toLocalDate());
-
-    dateOut.setVisible(true);
-    dateOut.setDisable(true);
-
-    btnEndDate.setText(String.valueOf(calculatedDateOut));
-    btnEndDate.setVisible(false);
+    if (dateIn.getValue()==null)
+    {
+        dateIn.valueProperty().addListener((observable, oldValue, newValue) -> {
+            LocalDate startDate = newValue;
+            LocalDate endDate = startDate.plusMonths(totalTime);
+            dateOut.setValue(endDate);
+        });
+    }
+    if (sentenceTypeText.equals("Life imprisonment")) {
+        LocalDate  today = LocalDate.now();
+        LocalDate unlimitedDate = today.minusYears(100);
+        dateOut.setValue(unlimitedDate);
+    } else if (sentenceTypeText.equals("limited time")) {
+        System.out.println("Set end date");
+    }
 }
-
 
     public boolean getSentence()
     {
         try {
-
-//            getTimesOfCrimes();
-//            int totalMonth = calculateTotal(getTimesOfCrimes());
-
             RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
             if (selectedSentenceType == null) {
                 showAlert("Sentence type must be selected");
@@ -320,14 +297,19 @@ public void setEndDate() {
             String sentenceTypeText = selectedSentenceType.getText();
             System.out.println("Sentence type: " + sentenceTypeText);
             LocalDate dateInput = dateIn.getValue();
+
+
             if (dateInput == null || dateInput.isAfter(LocalDate.now())) {
                 showAlert("Invalid start date");
-                dateIn.setDisable(false);
-                dateOut.setVisible(false);
-                btnEndDate.setVisible(true);
-                btnEndDate.setText("End date");
                 return false;
             }
+
+
+            if (getTimesOfCrimes() == null) {
+                showAlert("Select crime and input times");
+                return false;
+            }
+
             Date startDate = convertToDate(dateInput);
             System.out.println("Start Date: " + startDate);
             Date endDate = Date.valueOf(dateOut.getValue());
@@ -441,10 +423,6 @@ public void setEndDate() {
                 showAlert("Invalid contact phone");
                 return false;
             }
-
-            // Kiểm tra CMND
-
-
             Prisoner prisoner = new Prisoner();
             prisoner.setPrisonerCode(String.valueOf(code));
             prisoner.setPrisonerName(fullName);
@@ -456,7 +434,6 @@ public void setEndDate() {
             prisoner.setStatus(status);
             prisoner.setUser_id(userIdDb);
             prisoner.setIdentityCard(identityCard);
-
             this.prisoner = prisoner;
             return true;
         } catch (Exception e) {
@@ -495,7 +472,6 @@ public void setEndDate() {
                 String relativePath = destinationFolderPath + fileName;
                 File destFile = new File(relativePath);
 
-                // Copy file vào thư mục tài nguyên của ứng dụng
                 try (InputStream inputStream = new FileInputStream(selectedFile)) {
                     Files.copy(inputStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
@@ -564,16 +540,6 @@ public void getSelectedCrimes() {
     this.selectedCrimesId = idList;
 }
 
-//public String convertSelectedToString(List<Integer> idList)
-//{
-//    StringJoiner joiner = new StringJoiner(",");
-//    for (Integer id : idList)
-//    {
-//        joiner.add(id.toString());
-//    }
-//    return joiner.toString();
-//}
-
     public void openInputYearWindow() {
         try {
             getSelectedCrimes();
@@ -597,9 +563,22 @@ public void getSelectedCrimes() {
     }
 
 
+
     @FXML
     void loadInputYearCrimeView(ActionEvent event) {
         openInputYearWindow();
+        RadioButton selectedSentenceType = (RadioButton) tgSentenceType.getSelectedToggle();
+        String sentenceTypeText = selectedSentenceType.getText();
+        if (sentenceTypeText.equals("limited time"))
+        {
+//            Date dateInValue = Date.valueOf(dateIn.getValue());
+            int totalTime = calculateTotal(getTimesOfCrimes());
+//            Date calculatedDateOut = addMonths(dateInValue, totalTime);
+//            dateOut.setValue(calculatedDateOut.toLocalDate());
+            dateOut.setDisable(true);
+
+        }
+
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -609,7 +588,8 @@ public void getSelectedCrimes() {
         LocalDate currentDate = LocalDate.now();
         LocalDate eighteenYearsAgo = currentDate.minusYears(18);
         datePrisonerDOBAdd.setValue(eighteenYearsAgo);
-        dateOut.setVisible(false);
+//        dateOut.setVisible(false);
+//        dateOut.setDisable(true);
         lbPrisonerId.setVisible(false);
         tgGender = new ToggleGroup();
         tgSentenceType = new ToggleGroup();
@@ -618,8 +598,5 @@ public void getSelectedCrimes() {
         rbtnOther.setToggleGroup(tgGender);
         rbtnLimited.setToggleGroup(tgSentenceType);
         rbtnUnlimited.setToggleGroup(tgSentenceType);
-        dateOut.setOnAction(event -> {
-            setEndDate();
-        });
     }
 }

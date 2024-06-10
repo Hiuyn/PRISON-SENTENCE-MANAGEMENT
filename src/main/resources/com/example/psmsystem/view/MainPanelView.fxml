@@ -64,7 +64,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" onMouseClicked="#loadDashboardView" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/dashboardIconMenu.png" />
                            </image>
@@ -78,7 +78,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" onMouseClicked="#loadPrisonerView" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/prisonerIconMenu.png" />
                            </image>
@@ -92,7 +92,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" onMouseClicked="#loadManageVisitsView" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/visitorIconMenu.png" />
                            </image>
@@ -106,7 +106,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" onMouseClicked="#loadHealthView" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/healthIconMenu.png" />
                            </image>
@@ -120,7 +120,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" onMouseClicked="#loadSentenceView" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/sentenceIconMenu3.png" />
                            </image>
@@ -134,7 +134,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" onMouseClicked="#loadAssessView" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/assessIconMenu.png" />
                            </image>
@@ -148,7 +148,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0"  onMouseClicked="#loadReportView" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/reportIconMenu.png" />
                            </image>
@@ -162,7 +162,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/logOutIconColor.png" />
                            </image>
