@@ -123,10 +123,17 @@ public void acceptMonthOfCrime(ActionEvent event) {
             vBox.getChildren().addAll(labelName);
         }
 
-        if (anyEmpty || totalMonth == 0) {
+        if (anyEmpty || totalMonth == 0  ) {
             alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText("Enter all fields correctly");
+            alert.showAndWait();
+            return;
+        }else if (totalMonth <= 3)
+        {
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Total month must be greater than 3");
             alert.showAndWait();
             return;
         }

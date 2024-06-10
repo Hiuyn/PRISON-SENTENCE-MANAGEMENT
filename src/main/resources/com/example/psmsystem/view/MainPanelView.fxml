@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1350.0" style="-fx-background-color: #eff3f6;" stylesheets="@../css/mainpanel.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.MainPanelController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1350.0" style="-fx-background-color: #eff3f6;" stylesheets="@../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.MainPanelController">
    <top>
       <AnchorPane prefHeight="60.0" style="-fx-background-color: #fff;" BorderPane.alignment="CENTER">
          <children>
@@ -36,56 +41,134 @@
          <children>
             <AnchorPane prefHeight="132.0" prefWidth="160.0" style="-fx-border-width: .5px 0 .4px 0;" AnchorPane.bottomAnchor="442.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ImageView fitHeight="64.0" fitWidth="150.0" layoutX="62.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="75.0" fitWidth="82.0" layoutX="56.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="56.0" AnchorPane.topAnchor="0.0">
                      <image>
                         <Image url="@../../../../../java/com/example/psmsystem/assets/images/user.png" />
                      </image>
                   </ImageView>
-                  <Label alignment="CENTER_RIGHT" layoutX="64.0" layoutY="79.0" prefHeight="21.0" prefWidth="60.0" text="Welcome!" textFill="WHITE" />
-                  <Label fx:id="idLogin" alignment="CENTER" layoutX="44.0" layoutY="100.0" prefHeight="25.0" prefWidth="100.0" text="" textFill="WHITE" />
+                  <Label fx:id="idLogin" alignment="CENTER" layoutX="24.0" layoutY="106.0" prefHeight="25.0" prefWidth="139.0" text="" textFill="WHITE" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="110.0" />
                   <Separator layoutX="24.0" layoutY="138.0" prefHeight="3.0" prefWidth="140.0" />
+                  <Label layoutX="66.0" layoutY="89.0" prefHeight="17.0" prefWidth="55.0" text="Welcome!" AnchorPane.leftAnchor="66.0" AnchorPane.rightAnchor="66.0" AnchorPane.topAnchor="90.0" />
                </children>
             </AnchorPane>
             <VBox layoutY="137.0" prefHeight="410.0" prefWidth="185.0" spacing="10.0">
                <children>
-                  <Label fx:id="dashboard" alignment="CENTER" onMouseClicked="#loadDashboardView" prefHeight="40.0" prefWidth="185.0" text="Dashboard">
-                     <styleClass>
-                        <String fx:value="bt" />
-                        <String fx:value="selected" />
-                     </styleClass>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Label>
-                  <Label fx:id="prisoner" alignment="CENTER" onMouseClicked="#loadPrisonerView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Prisoner" textFill="WHITE">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Label>
-                  <Label fx:id="manageVisits" alignment="CENTER" onMouseClicked="#loadManageVisitsView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Manage Visits" textFill="WHITE">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Label>
-                  <Label fx:id="health" alignment="CENTER" onMouseClicked="#loadHealthView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Health" textFill="WHITE">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Label>
-                  <Label fx:id="sentence" alignment="CENTER" layoutX="10.0" layoutY="180.0" onMouseClicked="#loadSentenceView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Sentence" textFill="WHITE">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Label>
-                  <Label fx:id="assess" alignment="CENTER" onMouseClicked="#loadAssessView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Assess" textFill="WHITE">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Label>
-                  <Label fx:id="report" alignment="CENTER" onMouseClicked="#loadReportView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Report" textFill="WHITE">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Label>
-                  <Label fx:id="logout" alignment="CENTER" onMouseClicked="#close" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Log out" textFill="WHITE">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Label>
+                  <AnchorPane prefHeight="40.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="dashboard" alignment="CENTER" layoutX="69.0" layoutY="-6.0" onMouseClicked="#loadDashboardView" prefHeight="40.0" prefWidth="185.0" text="Dashboard" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <styleClass>
+                              <String fx:value="bt" />
+                              <String fx:value="selected" />
+                           </styleClass>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                           <image>
+                              <Image url="@../imgsApp/dashboardIconMenu.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="40.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="prisoner" alignment="CENTER" layoutX="10.0" layoutY="2.0" onMouseClicked="#loadPrisonerView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Prisoner" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                           <image>
+                              <Image url="@../imgsApp/prisonerIconMenu.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="40.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="manageVisits" alignment="CENTER" layoutX="10.0" layoutY="2.0" onMouseClicked="#loadManageVisitsView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Manage Visits" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                           <image>
+                              <Image url="@../imgsApp/visitorIconMenu.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="40.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="health" alignment="CENTER" layoutX="10.0" layoutY="2.0" onMouseClicked="#loadHealthView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Health" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                           <image>
+                              <Image url="@../imgsApp/healthIconMenu.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="40.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="sentence" alignment="CENTER" layoutX="10.0" layoutY="2.0" onMouseClicked="#loadSentenceView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Sentence" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                           <image>
+                              <Image url="@../imgsApp/sentenceIconMenu3.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="40.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="assess" alignment="CENTER" layoutX="10.0" layoutY="2.0" onMouseClicked="#loadAssessView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Assess" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                           <image>
+                              <Image url="@../imgsApp/assessIconMenu.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="40.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="report" alignment="CENTER" layoutX="10.0" layoutY="2.0" onMouseClicked="#loadReportView" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Report" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                           <image>
+                              <Image url="@../imgsApp/reportIconMenu.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="40.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="logout" alignment="CENTER" layoutX="10.0" layoutY="2.0" onMouseClicked="#close" prefHeight="40.0" prefWidth="185.0" styleClass="bt" text="Logout" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                           <image>
+                              <Image url="@../imgsApp/logOutIconColor.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
                </children>
                <padding>
                   <Insets top="20.0" />

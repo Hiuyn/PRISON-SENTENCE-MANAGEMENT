@@ -3,13 +3,13 @@ package com.example.psmsystem.controller.prisoner;
 
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -157,12 +157,12 @@ public class PrisonerController implements Initializable {
     }
 
     @FXML
-    void loadAddPrisonerView(ActionEvent event) {
+    void loadAddPrisonerView(MouseEvent event) {
         openAddWindow();
     }
 
     @FXML
-    void loadFilterView(ActionEvent event) {
+    void loadFilterView(MouseEvent event) {
         openFilterWindow();
     }
 }
