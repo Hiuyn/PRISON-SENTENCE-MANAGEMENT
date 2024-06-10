@@ -57,49 +57,58 @@ public class FilterController implements Initializable {
         try
         {
             PrisonerDAO prisonerDAO = new PrisonerDAO();
-
-            if (tgGender.getSelectedToggle() == rbtnMale)
-            {
-                genderFilter = 1;
-                System.out.println("genderFilter :" + genderFilter);
-            } else if (tgGender.getSelectedToggle() == rbtnFemale) {
-                genderFilter = 2;
-            } else if (tgGender.getSelectedToggle() == rbtnOther) {
-                genderFilter = 3;
-            }
-
             List<Prisoner> prisonerListByAge = prisonerDAO.getPrisonerByAge(this.ageFilter, this.genderFilter);
 
             if (sortNameType == 0   && sortTimeType ==0)
             {
-                getPrisonerListFilter(prisonerListByAge);
+                System.out.println("No time or age ASC DES");
             }
             else if (sortNameType == 1) {
                 Collections.sort(prisonerListByAge, (p1, p2) -> p1.getPrisonerName().compareTo(p2.getPrisonerName()));
             } else if (sortNameType == 2) {
 
             }
-
             for (Prisoner prisoner : prisonerListByAge) {
                 System.out.println("prisoner id sort test : " + prisoner.getPrisonerCode());
                 System.out.println("prisoner name sort test : " + prisoner.getPrisonerName());
             }
-
-//            if (!prisonerListByAge.isEmpty())
-//            {
-//                System.out.println("prisonerListByAge and gender :" + prisonerListByAge.size());
-//            }
         }catch (Exception e)
         {
             System.out.println("Filter controller - onFilter : "+ e.getMessage());
         }
     }
 
-    public void getPrisonerListFilter (List<Prisoner> prisonerList)
-    {
-
-
+    public void getGenderFilter(ActionEvent event) {
+        if (tgGender.getSelectedToggle() == rbtnMale)
+        {
+            genderFilter = 1;
+            btnU18.setDisable(true);
+            btnU40.setDisable(true);
+            btnU60.setDisable(true);
+            btnOver60.setDisable(true);
+        } else if (tgGender.getSelectedToggle() == rbtnFemale) {
+            genderFilter = 2;
+            btnU18.setDisable(true);
+            btnU40.setDisable(true);
+            btnU60.setDisable(true);
+            btnOver60.setDisable(true);
+        } else if (tgGender.getSelectedToggle() == rbtnOther) {
+            genderFilter = 3;
+            btnU18.setDisable(true);
+            btnU40.setDisable(true);
+            btnU60.setDisable(true);
+            btnOver60.setDisable(true);
+        }
+        else
+        {
+            btnU18.setDisable(false);
+            btnU40.setDisable(false);
+            btnU60.setDisable(false);
+            btnOver60.setDisable(false);
+        }
+        System.out.println("genderFilter :" + genderFilter);
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tgGender = new ToggleGroup();
@@ -111,22 +120,34 @@ public class FilterController implements Initializable {
 
     @FXML
     public void getAgeFilter(ActionEvent event) {
-        Button clickedButton = (Button) event.getSource();
-        System.out.println(getAgeRange(clickedButton));
-        this.ageFilter = getAgeRange(clickedButton);
+        try {
+            Button clickedButton = (Button) event.getSource();
+//            System.out.println(getAgeRange(clickedButton));
+            getAgeRange(clickedButton);
+            rbtnMale.setDisable(true);
+            rbtnFemale.setDisable(true);
+            rbtnOther.setDisable(true);
+        }catch (Exception e)
+        {
+            System.out.println("getAgeFilter: "+ e.getMessage());
+        }
     }
 
-    private int getAgeRange(Button button) {
+    private void getAgeRange(Button button) {
         if (button == btnU18) {
-            return 1;
+            this.ageFilter = 1;
         } else if (button == btnU40) {
-            return 2;
+            this.ageFilter = 2;
         } else if (button == btnU60) {
-            return 3;
+            this.ageFilter =  3;
         } else if (button == btnOver60) {
-            return 4;
+            this.ageFilter = 4;
         }
-        return 0;
+        else
+        {
+            this.ageFilter = 0;
+        }
+        System.out.println("AgeFilter :" + this.ageFilter);
     }
 
 

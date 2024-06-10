@@ -107,6 +107,11 @@ and open the template in the editor.
     -fx-border-width: .5px;
     -fx-padding: 10px;
 }
+.bgMenu
+{
+    /*-fx-background-color:  linear-gradient(to bottom right, #6d6f70, #47585e);*/
+    -fx-background-color: #888888;
+}
 
 .shadow{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.4), 6,0,0,0);

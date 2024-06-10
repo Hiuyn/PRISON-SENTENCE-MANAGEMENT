@@ -13,13 +13,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1350.0" style="-fx-background-color: #eff3f6;" stylesheets="@../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.MainPanelController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1350.0" stylesheets="@../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.MainPanelController">
    <top>
-      <AnchorPane prefHeight="60.0" style="-fx-background-color: #fff;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="60.0" styleClass="bgMenu" stylesheets="@../css/mainpanel.css" BorderPane.alignment="CENTER">
          <children>
             <AnchorPane prefHeight="60.0" prefWidth="160.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="60.0" prefWidth="187.0" style="-fx-background-color: linear-gradient(to bottom right, #188ba7, #306090);" text="Prison" textFill="WHITE">
+                  <Label alignment="CENTER" prefHeight="60.0" prefWidth="185.0" style="-fx-background-color: #fff;" stylesheets="@../css/mainpanel.css" text="Prison" textFill="#796d6d" AnchorPane.leftAnchor="0.0">
                      <font>
                         <Font name="System Bold Italic" size="25.0" />
                      </font></Label>
@@ -37,13 +37,13 @@
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="185.0" style="-fx-background-color: linear-gradient(to bottom right, #188ba7, #306090);" BorderPane.alignment="CENTER">
+      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="185.0" styleClass="bgMenu" stylesheets="@../css/mainpanel.css" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="132.0" prefWidth="160.0" style="-fx-border-width: .5px 0 .4px 0;" AnchorPane.bottomAnchor="442.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane prefHeight="132.0" prefWidth="160.0" style="-fx-border-width: .5px 0 .4px 0;" AnchorPane.bottomAnchor="442.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <ImageView fitHeight="75.0" fitWidth="82.0" layoutX="56.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="56.0" AnchorPane.topAnchor="0.0">
                      <image>
-                        <Image url="@../../../../../java/com/example/psmsystem/assets/images/user.png" />
+                        <Image url="@../imgsApp/guard3.png" />
                      </image>
                   </ImageView>
                   <Label fx:id="idLogin" alignment="CENTER" layoutX="24.0" layoutY="106.0" prefHeight="25.0" prefWidth="139.0" text="" textFill="WHITE" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="110.0" />
@@ -64,7 +64,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/dashboardIconMenu.png" />
                            </image>
@@ -78,7 +78,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/prisonerIconMenu.png" />
                            </image>
@@ -92,7 +92,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/visitorIconMenu.png" />
                            </image>
@@ -106,7 +106,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/healthIconMenu.png" />
                            </image>
@@ -120,7 +120,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/sentenceIconMenu3.png" />
                            </image>
@@ -134,7 +134,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/assessIconMenu.png" />
                            </image>
@@ -148,7 +148,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/reportIconMenu.png" />
                            </image>
@@ -162,7 +162,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <ImageView fitHeight="30.0" fitWidth="35.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="5.0">
+                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="1.0">
                            <image>
                               <Image url="@../imgsApp/logOutIconColor.png" />
                            </image>
