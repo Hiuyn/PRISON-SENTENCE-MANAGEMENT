@@ -13,33 +13,33 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<AnchorPane prefHeight="957.0" prefWidth="1760.0" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.assess.AssessController">
+<AnchorPane prefHeight="637.0" prefWidth="1270.0" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.assess.AssessController">
     <children>
-        <AnchorPane prefHeight="215.0" prefWidth="1712.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
+        <AnchorPane prefHeight="210.0" prefWidth="1222.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
             <styleClass>
                 <String fx:value="card" />
                 <String fx:value="shadow" />
             </styleClass>
             <children>
-                <Button layoutX="1238.0" layoutY="164.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CREATE">
+                <Button fx:id="createId" layoutX="638.0" layoutY="160.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CREATE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="340.0">
                     <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="success" />
                     </styleClass>
                 </Button>
-                <Button layoutX="1354.0" layoutY="164.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="EDIT">
+                <Button layoutX="754.0" layoutY="160.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="EDIT" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="230.0">
                     <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="infor" />
                     </styleClass>
                 </Button>
-                <Button layoutX="1585.0" layoutY="164.0" mnemonicParsing="false" onAction="#onClean" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CLEAN">
+                <Button layoutX="985.0" layoutY="160.0" mnemonicParsing="false" onAction="#onClean" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CLEAN" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                     <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="clear" />
                     </styleClass>
                 </Button>
-                <Button layoutX="1471.0" layoutY="164.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="DELETE">
+                <Button layoutX="871.0" layoutY="160.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="DELETE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="120.0">
                     <styleClass>
                         <String fx:value="btn" />
                         <String fx:value="danger" />
@@ -57,15 +57,15 @@
                 <ComboBox fx:id="cbLevel" layoutX="122.0" layoutY="87.0" prefHeight="40.0" prefWidth="241.0" />
             </children>
         </AnchorPane>
-        <AnchorPane prefHeight="663.0" prefWidth="1712.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0">
+        <AnchorPane layoutY="251.2" prefHeight="362.0" prefWidth="1222.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="251.0">
             <styleClass>
                 <String fx:value="card" />
                 <String fx:value="shadow" />
             </styleClass>
             <children>
-                <TextField fx:id="txtSearch" layoutX="21.0" layoutY="14.0" prefHeight="40.0" prefWidth="367.0" promptText="Search..." AnchorPane.topAnchor="10.0" />
-                <FontAwesomeIcon glyphName="SEARCH" layoutX="357.0" layoutY="48.0" size="22" />
-                <TableView fx:id="dataTable" layoutX="32.0" layoutY="73.0" onMouseClicked="#getItem" prefHeight="524.0" prefWidth="1659.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                <TextField fx:id="txtSearch" layoutX="14.0" layoutY="121.0" prefHeight="40.0" prefWidth="367.0" promptText="Search..." AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                <FontAwesomeIcon glyphName="SEARCH" layoutX="352.0" layoutY="48.0" size="22" />
+                <TableView fx:id="dataTable" layoutX="32.0" layoutY="73.0" onMouseClicked="#getItem" prefHeight="100.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
                     <columns>
                         <TableColumn fx:id="assessColumn" prefWidth="118.0" styleClass="text-center" text="Assess Code" />
                         <TableColumn fx:id="prisonerCodeColumn" prefWidth="118.0" styleClass="text-center" text="Sentence Code" />
@@ -76,7 +76,7 @@
                         <TableColumn fx:id="noteColumn" prefWidth="81.0" styleClass="text-center" text="Note" />
                     </columns>
                 </TableView>
-                <Pagination fx:id="pagination" layoutX="14.0" layoutY="71.0" prefHeight="569.0" prefWidth="1676.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                <Pagination fx:id="pagination" layoutX="14.0" layoutY="71.0" prefHeight="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
             </children>
         </AnchorPane>
     </children>

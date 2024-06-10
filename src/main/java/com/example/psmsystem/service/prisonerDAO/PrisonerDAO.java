@@ -14,7 +14,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners WHERE status = ? ";
-//    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_id FROM prisoners WHERE status = ? ORDER BY prisoner_id ASC LIMIT 1";
+    //    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_id FROM prisoners WHERE status = ? ORDER BY prisoner_id ASC LIMIT 1";
     private  static final String DELETE_PRISONER_BY_ID = "DELETE FROM prisoners WHERE prisoner_id = ?";
     private  static final String DELETE_SENTENCE_BY_ID = "DELETE FROM sentences WHERE prisoner_id = ?";
     private static final String SELECT_PRISONER_BY_AGE = "SELECT * FROM prisoners " +
@@ -171,7 +171,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         return false;
     }
 
-//    public List<String> getCrimes()
+    //    public List<String> getCrimes()
 //    {
 //        List<String> crimesList = new ArrayList<>();
 //        try(Connection connection = DbConnection.getDatabaseConnection().getConnection())

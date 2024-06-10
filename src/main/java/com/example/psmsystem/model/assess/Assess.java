@@ -3,8 +3,8 @@ package com.example.psmsystem.model.assess;
 public class Assess {
     private String processCode;
     private String sentencesId;
-    private String sentencesCode;
-    private String prisonerId;
+    private int sentencesCode;
+    private int prisonerId;
     private String prisonerName;
     private String dateOfOccurrence;
     private String eventType;
@@ -14,7 +14,7 @@ public class Assess {
     public Assess() {
     }
 
-    public Assess(String processCode, String sentencesId, String sentencesCode, String prisonerId, String prisonerName, String dateOfOccurrence, String eventType, int level, String note) {
+    public Assess(String processCode, String sentencesId, int sentencesCode, int prisonerId, String prisonerName, String dateOfOccurrence, String eventType, int level, String note) {
         this.processCode = processCode;
         this.sentencesId = sentencesId;
         this.sentencesCode = sentencesCode;
@@ -42,19 +42,19 @@ public class Assess {
         this.sentencesId = sentencesId;
     }
 
-    public String getSentencesCode() {
+    public int getSentencesCode() {
         return sentencesCode;
     }
 
-    public void setSentencesCode(String sentencesCode) {
+    public void setSentencesCode(int sentencesCode) {
         this.sentencesCode = sentencesCode;
     }
 
-    public String getPrisonerId() {
+    public int getPrisonerId() {
         return prisonerId;
     }
 
-    public void setPrisonerId(String prisonerId) {
+    public void setPrisonerId(int prisonerId) {
         this.prisonerId = prisonerId;
     }
 

@@ -8,7 +8,7 @@ public interface IManagementVisitDao<T> {
     List<T> getManagementVisits();
     void updateManagementVisit(T t, int id);
     void deleteManagementVisit(int id);
-    int getVisitationId(String prisonerCode, String visitDate);
+    int getVisitationId(int prisonerCode, String visitDate);
     int getCountManagementVisit();
     Map<String, Integer> countVisitsByMonth();
 }

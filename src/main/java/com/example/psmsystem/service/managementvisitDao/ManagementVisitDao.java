@@ -29,7 +29,7 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
         {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
             ps.setString(1,managementVisit.getSentenceId());
-            ps.setString(2,managementVisit.getPrisonerId());
+            ps.setInt(2,managementVisit.getPrisonerId());
             ps.setString(3,managementVisit.getVisitorName());
             ps.setString(4,managementVisit.getIdentityCard());
             ps.setString(5,managementVisit.getRelationship());
@@ -55,8 +55,8 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
 
             while (rs.next()) {
                 ManagementVisit managementVisit = new ManagementVisit();
-                managementVisit.setSentenceCode(rs.getString("sentences_code"));
-                managementVisit.setPrisonerId(rs.getString("prisoner_id"));
+                managementVisit.setSentenceCode(rs.getInt("sentences_code"));
+                managementVisit.setPrisonerId(rs.getInt("prisoner_id"));
                 managementVisit.setPrisonerName(rs.getString("prisoner_name"));
                 managementVisit.setVisitorName(rs.getString("visitor_name"));
                 managementVisit.setIdentityCard(rs.getString("identity_card"));
@@ -78,7 +78,7 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_MANAGEMENTVISIT_QUERY)) {
                 ps.setString(1,managementVisit.getSentenceId());
-                ps.setString(2,managementVisit.getPrisonerId());
+                ps.setInt(2,managementVisit.getPrisonerId());
                 ps.setString(3,managementVisit.getVisitorName());
                 ps.setString(4,managementVisit.getIdentityCard());
                 ps.setString(5,managementVisit.getRelationship());
@@ -107,12 +107,12 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
     }
 
     @Override
-    public int getVisitationId(String prisonerCode, String visitDate) {
+    public int getVisitationId(int prisonerCode, String visitDate) {
         int visitationId = -1;
 
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try (PreparedStatement ps = connection.prepareStatement(SELECT_BY_CODE_DATE_MANAGEMENTVISIT_QUERY)) {
-                ps.setString(1, prisonerCode);
+                ps.setInt(1, prisonerCode);
                 ps.setString(2, visitDate);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {

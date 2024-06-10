@@ -121,34 +121,34 @@ package com.example.psmsystem.model.sentence;
 //    }
 //}
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Sentence {
     private int sentenceId;
     private int prisonerId;
+    private String prisonerName;
     private int sentenceCode;
     private String sentenceType;
+    private String crimesCode;
     private Date startDate;
     private Date endDate;
     private Date releaseDate;
     private boolean status;
     private String parole;
-    private Date updateDate;
-    private int userId;
 
     public Sentence(){}
 
-    public Sentence( int prisonerId, int sentenceCode, String sentenceType, Date startDate, Date endDate, Date releaseDate, boolean status, String parole, Date updateDate, int userId) {
+    public Sentence( int prisonerId, String prisonerName, int sentenceCode, String sentenceType, String crimesCode, Date startDate, Date endDate, Date releaseDate, boolean status, String parole) {
         this.prisonerId = prisonerId;
+        this.prisonerName = prisonerName;
         this.sentenceCode = sentenceCode;
         this.sentenceType = sentenceType;
+        this.crimesCode = crimesCode;
         this.startDate = startDate;
         this.endDate = endDate;
         this.releaseDate = releaseDate;
         this.status = status;
         this.parole = parole;
-        this.updateDate = updateDate;
-        this.userId = userId;
     }
 
     public int getSentenceId() {
@@ -167,6 +167,14 @@ public class Sentence {
         this.prisonerId = prisonerId;
     }
 
+    public String getPrisonerName() {
+        return prisonerName;
+    }
+
+    public void setPrisonerName(String prisonerName) {
+        this.prisonerName = prisonerName;
+    }
+
     public int getSentenceCode() {
         return sentenceCode;
     }
@@ -181,6 +189,14 @@ public class Sentence {
 
     public void setSentenceType(String sentenceType) {
         this.sentenceType = sentenceType;
+    }
+
+    public String getCrimesCode() {
+        return crimesCode;
+    }
+
+    public void setCrimesCode(String crimesCode) {
+        this.crimesCode = crimesCode;
     }
 
     public Date getStartDate() {
@@ -221,21 +237,5 @@ public class Sentence {
 
     public void setParole(String parole) {
         this.parole = parole;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 }

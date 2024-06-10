@@ -1,6 +1,7 @@
 package com.example.psmsystem.service.reportDao;
 
 import com.example.psmsystem.database.DbConnection;
+import com.example.psmsystem.model.managementvisit.ManagementVisit;
 import com.example.psmsystem.model.report.IReportDao;
 import com.example.psmsystem.model.report.Report;
 
@@ -116,7 +117,7 @@ public class ReportDao implements IReportDao<Report> {
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
                     // Lấy ngày giờ từ cột update_date trong ResultSet
-                    Date date = rs.getDate("date_update");
+                    Date date = rs.getTimestamp("date_update");
 
                     // Định dạng ngày giờ theo yêu cầu ("yyyy-MM-dd HH:mm:ss")
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

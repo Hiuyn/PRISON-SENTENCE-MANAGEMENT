@@ -13,7 +13,7 @@ public interface ISentenceDao<T> {
 
     void updateSentence(T t, int id);
     void deleteSentence(int id);
-    int getSentenceId(String prisonerCode);
+    int getSentenceId(int prisonerCode);
     Map<String, Integer> countPrisonersBySentenceType();
     ObservableList<T> getPrisonerName();
 }

@@ -17,7 +17,7 @@ public class AssessDao implements IAssessDao<Assess> {
     private static final String DELETE_ASSESS_QUERY = "DELETE FROM incareration_process WHERE process_id = ?";
     private static final String SELECT_BY_ASSESS_QUERY = "SELECT ip.process_code, ip.sentence_id, s.sentences_code, ip.prisoner_id, p.prisoner_name,ip.date_of_occurrence, ip.event_type, ip.level, ip.note FROM incareration_process ip JOIN sentences s ON s.sentence_id = ip.sentence_id JOIN prisoners p ON p.prisoner_id = ip.prisoner_id ORDER BY date_of_occurrence";
     private static final String SELECT_BY_CODE_DATE_ASSESS_QUERY = "SELECT * FROM incareration_process WHERE process_code = ? AND date_of_occurrence = ?";
-    private static final String COUNT_ASSESS_QUERY = "SELECT COUNT(*) FROM incareration_process";
+    private static final String MAX_PROCESS_CODE_QUERY = "SELECT MAX(CAST(SUBSTRING(process_code, 2) AS UNSIGNED)) AS max_health_code FROM incareration_process WHERE process_code REGEXP '^H[0-9]+$'";
 
     @Override
     public void addAssess(Assess assess) {
@@ -26,7 +26,7 @@ public class AssessDao implements IAssessDao<Assess> {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
             ps.setString(1,assess.getProcessCode());
             ps.setString(2,assess.getSentencesId());
-            ps.setString(3,assess.getPrisonerId());
+            ps.setInt(3,assess.getPrisonerId());
             ps.setString(4,assess.getDateOfOccurrence());
             ps.setString(5,assess.getEventType());
             ps.setInt(6,assess.getLevel());
@@ -51,8 +51,8 @@ public class AssessDao implements IAssessDao<Assess> {
                 Assess assess = new Assess();
                 assess.setProcessCode(rs.getString("process_code"));
                 assess.setSentencesId(rs.getString("sentence_id"));
-                assess.setSentencesCode(rs.getString("sentences_code"));
-                assess.setPrisonerId(rs.getString("prisoner_id"));
+                assess.setSentencesCode(rs.getInt("sentences_code"));
+                assess.setPrisonerId(rs.getInt("prisoner_id"));
                 assess.setPrisonerName(rs.getString("prisoner_name"));
                 assess.setDateOfOccurrence(rs.getString("date_of_occurrence"));
                 assess.setEventType(rs.getString("event_type"));
@@ -72,7 +72,7 @@ public class AssessDao implements IAssessDao<Assess> {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_ASSESS_QUERY)) {
                 ps.setString(1,assess.getProcessCode());
                 ps.setString(2,assess.getSentencesId());
-                ps.setString(3,assess.getPrisonerId());
+                ps.setInt(3,assess.getPrisonerId());
                 ps.setString(4,assess.getDateOfOccurrence());
                 ps.setString(5,assess.getEventType());
                 ps.setInt(6,assess.getLevel());
@@ -120,17 +120,16 @@ public class AssessDao implements IAssessDao<Assess> {
 
     @Override
     public int getCountAssess() {
-        int count = 0;
+        int maxNumber = 0;
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(COUNT_ASSESS_QUERY);
+            PreparedStatement ps = connection.prepareStatement(MAX_PROCESS_CODE_QUERY);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                count = rs.getInt(1); // Lấy giá trị của cột đầu tiên (đếm tổng số bản ghi)
+                maxNumber = Integer.parseInt(rs.getString(1));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return count;
+        return maxNumber;
     }
 }
