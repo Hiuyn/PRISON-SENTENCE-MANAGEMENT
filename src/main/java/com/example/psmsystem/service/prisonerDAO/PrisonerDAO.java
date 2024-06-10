@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.*;
 
 public class PrisonerDAO implements IPrisonerDao<Prisoner> {
-    private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_name, date_birth, gender, identity_card, contacter_name, contacter_phone, image, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_name, date_birth, gender, identity_card, contacter_name, contacter_phone, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners WHERE status = ? ";
@@ -33,12 +33,10 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     public List<Prisoner> getAllPrisoner() {
         List<Prisoner> prisonerList = new ArrayList<>();
         try {
-
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_PRISONER_QUERY);
             statement.setBoolean(1,false);
             ResultSet rs = statement.executeQuery();
-
             while (rs.next()) {
                 Prisoner prisoner = new Prisoner();
                 prisoner.setPrisonerCode(rs.getString("prisoner_id"));
@@ -50,7 +48,6 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
                 prisoner.setContactPhone(rs.getString("contacter_phone"));
                 prisoner.setImagePath(rs.getString("image"));
                 prisoner.setStatus(rs.getBoolean("status"));
-                prisoner.setUser_id(rs.getInt("user_id"));
                 prisonerList.add(prisoner);
             }
         } catch (SQLException e) {
@@ -61,7 +58,6 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     public List<Prisoner> getItemComboboxPrisoner() {
         List<Prisoner> prisonerList = new ArrayList<>();
         try {
-
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_PRISONER_QUERY_COMBOBOX);
             ResultSet rs = statement.executeQuery();
@@ -75,7 +71,6 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
                 prisoner.setContactName(rs.getString("contacter_name"));
                 prisoner.setContactPhone(rs.getString("contacter_phone"));
                 prisoner.setImagePath(rs.getString("image"));
-
                 prisonerList.add(prisoner);
             }
         } catch (SQLException e) {
@@ -144,29 +139,6 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         }
         return PrisonerList;
     }
-
-//    public List<Sentence> getYearOfSentence()
-//    {
-//        List<Sentence> sentenceList = new ArrayList<>();
-//        try{
-//            Connection connection = DbConnection.getDatabaseConnection().getConnection();
-//            PreparedStatement ps = connection.prepareStatement(SELECT_YEAR_SENTENCE);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Sentence sentence = new Sentence();
-//                sentence.setPrisonerCode(String.valueOf(rs.getInt("prisoner_id")));
-//                sentence.setStartDate(rs.getString("start_date"));
-//                sentence.setEndDate(rs.getString("end_date"));
-//                sentenceList.add(sentence);
-//            }
-//        }catch (SQLException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        return sentenceList;
-//    }
-
-
     @Override
     public ObservableList<Prisoner> getPrisonerName() {
         List<Prisoner> prisoners = getItemComboboxPrisoner();
@@ -188,8 +160,6 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             ps.setString(7,prisoner.getContactPhone());
             ps.setString(8,prisoner.getImagePath());
             ps.setBoolean(9,prisoner.isStatus());
-            ps.setInt(10,prisoner.getUser_id());
-
             int rowAffected = ps.executeUpdate();
             if (rowAffected>0)
             {

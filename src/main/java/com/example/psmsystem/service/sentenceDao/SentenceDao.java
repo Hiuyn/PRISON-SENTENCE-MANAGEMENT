@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SentenceDao implements ISentenceDao<Sentence> {
-    private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_id, sentences_code, sentence_type, start_date, end_date, release_date, status, parole_eligibility, update_date, user_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_id, sentences_code, sentence_type, start_date, end_date, release_date, status, parole_eligibility, update_date) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET sentence_id = ?, prisoner_id = ?, sentences_code = ?, sentence_type = ?, crimes_code = ?, start_date = ?, end_date = ?, release_date = ?, status = ?, parole_eligibility = ?WHERE sentence_id = ?";
     private static final String DELETE_SENTENCE_QUERY = "DELETE FROM sentences WHERE sentence_id = ?";
     private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.sentence_id, s.prisoner_id, s.sentence_type, s.sentences_code, s.start_date, s.end_date, s.release_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_id = s.prisoner_id";
@@ -37,7 +37,6 @@ public class SentenceDao implements ISentenceDao<Sentence> {
             ps.setBoolean(7,sentence.isStatus());
             ps.setString(8,sentence.getParole());
             ps.setString(9, String.valueOf(sentence.getUpdateDate()));
-            ps.setInt(10,sentence.getUserId());
             int rowAffected = ps. executeUpdate();
             if (rowAffected > 0)
             {

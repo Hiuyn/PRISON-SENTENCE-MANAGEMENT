@@ -103,7 +103,7 @@ and open the template in the editor.
 .card {
     -fx-background-color: #fff;
     -fx-background-radius: 10px;
-    -fx-border-color: #ccc;
+    /*-fx-border-color: #ccc;*/
     -fx-border-width: .5px;
     -fx-padding: 10px;
 }

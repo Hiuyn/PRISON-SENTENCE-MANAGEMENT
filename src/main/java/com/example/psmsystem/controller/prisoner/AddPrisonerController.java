@@ -111,6 +111,7 @@ public class AddPrisonerController implements Initializable {
     private int sentenceId;
     private Prisoner prisoner;
     private Sentence sentence;
+    private int prisonerId;
 
     public static boolean isPositiveInteger(String str) {
         if (str == null || str.isEmpty()) {
@@ -315,18 +316,23 @@ public void setEndDate() {
             }
             new ArrayList<>(ccbCrimes.getCheckModel().getCheckedItems());
             int sentenceCode = Integer.parseInt(lbSentenceId.getText());
-            String sentenceTypeText = convertSentenceType(selectedSentenceType.getText());
+//            String sentenceTypeText = convertSentenceType(selectedSentenceType.getText());
+            String sentenceTypeText = selectedSentenceType.getText();
             System.out.println("Sentence type: " + sentenceTypeText);
             LocalDate dateInput = dateIn.getValue();
             if (dateInput == null || dateInput.isAfter(LocalDate.now())) {
                 showAlert("Invalid start date");
+                dateIn.setDisable(false);
+                dateOut.setVisible(false);
+                btnEndDate.setVisible(true);
+                btnEndDate.setText("End date");
                 return false;
             }
             Date startDate = convertToDate(dateInput);
             System.out.println("Start Date: " + startDate);
             Date endDate = Date.valueOf(dateOut.getValue());
             System.out.println("End Date: " + startDate);
-            int prisoner_id = Integer.parseInt(lbPrisonerId.getText());
+            int prisoner_id = this.prisonerId;
             System.out.println("Prisoner ID getSentence: " + prisoner_id);
             String parole = " ";
 //        String prisonerName = txtPrisonerFNAdd.getText();
@@ -366,65 +372,22 @@ public void setEndDate() {
     {
         PrisonerDAO prisonerDAO = new PrisonerDAO();
         int prisonerIdDB = prisonerDAO.getIdEmpty();
-
+        this.prisonerId = prisonerIdDB;
         if ( prisonerIdDB < 10) {
-            lbPrisonerId.setText("0000"+prisonerIdDB);
+            lbPrisonerId.setText("0000"+this.prisonerId);
         }
         else if (prisonerIdDB < 100 && prisonerIdDB > 10) {
-            lbPrisonerId.setText("000"+prisonerIdDB);
+            lbPrisonerId.setText("000"+this.prisonerId);
         }
         else if (prisonerIdDB > 100 && prisonerIdDB < 1000 )
         {
-            lbPrisonerId.setText("00"+prisonerIdDB);
+            lbPrisonerId.setText("00"+this.prisonerId);
         }
         else if (prisonerIdDB > 1000 && prisonerIdDB < 10000 )
         {
-            lbPrisonerId.setText("0"+prisonerIdDB);
+            lbPrisonerId.setText("0"+this.prisonerId);
         }
     }
-//    public boolean getPrisoner()
-//    {
-//        try {
-//            PrisonerDAO prisonerDAO = new PrisonerDAO();
-//            RadioButton selectedGender = (RadioButton) tgGender.getSelectedToggle();
-//            String selectedRadioButtonText = selectedGender.getText();
-//            int genderInputDb;
-//            if (selectedRadioButtonText.equals("Male")) {
-//                genderInputDb = 1;
-//            } else if (selectedRadioButtonText.equals("Female")) {
-//                genderInputDb = 2;
-//            } else {
-//                genderInputDb = 3;
-//            }
-//            String fullName = txtPrisonerFNAdd.getText();
-//            LocalDate Dob = datePrisonerDOBAdd.getValue();
-//            String contactName = txtContactName.getText();
-//            String contactPhone = txtContactPhone.getText();
-//            String identityCard = txtIdentityCard.getText();
-//            String code = lbPrisonerId.getText();
-//            boolean status = false;
-//            int userIdDb = this.userId;
-//            System.out.println("User Id Add: " + userIdDb);
-//            Prisoner prisoner = new Prisoner();
-//            prisoner.setPrisonerCode(String.valueOf(code));
-//            prisoner.setPrisonerName(fullName);
-//            prisoner.setDOB(String.valueOf(Dob));
-//            prisoner.setContactName(contactName);
-//            prisoner.setContactPhone(contactPhone);
-//            prisoner.setGender(genderInputDb);
-//            prisoner.setImagePath(getRelativePath);
-//            prisoner.setStatus(status);
-//            prisoner.setUser_id(userIdDb);
-//            prisoner.setIdentityCard(identityCard);
-//            if (prisonerDAO.insertPrisonerDB(prisoner)) {
-//                return true;
-//            }
-//        }catch (Exception e)
-//        {
-//            System.out.println("getPrisoner - AddPrisonerController ; " + e.getMessage());
-//        }
-//        return false;
-//    }
 
     public boolean getPrisoner() {
         try {
@@ -634,8 +597,6 @@ public void getSelectedCrimes() {
     }
 
 
-
-
     @FXML
     void loadInputYearCrimeView(ActionEvent event) {
         openInputYearWindow();
@@ -645,8 +606,11 @@ public void getSelectedCrimes() {
         setPrisonerId();
         setIdSentence();
         setCbCrimes();
+        LocalDate currentDate = LocalDate.now();
+        LocalDate eighteenYearsAgo = currentDate.minusYears(18);
+        datePrisonerDOBAdd.setValue(eighteenYearsAgo);
         dateOut.setVisible(false);
-//        lbPrisonerId.setVisible(false);
+        lbPrisonerId.setVisible(false);
         tgGender = new ToggleGroup();
         tgSentenceType = new ToggleGroup();
         rbtnMale.setToggleGroup(tgGender);

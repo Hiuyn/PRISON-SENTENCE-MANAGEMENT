@@ -26,7 +26,7 @@ create table sentences( -- tù án
                           sentence_id int primary key auto_increment, -- id
                           prisoner_id int not null, -- id tù nhân
                           sentences_code int not null, -- mã tù án
-                          sentence_type enum ("life_imprisonment",'limited_time'), -- kiểu tù án(chung thân hoặc có thời hạn)
+                          sentence_type enum ("life imprisonment",'limited time'), -- kiểu tù án(chung thân hoặc có thời hạn)
                           crimes_code text,
                           start_date date, -- ngày bắt đầu
                           end_date date, -- ngày kết thúc dự kiến
@@ -91,7 +91,7 @@ create table healths( -- lịch sử khám sức khỏe
 
 create table incareration_process(
                                      process_id int primary key auto_increment,
-				process_code varchar(10),
+				                    process_code varchar(10),
                                      sentence_id int not null,
                                      prisoner_id int not null,
                                      date_of_occurrence date default (curdate()),
