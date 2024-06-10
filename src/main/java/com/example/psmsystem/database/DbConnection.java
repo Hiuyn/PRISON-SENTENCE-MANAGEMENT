@@ -22,8 +22,7 @@ public class DbConnection {
         try {
             String url = "jdbc:mysql://localhost:3306/prisoner_sentence";
             String username = "root";
-//            String password = "12345678";
-            String password = "1234";
+            String password = "12345678";
             con = DriverManager.getConnection(url, username, password);
         } catch (SQLException ex) {
             Logger.getLogger(DbConnection.class.getName()).log(Level.SEVERE, null, ex);

@@ -335,13 +335,13 @@ public void setEndDate() {
             int prisoner_id = this.prisonerId;
             System.out.println("Prisoner ID getSentence: " + prisoner_id);
             String parole = " ";
-//        String prisonerName = txtPrisonerFNAdd.getText();
+            String prisonerName = txtPrisonerFNAdd.getText();
             Date releaseDate = endDate;
             LocalDate now = LocalDate.now();
             Date updateDate = Date.valueOf(now);
             boolean status = false;
-            sentence = new Sentence(prisoner_id, sentenceCode, sentenceTypeText, startDate, endDate, releaseDate, status, parole, updateDate, userId);
-            this.sentence = sentence;
+//            sentence = new Sentence(prisoner_id,prisonerName, sentenceCode, sentenceTypeText, startDate, endDate, releaseDate, status, parole, updateDate, userId);
+//            this.sentence = sentence;
             return true;
         }catch (Exception e)
         {

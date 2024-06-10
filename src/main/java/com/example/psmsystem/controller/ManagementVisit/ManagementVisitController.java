@@ -391,7 +391,7 @@ public class ManagementVisitController implements Initializable {
         String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         String formattedEndTime = endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-        if (visitationId == -1) {
+        if (visitationId <1) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "No visit found for the selected prisoner and date.");
             return;
