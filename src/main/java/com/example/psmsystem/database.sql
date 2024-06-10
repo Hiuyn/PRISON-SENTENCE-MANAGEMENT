@@ -91,6 +91,7 @@ create table healths( -- lịch sử khám sức khỏe
 
 create table incareration_process(
                                      process_id int primary key auto_increment,
+				process_code varchar(10),
                                      sentence_id int not null,
                                      prisoner_id int not null,
                                      date_of_occurrence date default (curdate()),
@@ -196,15 +197,15 @@ INSERT INTO healths (health_code, sentence_id, prisoner_id, weight, height, chec
                                                                                                              ('H9', 9, 9, 72, 1.78, '2023-11-10', true, 2),
                                                                                                              ('H10', 10, 10, 67, 1.67, '2023-12-05', false, 0);
 
-INSERT INTO incareration_process (sentence_id, prisoner_id, date_of_occurrence, event_type, level, note)
+INSERT INTO incareration_process (process_code, sentence_id, prisoner_id, date_of_occurrence, event_type, level, note)
 VALUES
-    (1, 1, '2023-06-01', 'Breach of discipline', 1, 'Minor misconduct.'),
-    (2, 2, '2023-06-02', 'Bonus', 4, 'Exemplary behavior.'),
-    (3, 3, '2023-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
-    (4, 4, '2023-06-04', 'Bonus', 3, 'Good behavior.'),
-    (5, 5, '2023-06-05', 'Breach of discipline', 1, 'Minor misconduct again.'),
-    (6, 6, '2023-06-06', 'Bonus', 4, 'Very good behavior.'),
-    (7, 7, '2023-06-07', 'Breach of discipline', 2, 'Moderate misconduct again.'),
-    (8, 8, '2023-06-08', 'Bonus', 3, 'Good behavior again.'),
-    (9, 9, '2023-06-09', 'Breach of discipline', 1, 'Another minor misconduct.'),
-    (10, 10, '2023-06-10', 'Bonus', 4, 'Outstanding behavior.');
+    ('P1', 1, 1, '2023-06-01', 'Breach of discipline', 1, 'Minor misconduct.'),
+    ('P2', 2, 2, '2023-06-02', 'Bonus', 4, 'Exemplary behavior.'),
+    ('P3', 3, 3, '2023-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
+    ('P4', 4, 4, '2023-06-04', 'Bonus', 3, 'Good behavior.'),
+    ('P5', 5, 5, '2023-06-05', 'Breach of discipline', 1, 'Minor misconduct again.'),
+    ('P6', 6, 6, '2023-06-06', 'Bonus', 4, 'Very good behavior.'),
+    ('P7', 7, 7, '2023-06-07', 'Breach of discipline', 2, 'Moderate misconduct again.'),
+    ('P8', 8, 8, '2023-06-08', 'Bonus', 3, 'Good behavior again.'),
+    ('P9', 9, 9, '2023-06-09', 'Breach of discipline', 1, 'Another minor misconduct.'),
+    ('P10', 10, 10, '2023-06-10', 'Bonus', 4, 'Outstanding behavior.');
