@@ -62,9 +62,6 @@ public class HealthController implements Initializable {
     private TableColumn<Health, Double> heightColumn;
 
     @FXML
-    private TableColumn<Health, String> noteColumn;
-
-    @FXML
     private Pagination pagination;
 
     @FXML
@@ -81,6 +78,8 @@ public class HealthController implements Initializable {
 
     @FXML
     private TableColumn<Health, Boolean> statusColumn;
+    @FXML
+    private TableColumn<Health, Integer> idColumn;
 
     @FXML
     private TextField txtHeight;
@@ -100,8 +99,8 @@ public class HealthController implements Initializable {
     private Button createId;
 
     Integer index;
+    private int healthId;
     Window window;
-    int visitationId;
     private final Map<Integer, String> levelMap = new HashMap<>();
     ObservableList<Health> listTable = FXCollections.observableArrayList();
 
@@ -143,6 +142,8 @@ public class HealthController implements Initializable {
         if(index <= -1){
             return;
         }
+        // Lấy ID từ cột ẩn
+        healthId = Integer.parseInt(idColumn.getCellData(index).toString());
 
         for (SentenceDTO sentence : filterCombo.getItems()) {
             if (sentence.getSentence().getSentenceCode() == (prisonercodeColumn.getCellData(index))) {
@@ -170,7 +171,6 @@ public class HealthController implements Initializable {
             System.out.println("Level description not found in map.");
         }
 
-        visitationId = healthDao.getVisitationId(healthCode, dateString);
     }
 
     private void resetValue(){
@@ -209,6 +209,10 @@ public class HealthController implements Initializable {
     }
 
     private void loadDataTable() {
+        idColumn = new TableColumn<>("ID");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idColumn.setVisible(false);
+        dataTable.getColumns().add(idColumn);
         healthcodeColumn.setCellValueFactory(new PropertyValueFactory<>("healthCode"));
         prisonercodeColumn.setCellValueFactory(new PropertyValueFactory<>("sentenceCode"));
         prisonernameColumn.setCellValueFactory(new PropertyValueFactory<>("prisonerName"));
@@ -217,6 +221,8 @@ public class HealthController implements Initializable {
         checkupDateColumn.setCellValueFactory(new PropertyValueFactory<>("checkupDate"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         levelColumn.setCellValueFactory(new PropertyValueFactory<>("level"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
         statusColumn.setCellFactory(col -> new TableCell<Health, Boolean>() {
             @Override
             protected void updateItem(Boolean item, boolean empty) {
@@ -356,8 +362,8 @@ public class HealthController implements Initializable {
             txtWeight.requestFocus();
             return false;
         }
-        if (dateCheckupDate.getValue() == null) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Visit Date is required.");
+        if (dateCheckupDate.getValue() == null || dateCheckupDate.getValue().isAfter(LocalDate.now())) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Check up Date is required.");
             dateCheckupDate.requestFocus();
             return false;
         }
@@ -405,7 +411,7 @@ public class HealthController implements Initializable {
         }
         String healthCode = getHealthCode();
 
-        Health health = new Health(healthCode, prisonerId, sentenceId, sentenceCode, prisonerName, weight, height, date, status, levelValue);
+        Health health = new Health(0,healthCode, prisonerId, sentenceId, sentenceCode, prisonerName, weight, height, date, status, levelValue);
         healthDao.addHealth(health);
         listTable.add(health);
         dataTable.setItems(listTable);
@@ -428,13 +434,13 @@ public class HealthController implements Initializable {
             LocalDate selectedDate = dateCheckupDate.getValue();
             if (selectedDate == null) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                        "Please select a visit date.");
+                        "Please select a Check-up date.");
                 return;
             }
 
-            if (visitationId == -1) {
+            if (healthId < 1) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                        "No visit found for the selected prisoner and date.");
+                        "Health not found.");
                 return;
             }
 
@@ -450,7 +456,7 @@ public class HealthController implements Initializable {
             Optional<ButtonType> result = confirmationDialog.showAndWait();
 
             if (result.isPresent() && result.get() == okButton) {
-                healthDao.deleteHealth(visitationId);
+                healthDao.deleteHealth(healthId);
                 Health selected = dataTable.getSelectionModel().getSelectedItem();
                 listTable.remove(selected);
                 dataTable.setItems(listTable);
@@ -492,17 +498,17 @@ public class HealthController implements Initializable {
             }
         }
 
-        if (visitationId == -1) {
+        if (healthId < 1) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "No visit found for the selected prisoner and date.");
+                    "No visit found.");
             return;
         }
         index = dataTable.getSelectionModel().getSelectedIndex();
 
         Health selectedHealth = dataTable.getItems().get(index);
         String hearthCode = healthcodeColumn.getCellData(selectedHealth);
-        Health mv = new Health(hearthCode, prisonerId, sentenceId, sentenceCode, prisonerName, weight, height, date, status, levelValue);
-        healthDao.updateHealth(mv, visitationId);
+        Health mv = new Health(healthId,hearthCode, prisonerId, sentenceId, sentenceCode, prisonerName, weight, height, date, status, levelValue);
+        healthDao.updateHealth(mv, healthId);
 
 
         if (index >= 0) {

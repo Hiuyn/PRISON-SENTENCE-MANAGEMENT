@@ -36,7 +36,6 @@ public class SentenceDao implements ISentenceDao<Sentence> {
             ps.setDate(7, sentence.getReleaseDate());
             ps.setBoolean(8,sentence.isStatus());
             ps.setString(9,sentence.getParole());
-//            ps.setString(9, String.valueOf(sentence.getUpdateDate()));
             int rowAffected = ps. executeUpdate();
             if (rowAffected > 0)
             {

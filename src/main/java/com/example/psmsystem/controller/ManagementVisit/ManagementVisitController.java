@@ -325,7 +325,7 @@ public class ManagementVisitController implements Initializable {
 
             if (visitationId == -1) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                        "No visit found for the selected prisoner and date.");
+                        "No visit found.");
                 return;
             }
 
