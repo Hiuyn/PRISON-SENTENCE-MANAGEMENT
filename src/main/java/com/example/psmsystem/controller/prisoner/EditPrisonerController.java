@@ -1,11 +1,8 @@
 package com.example.psmsystem.controller.prisoner;
 
-import com.example.psmsystem.model.crime.Crime;
+import com.example.psmsystem.controller.DataStorage;
 import com.example.psmsystem.model.prisoner.Prisoner;
-import com.example.psmsystem.model.sentence.Sentence;
-import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
-import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -95,6 +91,7 @@ public class EditPrisonerController  implements Initializable {
     private boolean imageSelected;
     private String getRelativePath;
     private Prisoner prisoner;
+    private PrisonerController prisonerController;
 
     public void setPrisonerEdit(Prisoner prisoner) {
         this.prisonerEdit = prisoner;
@@ -242,7 +239,23 @@ public class EditPrisonerController  implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+
     }
+
+    public interface Callback {
+        void execute();
+    }
+
+    public void back(ActionEvent event, AddPrisonerController.Callback callback)  {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
+        System.out.println("Cửa sổ đã được đóng");
+        if (callback != null) {
+            System.out.println("Thực hiện callback");
+            callback.execute();
+        }
+    }
+
     public String selectImageFile() {
         if (!imageSelected) {
             FileChooser fileChooser = new FileChooser();
@@ -282,7 +295,7 @@ public class EditPrisonerController  implements Initializable {
 //         public Prisoner(String prisonerCode, String prisonerName, String DOB, int gender, String identityCard, String contactName, String contactPhone, String imagePath, boolean status, int user_id) {
 
         String identityCard = txtIdentity.getText();
-        int id = Integer.parseInt(lbPrisonerId.getText());
+        String id = prisonerEdit.getPrisonerCode();
         String name = txtPrisonerFNAdd.getText();
         RadioButton genderRadio = (RadioButton) tgGender.getSelectedToggle();
         String gender = genderRadio.getText();
@@ -326,6 +339,7 @@ public class EditPrisonerController  implements Initializable {
             return false;
         }
         Prisoner prisoner = new Prisoner();
+        prisoner.setPrisonerCode(id);
         prisoner.setPrisonerName(name);
         prisoner.setDOB(String.valueOf(dob));
         prisoner.setContactName(contactName);
@@ -337,27 +351,38 @@ public class EditPrisonerController  implements Initializable {
         return true;
     }
 
-    public void getNewPrisoner(ActionEvent actionEvent) {
+    public void updatePrisoner(ActionEvent actionEvent) {
         if (getPrisoner()) {
+            PrisonerDAO prisonerDAO = new PrisonerDAO();
+            prisonerDAO.updatePrisoner(this.prisoner);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Update successfully!");
+            alert.showAndWait();
+            back(actionEvent, () -> prisonerController.refreshPrisonerList());
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Update fail!");
+            alert.showAndWait();
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        this.prisonerController = DataStorage.getPrisonerController();
+        System.out.println("prisoner controller: " + prisonerController);
         tgGender = new ToggleGroup();
         tgSentenceType = new ToggleGroup();
         rbtnMale.setToggleGroup(tgGender);
         rbtnFemale.setToggleGroup(tgGender);
         rbtnOther.setToggleGroup(tgGender);
-//        rbtnLimited.setToggleGroup(tgSentenceType);
-//        rbtnUnlimited.setToggleGroup(tgSentenceType);
         setInformation();
-//        setCbCrimes();
     }
     public void back(ActionEvent event) throws IOException {
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

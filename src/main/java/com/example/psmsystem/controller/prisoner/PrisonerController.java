@@ -1,6 +1,7 @@
 package com.example.psmsystem.controller.prisoner;
 
 
+import com.example.psmsystem.controller.DataStorage;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import javafx.fxml.FXML;
@@ -70,7 +71,7 @@ public class PrisonerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        DataStorage.setPrisonerController(this);
         setupPagination();
     }
 

@@ -11,6 +11,7 @@ import java.util.*;
 
 public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_name, date_birth, gender, identity_card, contacter_name, contacter_phone, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_QUERY = "UPDATE prisoners SET prisoner_name = ?, date_birth = ?, gender = ?, identity_card = ?, contacter_name = ?, contacter_phone = ?, image = ?, status = ? WHERE prisoner_id = ?";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners WHERE status = ? ";
@@ -171,22 +172,33 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         return false;
     }
 
-    //    public List<String> getCrimes()
-//    {
-//        List<String> crimesList = new ArrayList<>();
-//        try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
-//        {
-//            PreparedStatement ps = connection.prepareStatement(SELECT_BY_CRIMES);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next())
-//            {
-//                crimesList.add(rs.getString("crime_name"));
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return crimesList;
-//    }
+    public boolean updatePrisoner(Prisoner prisoner)
+    {
+        try{
+            Connection conn = DbConnection.getDatabaseConnection().getConnection();
+            PreparedStatement ps = conn.prepareStatement(UPDATE_QUERY);
+            ps.setString(1,prisoner.getPrisonerName());
+            ps.setString(2,prisoner.getDOB());
+            ps.setInt(3,prisoner.getGender());
+            ps.setString(4,prisoner.getIdentityCard());
+            ps.setString(5,prisoner.getContactName());
+            ps.setString(6,prisoner.getContactPhone());
+            ps.setString(7,prisoner.getImagePath());
+            ps.setBoolean(8,prisoner.isStatus());
+            ps.setString(9, prisoner.getPrisonerCode());
+            int rowAffected = ps.executeUpdate();
+            if (rowAffected>0)
+            {
+                return true;
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
     public int getIdEmpty() {
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             PreparedStatement ps = connection.prepareStatement(SELECT_MAX_VALUES_PRISONER_ID);
