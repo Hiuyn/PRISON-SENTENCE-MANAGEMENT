@@ -34,7 +34,7 @@ public class SentenceService implements SentenceServiceImpl<SentenceDTO> {
                 Sentence sentence = new Sentence();
                 sentence.setSentenceCode(rs.getInt("sentences_code"));
                 sentence.setSentenceType(rs.getString("sentence_type"));
-//                sentence.setCrimesCode(rs.getString("crimes_code"));
+                sentence.setCrimesCode(rs.getString("crimes_code"));
                 sentence.setStartDate(rs.getDate("start_date"));
                 sentence.setEndDate(rs.getDate("end_date"));
                 sentence.setReleaseDate(rs.getDate("release_date"));

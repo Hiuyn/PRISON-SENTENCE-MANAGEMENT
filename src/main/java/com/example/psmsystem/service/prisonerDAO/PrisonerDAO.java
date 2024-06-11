@@ -224,7 +224,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                String gender = rs.getString("gender");
+                String gender = rs.getInt("gender") == 1 ? "Male" : "Female";
                 int count = rs.getInt("count");
                 genderCount.put(gender, count);
             }
