@@ -4,10 +4,8 @@ import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.crime.ICrimeDao;
-import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
-import com.example.psmsystem.model.report.Report;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.model.sentence.SentenceServiceImpl;
@@ -40,6 +38,7 @@ import org.controlsfx.control.SearchableComboBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -89,6 +88,9 @@ public class SentenceController implements Initializable {
     private TableColumn<Sentence, Date> startDateColumn;
 
     @FXML
+    private TableColumn<Sentence, Date> releaseDateColumn;
+
+    @FXML
     private TableColumn<Sentence, Boolean> statusColumn;
 
     @FXML
@@ -102,6 +104,9 @@ public class SentenceController implements Initializable {
 
     @FXML
     private TextField txtSearch;
+
+    @FXML
+    private DatePicker dateReleaseDate;
 
 //    @FXML
 //    private TextField txtStatus;
@@ -147,18 +152,18 @@ public class SentenceController implements Initializable {
             if (selectedType != null) {
                 switch (selectedType) {
                     case "life imprisonment":
-                        txtMonth.setDisable(true);
-                        txtYear.setDisable(true);
-                        txtMonth.clear();
-                        txtYear.clear();
+                        dateEndDate.setDisable(true);
+                        dateReleaseDate.setDisable(true);
+//                        txtMonth.clear();
+//                        txtYear.clear();
                         break;
                     case "limited time":
-                        txtMonth.setDisable(false);
-                        txtYear.setDisable(false);
+                        dateEndDate.setDisable(false);
+                        dateReleaseDate.setDisable(false);
                         break;
                     default:
-                        txtMonth.setDisable(false);
-                        txtYear.setDisable(false);
+//                        txtMonth.setDisable(false);
+//                        txtYear.setDisable(false);
                         break;
                 }
             }
@@ -176,12 +181,12 @@ public class SentenceController implements Initializable {
             }
         });
 
-        setNumericTextField(txtYear);
-        setNumericTextField(txtMonth);
+//        setNumericTextField(txtYear);
+//        setNumericTextField(txtMonth);
 
-        txtYear.textProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
-        txtMonth.textProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
-        dateStartDate.valueProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
+//        txtYear.textProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
+//        txtMonth.textProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
+//        dateStartDate.valueProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
 
         loadDataTable();
         setupPagination();
@@ -195,6 +200,7 @@ public class SentenceController implements Initializable {
         sentenceTypeColumn.setCellValueFactory(new PropertyValueFactory<>("sentenceType"));
         crimesColumn.setCellValueFactory(new PropertyValueFactory<>("crimesCode"));
         startDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        releaseDateColumn.setCellValueFactory(new PropertyValueFactory<>("releaseDate"));
         endDateColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         paroleEligibilityColumn.setCellValueFactory(new PropertyValueFactory<>("parole"));
@@ -249,9 +255,9 @@ public class SentenceController implements Initializable {
                 else if (String.valueOf(sentence.getEndDate()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-//                else if (sentence.getStatus().toLowerCase().contains(lowerCaseFilter)) {
-//                    return true;
-//                }
+                else if (String.valueOf(sentence.getReleaseDate()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
                 else if (sentence.getParole().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
@@ -300,6 +306,7 @@ public class SentenceController implements Initializable {
         };
         dateStartDate.setConverter(converter);
         dateEndDate.setConverter(converter);
+        dateReleaseDate.setConverter(converter);
     }
 
     private void setupPagination() {
@@ -362,21 +369,29 @@ public class SentenceController implements Initializable {
             dateEndDate.setValue(null);
         }
 
+        String releaseDateCellValue = releaseDateColumn.getCellData(index) != null ? releaseDateColumn.getCellData(index).toString() : null;
+        if (releaseDateCellValue != null && !releaseDateCellValue.isEmpty()) {
+            LocalDate releaseDate = LocalDate.parse(releaseDateCellValue);
+            dateReleaseDate.setValue(releaseDate);
+        } else {
+            dateReleaseDate.setValue(null);
+        }
+
 //        txtStatus.setText(statusColumn.getCellData(index).toString());
         txtParoleEligibility.setText(paroleEligibilityColumn.getCellData(index).toString());
 
         visitationId = sentenceDao.getSentenceId(prisonerCode);
 
-        if (startDate != null && LocalDate.parse(endDateCellValue) != null) {
-            long yearsBetween = ChronoUnit.YEARS.between(startDate, LocalDate.parse(endDateCellValue));
-            long monthsBetween = ChronoUnit.MONTHS.between(startDate.plusYears(yearsBetween), LocalDate.parse(endDateCellValue));
-
-            txtYear.setText(String.valueOf(yearsBetween));
-            txtMonth.setText(String.valueOf(monthsBetween));
-        } else {
-            txtYear.setText("");
-            txtMonth.setText("");
-        }
+//        if (startDate != null && LocalDate.parse(endDateCellValue) != null) {
+//            long yearsBetween = ChronoUnit.YEARS.between(startDate, LocalDate.parse(endDateCellValue));
+//            long monthsBetween = ChronoUnit.MONTHS.between(startDate.plusYears(yearsBetween), LocalDate.parse(endDateCellValue));
+//
+//            txtYear.setText(String.valueOf(yearsBetween));
+//            txtMonth.setText(String.valueOf(monthsBetween));
+//        } else {
+//            txtYear.setText("");
+//            txtMonth.setText("");
+//        }
     }
 
     private List<Crime> createCrimesFromSentenceCode(String sentenceCode) {
@@ -400,12 +415,14 @@ public class SentenceController implements Initializable {
         filterCombo.setPromptText("Select Sentence Code");
         cbSentenceType.getSelectionModel().select("limited time");
         ccbSentenceCode.getCheckModel().clearChecks();
-        txtYear.clear();
-        txtMonth.clear();
+//        txtYear.clear();
+//        txtMonth.clear();
         dateStartDate.setValue(null);
         dateStartDate.setPromptText("YYYY-MM-DD");
         dateEndDate.setValue(null);
         dateEndDate.setPromptText("YYYY-MM-DD");
+        dateReleaseDate.setValue(null);
+        dateReleaseDate.setPromptText("YYYY-MM-DD");
 //        txtStatus.clear();
         txtParoleEligibility.clear();
 
@@ -442,7 +459,8 @@ public class SentenceController implements Initializable {
 //        String endDate = selectedEndDate.toString();
         Boolean status = false;
         String paroleeligibility = txtParoleEligibility.getText();
-        java.sql.Date releaseDate = null;
+        LocalDate selectedReleaseDate = dateReleaseDate.getValue();
+        java.sql.Date releaseDate = java.sql.Date.valueOf(selectedReleaseDate);
 
         Sentence sentence = new Sentence(prisonerId, prisonerName, sentenceCode, sentenceType, crimeCode, startDate, endDate, releaseDate, status, paroleeligibility);
         sentenceDao.addSentence(sentence);
@@ -499,15 +517,21 @@ public class SentenceController implements Initializable {
                 Sentence selected = dataTable.getSelectionModel().getSelectedItem();
 
                 if (selected != null) {
-                    LocalDate endDate = selected.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//                    LocalDate endDate = selected.getEndDate() != null ? selected.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
+                    long releaseTimeMillis = selected.getReleaseDate() != null ? selected.getReleaseDate().getTime() : 0;
+
+                    LocalDate releaseDate = Instant.ofEpochMilli(releaseTimeMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                     LocalDate today = LocalDate.now();
 
-                    if (endDate == null) {
-                        AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
-                                "Cannot delete record because the prisoner is life imprisonment.");
-                    }
-                    else if (endDate.isBefore(today)) {
+                    System.out.println(selected.isStatus());
+                    System.out.println((releaseDate != null) + ""+ releaseDate);
+                    System.out.println((releaseDate.plusYears(20).isBefore(today)));
 
+//                    if (endDate == null) {
+//                        AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
+//                                "Cannot delete record because the prisoner is life imprisonment.");
+//                    }
+                     if (selected.isStatus() && releaseDate != null && releaseDate.plusYears(20).isBefore(today)) {
                         sentenceDao.deleteSentence(visitationId);
                         listTable.remove(selected);
                         dataTable.setItems(listTable);
@@ -520,7 +544,10 @@ public class SentenceController implements Initializable {
                                 "Cannot delete record because end date is not before today.");
                     }
                 }
-
+                else {
+                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
+                            "Record cannot be deleted due to an active sentence.");
+                }
 
             }
         } catch (Exception e) {
@@ -535,12 +562,14 @@ public class SentenceController implements Initializable {
         filterCombo.setPromptText("Select Sentence Code");
         cbSentenceType.getSelectionModel().select("limited time");
         ccbSentenceCode.getCheckModel().clearChecks();
-        txtYear.clear();
-        txtMonth.clear();
+//        txtYear.clear();
+//        txtMonth.clear();
         dateStartDate.setValue(null);
         dateStartDate.setPromptText("YYYY-MM-DD");
         dateEndDate.setValue(null);
         dateEndDate.setPromptText("YYYY-MM-DD");
+        dateReleaseDate.setValue(null);
+        dateReleaseDate.setPromptText("YYYY-MM-DD");
 //        txtStatus.clear();
         txtParoleEligibility.clear();
     }
@@ -560,9 +589,9 @@ public class SentenceController implements Initializable {
 
         String prisonerName = selectedValue.getPrisonerName();
         LocalDate selectedStartDate = dateStartDate.getValue();
-        java.sql.Date startDate = java.sql.Date.valueOf(selectedStartDate);
         LocalDate selectedEndDate = dateEndDate.getValue();
-        java.sql.Date endDate = java.sql.Date.valueOf(selectedEndDate);
+        LocalDate selectedReleaseDate = dateReleaseDate.getValue();
+
         Boolean status = false;
         String paroleEligibility = txtParoleEligibility.getText();
 
@@ -572,7 +601,10 @@ public class SentenceController implements Initializable {
             return;
         }
 
-        java.sql.Date releaseDate = null;
+        java.sql.Date startDate = selectedStartDate != null ? java.sql.Date.valueOf(selectedStartDate) : null;
+        java.sql.Date endDate = selectedEndDate != null ? java.sql.Date.valueOf(selectedEndDate) : null;
+        java.sql.Date releaseDate = selectedReleaseDate != null ? java.sql.Date.valueOf(selectedReleaseDate) : null;
+
 
         Sentence sentence = new Sentence(prisonerId, prisonerName, sentenceCode, sentenceType, crimeCode, startDate, endDate, releaseDate, status, paroleEligibility);
         sentenceDao.updateSentence(sentence, visitationId);
@@ -595,7 +627,7 @@ public class SentenceController implements Initializable {
             dataTable.setItems(listTable);
             dataTable.refresh();
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
-                    "Health updated successfully.");
+                    "Sentence updated successfully.");
 
             onClean(event);
         } else {
@@ -605,58 +637,80 @@ public class SentenceController implements Initializable {
     }
 
     private boolean isValidate() {
-//        if (filterCombo.getValue() == null) {
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Please select a prisoner.");
-//            filterCombo.requestFocus();
-//            return false;
-//        }
+        LocalDate startDate = dateStartDate.getValue();
+        LocalDate endDate = dateEndDate.getValue();
+        LocalDate releaseDate = dateReleaseDate.getValue();
+
+        if (filterCombo.getValue() == null) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Please select a prisoner.");
+            filterCombo.requestFocus();
+            return false;
+        }
 //
-//        String prisonerCode = filterCombo.getValue().getSentenceCode();
+//        int prisonerCode = filterCombo.getValue().getSentence().getSentenceCode();
 //        int sentenceId = sentenceDao.getSentenceId(prisonerCode);
 //        if (sentenceId != -1) {
 //            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Selected prisoner already has a sentence.");
 //            return false;
 //        }
-//
+
+        if (startDate != null && endDate != null) {
+            if (!isDateDifferenceValid(startDate, endDate, 3)) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Validation Error", "End date must be at least 3 months greater than start date.");
+                return false;
+            }
+        }
+
+        if (startDate != null && releaseDate != null) {
+            if (!isDateDifferenceValid(startDate, releaseDate, 3)) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Validation Error", "Release date must be at least 3 months greater than start date.");
+                return false;
+            }
+        }
+
         return true;
     }
 
-    private void setNumericTextField(TextField textField) {
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                textField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
+    private boolean isDateDifferenceValid(LocalDate startDate, LocalDate endDate, int months) {
+        return !endDate.isBefore(startDate.plusMonths(months));
     }
 
-    private void updateEndDate() {
-        if (dateStartDate.getValue() != null) {
-            try {
-                String textYear = txtYear.getText();
-                String textMonth = txtMonth.getText();
-                if (textYear.isEmpty()){
-                    txtYear.setText("0");
-                }
-                if (textMonth.isEmpty()){
-                    txtMonth.setText("0");
-                }
-                int years = textYear.isEmpty() ? 0 : Integer.parseInt(textYear);
-                int months = textMonth.isEmpty() ? 0 :Integer.parseInt(textMonth);
-                LocalDate startDate = dateStartDate.getValue();
-                System.out.println(startDate);
-                LocalDate endDate = startDate.plusYears(years).plusMonths(months);
-
-                dateEndDate.setValue(endDate);
-            } catch (NumberFormatException e) {
-//                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Invalid Input",
-//                        "Please enter valid numbers for year and month.");
-                dateEndDate.setValue(null);
-                dateEndDate.setPromptText("YYYY-MM-DD");
-            }
-        }
-        else{
-            txtYear.clear();
-            txtMonth.clear();
-        }
-    }
+//    private void setNumericTextField(TextField textField) {
+//        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if (!newValue.matches("\\d*")) {
+//                textField.setText(newValue.replaceAll("[^\\d]", ""));
+//            }
+//        });
+//    }
+//
+//    private void updateEndDate() {
+//        if (dateStartDate.getValue() != null) {
+//            try {
+//                String textYear = txtYear.getText();
+//                String textMonth = txtMonth.getText();
+//                if (textYear.isEmpty()){
+//                    txtYear.setText("0");
+//                }
+//                if (textMonth.isEmpty()){
+//                    txtMonth.setText("0");
+//                }
+//                int years = textYear.isEmpty() ? 0 : Integer.parseInt(textYear);
+//                int months = textMonth.isEmpty() ? 0 :Integer.parseInt(textMonth);
+//                LocalDate startDate = dateStartDate.getValue();
+//                System.out.println(startDate);
+//                LocalDate endDate = startDate.plusYears(years).plusMonths(months);
+//
+//                dateEndDate.setValue(endDate);
+//            } catch (NumberFormatException e) {
+////                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Invalid Input",
+////                        "Please enter valid numbers for year and month.");
+//                dateEndDate.setValue(null);
+//                dateEndDate.setPromptText("YYYY-MM-DD");
+//            }
+//        }
+//        else{
+//            txtYear.clear();
+//            txtMonth.clear();
+//        }
+//    }
 }

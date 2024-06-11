@@ -5,7 +5,7 @@ use prisoner_sentence;
 create table users(
                       user_id int auto_increment primary key, -- id
                       full_name nvarchar(50) not null, -- full name
-                      username nvarchar(15) not null, -- username
+                      username nvarchar(15) BINARY not null, -- username
                       password nvarchar(500) not null -- hash password
 );
 

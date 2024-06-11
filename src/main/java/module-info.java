@@ -13,6 +13,7 @@ module com.example.psmsystem {
     requires java.sql.rowset;
     requires jdk.compiler;
     requires mysql.connector.j;
+    requires org.apache.poi.ooxml;
 
     opens com.example.psmsystem to javafx.fxml;
     exports com.example.psmsystem;

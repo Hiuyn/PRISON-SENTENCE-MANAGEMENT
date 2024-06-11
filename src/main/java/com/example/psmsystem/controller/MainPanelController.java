@@ -76,7 +76,6 @@ public class MainPanelController implements Initializable {
     }
     private void loadFXML(String fileName) {
         try {
-            System.out.println("user id main: "+userId);
             nameView.setText(fileName);
             String pathFileName;
             if (fileName.equals("Dashboard")){

@@ -27,6 +27,7 @@ public class UserDao implements IUserDao<User> {
             PreparedStatement stmt = conn.prepareStatement(INSERT_QUERY);
 
             String hashPassword = hashPassword(user.getPassword());
+            System.out.println(hashPassword);
             stmt.setString(1, user.getFullName());
             stmt.setString(2, user.getUsername());
             stmt.setString(3, hashPassword);
@@ -111,19 +112,18 @@ public class UserDao implements IUserDao<User> {
     private String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-
             byte[] hash = digest.digest(password.getBytes());
-
             StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
                 String hex = Integer.toHexString(0xff & b);
                 if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
             }
+            return hexString.toString(); // Trả về mật khẩu đã được mã hóa
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return password;
+        return password; // Trả về mật khẩu gốc trong trường hợp xảy ra lỗi
     }
 
 

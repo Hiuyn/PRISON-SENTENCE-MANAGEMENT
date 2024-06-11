@@ -60,8 +60,8 @@ public class RegisterController implements Initializable{
     private void register() {
         window = registerButton.getScene().getWindow();
         if (this.isValidated()) {
-            String hashPassword = hashPassword(txtPassword.getText());
-            User user = new User(txtFullName.getText(), txtUsername.getText(), hashPassword);
+            String password = txtPassword.getText();
+            User user = new User(txtFullName.getText(), txtUsername.getText(), password);
             userDao.addUser(user);
             this.clearForm();
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Information",
@@ -161,24 +161,24 @@ public class RegisterController implements Initializable{
         stage.show();
     }
 
-    private String hashPassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes());
-            StringBuilder hexString = new StringBuilder();
-
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-
-        }
-    }
+//    private String hashPassword(String password) {
+//        try {
+//            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+//            byte[] hash = digest.digest(password.getBytes());
+//            StringBuilder hexString = new StringBuilder();
+//
+//            for (byte b : hash) {
+//                String hex = Integer.toHexString(0xff & b);
+//                if (hex.length() == 1) hexString.append('0');
+//                hexString.append(hex);
+//            }
+//
+//            return hexString.toString();
+//        } catch (NoSuchAlgorithmException e) {
+//            return null;
+//
+//        }
+//    }
 
     public void onBtnCloseClick(ActionEvent event) throws IOException {
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
