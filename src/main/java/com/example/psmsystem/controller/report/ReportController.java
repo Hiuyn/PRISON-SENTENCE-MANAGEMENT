@@ -92,27 +92,27 @@ public class ReportController implements Initializable {
         commendationSumColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCommendationSum()).asObject());
         disciplinarySumColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getDisciplinaryMeasureSum()).asObject());
 
-//        imageColumn.setCellFactory(column -> new TableCell<>() {
-//            private final ImageView imageView = new ImageView();
-//            @Override
-//            protected void updateItem(String item, boolean empty) {
-//                super.updateItem(item, empty);
-//                if (empty || item == null || item.isEmpty()) {
-//                    setGraphic(null);
-//                } else {
-//                    Image image = new Image(item, true);
-//                    image.errorProperty().addListener((obs, oldError, newError) -> {
-//                        if (newError) {
-//                            imageView.setImage(new Image("/static/images.png"));
-//                        }
-//                    });
-//                    imageView.setImage(image);
-//                    imageView.setFitWidth(100);
-//                    imageView.setFitHeight(100);
-//                    setGraphic(imageView);
-//                }
-//            }
-//        });
+        imageColumn.setCellFactory(column -> new TableCell<>() {
+            private final ImageView imageView = new ImageView();
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null || item.isEmpty()) {
+                    setGraphic(null);
+                } else {
+                    Image image = new Image(item, true);
+                    image.errorProperty().addListener((obs, oldError, newError) -> {
+                        if (newError) {
+                            imageView.setImage(new Image("/static/images.png"));
+                        }
+                    });
+                    imageView.setImage(image);
+                    imageView.setFitWidth(100);
+                    imageView.setFitHeight(100);
+                    setGraphic(imageView);
+                }
+            }
+        });
     }
 
     @FXML

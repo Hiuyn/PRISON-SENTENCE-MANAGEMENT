@@ -118,11 +118,11 @@ public class HealthController implements Initializable {
         filterCombo.setItems(sentenceService.getPrisonerName());
         filterCombo.setConverter(converter);
 
-        cbLevel.setItems(FXCollections.observableArrayList("no illness", "mild", "severe", "requires intervention"));
+        cbLevel.setItems(FXCollections.observableArrayList("Strong", "mild", "severe", "requires intervention"));
 
-        cbLevel.getSelectionModel().select("no illness");
+        cbLevel.getSelectionModel().select("Strong");
 
-        levelMap.put(0, "no illness");
+        levelMap.put(0, "Strong");
         levelMap.put(1, "mild");
         levelMap.put(2, "severe");
         levelMap.put(3, "requires intervention");
@@ -180,7 +180,7 @@ public class HealthController implements Initializable {
         txtHeight.clear();
         dateCheckupDate.setValue(null);
         dateCheckupDate.setPromptText("YYYY-MM-DD");
-        cbLevel.getSelectionModel().select("no illness");
+        cbLevel.getSelectionModel().select("Strong");
     }
 
     private void initUI() {
@@ -237,7 +237,7 @@ public class HealthController implements Initializable {
                 } else {
                     switch (item) {
                         case 0:
-                            setText("no illness");
+                            setText("Strong");
                             break;
                         case 1:
                             setText("mild");
@@ -338,14 +338,22 @@ public class HealthController implements Initializable {
             filterCombo.requestFocus();
             return false;
         }
-        if (txtWeight.getText() == null || txtWeight.getText().trim().isEmpty()) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Weight is required.");
+        try {
+            Double weight = Double.parseDouble(txtWeight.getText());
+            Double height = Double.parseDouble(txtHeight.getText())/100;
+            if (weight < 20 || weight > 250) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Minimum weight 20kg and maximum 250kg");
+                txtWeight.requestFocus();
+                return false;
+            }
+            if(height < 0.5 || height > 2.5) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Minimum height is 50cm and maximum is 250cm");
+                txtHeight.requestFocus();
+                return false;
+            }
+        } catch (Exception e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Please enter number for full weight and height");
             txtWeight.requestFocus();
-            return false;
-        }
-        if (txtHeight.getText() == null || txtHeight.getText().trim().isEmpty()) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Height is required.");
-            txtHeight.requestFocus();
             return false;
         }
         if (dateCheckupDate.getValue() == null) {
@@ -364,7 +372,7 @@ public class HealthController implements Initializable {
         txtHeight.clear();
         dateCheckupDate.setValue(null);
         dateCheckupDate.setPromptText("YYYY-MM-DD");
-        cbLevel.getSelectionModel().select("no illness");;
+        cbLevel.getSelectionModel().select("Strong");;
 
         dataTable.getSelectionModel().clearSelection();
     }
@@ -382,7 +390,7 @@ public class HealthController implements Initializable {
 
         String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
-        Double height = Double.valueOf(txtHeight.getText());
+        Double height = Double.parseDouble(txtHeight.getText())/100;
         boolean status = cbLevel.getSelectionModel().getSelectedIndex() == 0 ? false : true;
         String level = cbLevel.getValue();
 
