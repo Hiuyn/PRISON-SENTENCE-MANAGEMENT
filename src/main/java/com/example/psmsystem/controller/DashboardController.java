@@ -8,16 +8,21 @@ import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.service.assessDao.AssessDao;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
+import com.example.psmsystem.service.healthDao.HealthDao;
 import com.example.psmsystem.service.managementvisitDao.ManagementVisitDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -31,7 +36,10 @@ public class DashboardController implements Initializable {
     private AreaChart<String, Number> areaChart;
 
     @FXML
-    private BarChart<String, Number> barChart;
+    private BarChart<String, Number> barChartDiscipline;
+
+    @FXML
+    private BarChart<String, Number> barChartBonus;
 
     @FXML
     private LineChart<String, Number> lineChart;
@@ -71,27 +79,27 @@ public class DashboardController implements Initializable {
 
     public void areaChartController() {
         CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis(0, 15, 2.5);
-        areaChart.setTitle("Temperature Monitoring (in Degrees C)");
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        series1.setName("John");
-        series1.getData().add(new XYChart.Data<>("Monday", 3));
-        series1.getData().add(new XYChart.Data<>("Tuesday", 4));
-        series1.getData().add(new XYChart.Data<>("Wednesday", 3));
-        series1.getData().add(new XYChart.Data<>("Thursday", 5));
-        series1.getData().add(new XYChart.Data<>("Friday", 4));
-        series1.getData().add(new XYChart.Data<>("Saturday", 10));
-        series1.getData().add(new XYChart.Data<>("Sunday", 12));
-        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-        series2.setName("Jane");
-        series2.getData().add(new XYChart.Data<>("Monday", 1));
-        series2.getData().add(new XYChart.Data<>("Tuesday", 3));
-        series2.getData().add(new XYChart.Data<>("Wednesday", 4));
-        series2.getData().add(new XYChart.Data<>("Thursday", 3));
-        series2.getData().add(new XYChart.Data<>("Friday", 3));
-        series2.getData().add(new XYChart.Data<>("Saturday", 5));
-        series2.getData().add(new XYChart.Data<>("Sunday", 4));
-        areaChart.getData().addAll(series1, series2);
+        NumberAxis yAxis = new NumberAxis();
+        barChartBonus.setTitle("Prisoner Bonus Chart");
+        barChartBonus.getXAxis().setLabel("Prisoner");
+        barChartBonus.getYAxis().setLabel("Count");
+
+        AssessDao assessDao = new AssessDao();
+//        Map<String, Integer> breachData = assessDao.getBreachOfDisciplineData();
+        Map<String, Integer> bonusData = assessDao.getBonusData();
+
+//        System.out.println("breachData"+breachData);
+//        System.out.println("bonusData"+bonusData);
+
+//        XYChart.Series<String, Number> breachSeries = new XYChart.Series<>();
+//        breachSeries.setName("Breach of Discipline");
+//        breachData.forEach((prisonerName, breachCount) -> breachSeries.getData().add(new XYChart.Data<>(prisonerName, breachCount)));
+
+        XYChart.Series<String, Number> bonusSeries = new XYChart.Series<>();
+        bonusSeries.setName("Bonus");
+        bonusData.forEach((prisonerName, bonusCount) -> bonusSeries.getData().add(new XYChart.Data<>(prisonerName, bonusCount)));
+
+        barChartBonus.getData().add(bonusSeries);
     }
 
     public void lineChartController() {
@@ -115,20 +123,31 @@ public class DashboardController implements Initializable {
     public void barChartController() {
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Sentence Type");
-        yAxis.setLabel("Number of Prisoners");
 
-        barChart.setTitle("Number of Prisoners by Sentence Type");
+        barChartDiscipline.setTitle("Prisoner Discipline Chart");
+        barChartDiscipline.getXAxis().setLabel("Prisoner");
+        barChartDiscipline.getYAxis().setLabel("Count");
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Prisoners");
+        AssessDao assessDao = new AssessDao();
+        Map<String, Integer> breachData = assessDao.getBreachOfDisciplineData();
+//        xAxis.setLabel("Sentence Type");
+//        yAxis.setLabel("Number of Prisoners");
+//
+//        barChart.setTitle("Number of Prisoners by Sentence Type");
 
-        Map<String, Integer> prisonersBySentenceType = sentenceDao.countPrisonersBySentenceType();
-        for (Map.Entry<String, Integer> entry : prisonersBySentenceType.entrySet()) {
-            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-        }
+//        XYChart.Series<String, Number> series = new XYChart.Series<>();
+//        series.setName("Prisoners");
 
-        barChart.getData().add(series);
+        XYChart.Series<String, Number> breachSeries = new XYChart.Series<>();
+        breachSeries.setName("Breach of Discipline");
+        breachData.forEach((prisonerName, breachCount) -> breachSeries.getData().add(new XYChart.Data<>(prisonerName, breachCount)));
+
+//        Map<String, Integer> prisonersBySentenceType = sentenceDao.countPrisonersBySentenceType();
+//        for (Map.Entry<String, Integer> entry : prisonersBySentenceType.entrySet()) {
+//            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+//        }
+
+        barChartDiscipline.getData().add(breachSeries);
     }
 
     public void pieChartController() {
@@ -142,27 +161,30 @@ public class DashboardController implements Initializable {
     }
 
     public void stackedAreaChartController() {
-        CategoryAxis xAxis = new CategoryAxis();
+        HealthDao healthDao = new HealthDao();
+        int year = LocalDate.now().getYear(); // Lấy năm hiện tại
+        Map<Integer, Integer> strongHealthData = healthDao.getStrongHealthDataByMonthYear(year);
+        Map<Integer, Integer> weakHealthData = healthDao.getWeakHealthDataByMonthYear(year);
+
+        NumberAxis xAxis = new NumberAxis(1, 12, 1);
+        xAxis.setLabel("Month");
         NumberAxis yAxis = new NumberAxis();
-        stackedAreaChart.setTitle("Stacked Area Chart Example");
+        yAxis.setLabel("Count");
+        stackedAreaChart.setTitle("Health Status by Month (" + year + ")");
 
-        // Tạo dữ liệu cho series 1
-        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-        series1.setName("Series 1");
-        series1.getData().add(new XYChart.Data<>(1, 10));
-        series1.getData().add(new XYChart.Data<>(2, 20));
-        series1.getData().add(new XYChart.Data<>(3, 15));
-        series1.getData().add(new XYChart.Data<>(4, 25));
+        XYChart.Series<Number, Number> strongSeries = new XYChart.Series<>();
+        strongSeries.setName("Strong");
+        for (Map.Entry<Integer, Integer> entry : strongHealthData.entrySet()) {
+            strongSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
 
-        // Tạo dữ liệu cho series 2
-        XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
-        series2.setName("Series 2");
-        series2.getData().add(new XYChart.Data<>(1, 15));
-        series2.getData().add(new XYChart.Data<>(2, 25));
-        series2.getData().add(new XYChart.Data<>(3, 20));
-        series2.getData().add(new XYChart.Data<>(4, 30));
+        XYChart.Series<Number, Number> weakSeries = new XYChart.Series<>();
+        weakSeries.setName("Weak");
+        for (Map.Entry<Integer, Integer> entry : weakHealthData.entrySet()) {
+            weakSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
 
-        // Thêm series vào chart
-        stackedAreaChart.getData().addAll(series1, series2);
+        stackedAreaChart.getData().clear();
+        stackedAreaChart.getData().addAll(strongSeries, weakSeries);
     }
 }

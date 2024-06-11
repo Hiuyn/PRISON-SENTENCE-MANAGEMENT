@@ -84,18 +84,28 @@
             <HBox prefHeight="394.0" spacing="10.0">
                <children>
                   <AnchorPane prefHeight="394.0" prefWidth="851.0" stylesheets="@../css/mainpanel.css" HBox.hgrow="ALWAYS">
+<!--                     <children>-->
+<!--                        <AreaChart fx:id="areaChart" layoutX="22.0" layoutY="14.0" prefHeight="386.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">-->
+<!--                          <xAxis>-->
+<!--                            <CategoryAxis side="BOTTOM" />-->
+<!--                          </xAxis>-->
+<!--                          <yAxis>-->
+<!--                            <NumberAxis side="LEFT" />-->
+<!--                          </yAxis>-->
+<!--                           <padding>-->
+<!--                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />-->
+<!--                           </padding>-->
+<!--                        </AreaChart>-->
+<!--                     </children>-->
                      <children>
-                        <AreaChart fx:id="areaChart" layoutX="22.0" layoutY="14.0" prefHeight="386.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <xAxis>
-                            <CategoryAxis side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis side="LEFT" />
-                          </yAxis>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </AreaChart>
+                        <BarChart fx:id="barChartBonus" layoutY="-52.0" prefHeight="386.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <xAxis>
+                              <CategoryAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </BarChart>
                      </children>
                      <styleClass>
                         <String fx:value="card" />
@@ -104,7 +114,7 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="394.0" prefWidth="851.0" stylesheets="@../css/mainpanel.css" HBox.hgrow="ALWAYS">
                      <children>
-                        <BarChart fx:id="barChart" layoutY="-52.0" prefHeight="386.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <BarChart fx:id="barChartDiscipline" layoutY="-52.0" prefHeight="386.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>

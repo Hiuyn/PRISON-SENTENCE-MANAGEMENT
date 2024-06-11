@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AssessDao implements IAssessDao<Assess> {
     private static final String INSERT_QUERY = "INSERT INTO incareration_process (process_code, sentence_id, prisoner_id, date_of_occurrence, event_type, level, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -17,7 +19,9 @@ public class AssessDao implements IAssessDao<Assess> {
     private static final String DELETE_ASSESS_QUERY = "DELETE FROM incareration_process WHERE process_id = ?";
     private static final String SELECT_BY_ASSESS_QUERY = "SELECT ip.process_code, ip.sentence_id, s.sentences_code, ip.prisoner_id, p.prisoner_name,ip.date_of_occurrence, ip.event_type, ip.level, ip.note FROM incareration_process ip JOIN sentences s ON s.sentence_id = ip.sentence_id JOIN prisoners p ON p.prisoner_id = ip.prisoner_id ORDER BY date_of_occurrence";
     private static final String SELECT_BY_CODE_DATE_ASSESS_QUERY = "SELECT * FROM incareration_process WHERE process_code = ? AND date_of_occurrence = ?";
-    private static final String MAX_PROCESS_CODE_QUERY = "SELECT MAX(CAST(SUBSTRING(process_code, 2) AS UNSIGNED)) AS max_health_code FROM incareration_process WHERE process_code REGEXP '^H[0-9]+$'";
+    private static final String MAX_PROCESS_CODE_QUERY = "SELECT MAX(CAST(SUBSTRING(process_code, 2) AS UNSIGNED)) AS max_health_code FROM incareration_process WHERE process_code REGEXP '^P[0-9]+$'";
+    private static final String BREACH_QUERY  = "SELECT p.prisoner_name, COUNT(CASE WHEN ip.event_type = 'Breach of discipline' THEN 1 ELSE NULL END) AS total_breach FROM incareration_process ip JOIN prisoners p ON ip.prisoner_id = p.prisoner_id WHERE ip.event_type = 'Breach of discipline' GROUP BY p.prisoner_name ORDER BY total_breach DESC LIMIT 5";
+    private static final String BONUS_QUERY = "SELECT p.prisoner_name, COUNT(CASE WHEN ip.event_type = 'Bonus' THEN 1 ELSE NULL END) AS total_bonus FROM incareration_process ip JOIN prisoners p ON ip.prisoner_id = p.prisoner_id WHERE ip.event_type = 'Bonus' GROUP BY p.prisoner_name ORDER BY total_bonus DESC LIMIT 5";
 
     @Override
     public void addAssess(Assess assess) {
@@ -125,11 +129,43 @@ public class AssessDao implements IAssessDao<Assess> {
             PreparedStatement ps = connection.prepareStatement(MAX_PROCESS_CODE_QUERY);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                maxNumber = Integer.parseInt(rs.getString(1));
+                maxNumber = rs.getInt(1);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return maxNumber;
+    }
+
+    public Map<String, Integer> getBreachOfDisciplineData(){
+         Map<String, Integer> data = new HashMap<>();
+         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+             PreparedStatement ps = connection.prepareStatement(BREACH_QUERY);
+             ResultSet rs = ps.executeQuery();
+             while (rs.next()) {
+                 String prisonerName = rs.getString("prisoner_name");
+                 int breachCount = rs.getInt("total_breach");
+                 data.put(prisonerName, breachCount);
+             }
+         } catch (SQLException e) {
+             throw new RuntimeException(e);
+         }
+         return data;
+     }
+
+    public Map<String, Integer> getBonusData(){
+        Map<String, Integer> data = new HashMap<>();
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(BONUS_QUERY);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String prisonerName = rs.getString("prisoner_name");
+                int bonusCount  = rs.getInt("total_bonus");
+                data.put(prisonerName, bonusCount );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return data;
     }
 }

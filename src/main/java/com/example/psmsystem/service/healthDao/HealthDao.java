@@ -9,7 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HealthDao implements IHealthDao<Health> {
     private static final String INSERT_QUERY = "INSERT INTO healths (health_code, sentence_id, prisoner_id, weight, height, checkup_date, status, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -18,7 +20,13 @@ public class HealthDao implements IHealthDao<Health> {
     private static final String SELECT_BY_HEALTH_QUERY = "SELECT h.health_code, h.sentence_id, s.sentences_code, h.prisoner_id, p.prisoner_name, h.weight, h.height, h.checkup_date, h.status, h.level FROM healths h JOIN sentences s ON s.sentence_id = h.sentence_id JOIN prisoners p ON p.prisoner_id = h.prisoner_id ORDER BY checkup_date";
     private static final String SELECT_BY_CODE_DATE_HEALTH_QUERY = "SELECT * FROM healths WHERE hearthCode = ? AND checkup_date = ?";
     private static final String MAX_HEALTH_CODE_QUERY = "SELECT MAX(CAST(SUBSTRING(health_code, 2) AS UNSIGNED)) AS max_health_code FROM healths WHERE health_code REGEXP '^H[0-9]+$'";
-
+    private static final String GET_HEALTH_DATA_BY_MONTH_YEAR = "SELECT "
+            + "MONTH(checkup_date) AS month_number, "
+            + "SUM(CASE WHEN status = false THEN 1 ELSE 0 END) AS strong_count, "
+            + "SUM(CASE WHEN status = true THEN 1 ELSE 0 END) AS weak_count "
+            + "FROM healths "
+            + "WHERE YEAR(checkup_date) = ? "
+            + "GROUP BY month_number";
     @Override
     public void addHealth(Health health) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
@@ -128,11 +136,45 @@ public class HealthDao implements IHealthDao<Health> {
             PreparedStatement ps = connection.prepareStatement(MAX_HEALTH_CODE_QUERY);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                maxNumber = Integer.parseInt(rs.getString(1));
+                maxNumber = rs.getInt(1);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return maxNumber;
+    }
+
+    public Map<Integer, Integer> getStrongHealthDataByMonthYear(int year) {
+        Map<Integer, Integer> strongHealthDataMap = new HashMap<>();
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection();
+             PreparedStatement ps = connection.prepareStatement(GET_HEALTH_DATA_BY_MONTH_YEAR)) {
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int monthNumber = rs.getInt("month_number");
+                int strongCount = rs.getInt("strong_count");
+                strongHealthDataMap.put(monthNumber, strongCount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return strongHealthDataMap;
+    }
+
+    public Map<Integer, Integer> getWeakHealthDataByMonthYear(int year) {
+        Map<Integer, Integer> weakHealthDataMap = new HashMap<>();
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection();
+             PreparedStatement ps = connection.prepareStatement(GET_HEALTH_DATA_BY_MONTH_YEAR)) {
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int monthNumber = rs.getInt("month_number");
+                int weakCount = rs.getInt("weak_count");
+                weakHealthDataMap.put(monthNumber, weakCount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return weakHealthDataMap;
     }
 }
