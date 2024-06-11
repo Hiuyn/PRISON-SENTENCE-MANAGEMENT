@@ -29,7 +29,7 @@
             <Label alignment="CENTER_RIGHT" layoutX="22.0" layoutY="23.0" prefHeight="40.0" prefWidth="87.0" text="Prisoner Code:" />
             <Label alignment="CENTER_RIGHT" layoutX="26.0" layoutY="74.0" prefHeight="40.0" prefWidth="80.0" text="Visitor Name:" />
             <TextField fx:id="txtVisitorName" layoutX="122.0" layoutY="74.0" prefHeight="40.0" prefWidth="323.0" AnchorPane.rightAnchor="10.0" />
-            <Label alignment="CENTER_RIGHT" layoutX="24.0" layoutY="133.0" prefHeight="40.0" prefWidth="80.0" text="CCCD/CMD:" />
+            <Label alignment="CENTER_RIGHT" layoutX="24.0" layoutY="133.0" prefHeight="40.0" prefWidth="80.0" text="Identity card:" />
             <TextField fx:id="txtcccd" layoutX="120.0" layoutY="133.0" prefHeight="40.0" prefWidth="323.0" AnchorPane.rightAnchor="10.0" />
             <Label alignment="CENTER_RIGHT" layoutX="19.0" layoutY="194.0" prefHeight="40.0" prefWidth="80.0" text="Relationship:" />
             <TextField fx:id="txtRelationship" layoutX="121.0" layoutY="194.0" prefHeight="40.0" prefWidth="323.0" AnchorPane.rightAnchor="10.0" />

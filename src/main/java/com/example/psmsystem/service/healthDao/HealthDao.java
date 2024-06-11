@@ -38,9 +38,8 @@ public class HealthDao implements IHealthDao<Health> {
             ps.setDouble(4,health.getWeight());
             ps.setDouble(5,health.getHeight());
             ps.setString(6,health.getCheckupDate());
-            ps.setBoolean(7,health.getStatus());
+            ps.setBoolean(7, health.getLevel() != 0);
             ps.setInt(8,health.getLevel());
-
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -86,7 +85,7 @@ public class HealthDao implements IHealthDao<Health> {
                 ps.setDouble(4,health.getWeight());
                 ps.setDouble(5,health.getHeight());
                 ps.setString(6,health.getCheckupDate());
-                ps.setBoolean(7,health.getStatus());
+                ps.setBoolean(7,health.getLevel() != 0);
                 ps.setInt(8,health.getLevel());
                 ps.setInt(9, id);
                 ps.executeUpdate();

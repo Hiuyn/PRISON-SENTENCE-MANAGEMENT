@@ -31,7 +31,7 @@
                   <TableColumn fx:id="prisonercodeColumn" prefWidth="98.0" styleClass="text-center" text="Sentence Code" />
                   <TableColumn fx:id="prisonernameColumn" prefWidth="98.0" styleClass="text-center" text="Prisoner Name" />
                   <TableColumn fx:id="weightColumn" prefWidth="72.0" styleClass="text-center" text="Weight (kg)" />
-                  <TableColumn fx:id="heightColumn" prefWidth="67.0" styleClass="text-center" text="Height (m)" />
+                  <TableColumn fx:id="heightColumn" prefWidth="67.0" styleClass="text-center" text="Height (cm)" />
                   <TableColumn fx:id="checkupDateColumn" prefWidth="124.0" styleClass="text-center" text="Checkup Date" />
                   <TableColumn fx:id="statusColumn" prefWidth="151.0" styleClass="text-center" text="Status" />
                   <TableColumn fx:id="levelColumn" prefWidth="151.0" styleClass="text-center" text="Level" />
@@ -78,7 +78,7 @@
                </styleClass>
             </Button>
             <Label alignment="CENTER_RIGHT" layoutX="409.0" layoutY="132.0" prefHeight="40.0" prefWidth="30.0" text="( kg )" />
-            <Label alignment="CENTER_RIGHT" layoutX="409.0" layoutY="186.0" prefHeight="40.0" prefWidth="30.0" text="( m )" />
+            <Label alignment="CENTER_RIGHT" layoutX="409.0" layoutY="186.0" prefHeight="40.0" prefWidth="30.0" text="( cm )" />
             <SearchableComboBox fx:id="filterCombo" layoutX="147.0" layoutY="72.0" prefHeight="40.0" prefWidth="241.0" promptText="Select Sentence Code" AnchorPane.rightAnchor="52.0" />
             <ComboBox fx:id="cbLevel" layoutX="170.0" layoutY="297.0" prefHeight="40.0" prefWidth="241.0" AnchorPane.rightAnchor="52.0" />
          </children>

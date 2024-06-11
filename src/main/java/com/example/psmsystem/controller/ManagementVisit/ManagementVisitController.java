@@ -552,8 +552,8 @@ public class ManagementVisitController implements Initializable {
             txtVisitorName.requestFocus();
             return false;
         }
-        if (txtcccd.getText() == null || txtcccd.getText().trim().isEmpty()) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "CCCD is required.");
+        if (!txtcccd.getText().matches("^(?!0{12})\\d{12}$")) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Identity card must be 12character number and not 000000000000.");
             txtcccd.requestFocus();
             return false;
         }
