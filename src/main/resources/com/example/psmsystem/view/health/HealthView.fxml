@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<AnchorPane prefHeight="957.0" prefWidth="1760.0" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.health.HealthController">
+<AnchorPane prefHeight="637.0" prefWidth="1270.0" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.health.HealthController">
    <children>
-      <AnchorPane prefHeight="909.0" prefWidth="1153.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="24.0">
+      <AnchorPane prefHeight="589.0" prefWidth="738.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="510.0" AnchorPane.topAnchor="24.0">
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
@@ -25,7 +25,7 @@
             <String fx:value="shadow" />
          </styleClass>
          <children>
-            <TableView fx:id="dataTable" layoutX="12.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#getItem" prefHeight="772.0" stylesheets="@../../css/mainpanel.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <TableView fx:id="dataTable" layoutX="23.0" layoutY="128.0" onMouseClicked="#getItem" prefWidth="200.0" stylesheets="@../../css/mainpanel.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0">
                <columns>
                   <TableColumn fx:id="healthcodeColumn" prefWidth="98.0" styleClass="text-center" text="Health Code" />
                   <TableColumn fx:id="prisonercodeColumn" prefWidth="98.0" styleClass="text-center" text="Sentence Code" />
@@ -37,58 +37,55 @@
                   <TableColumn fx:id="levelColumn" prefWidth="151.0" styleClass="text-center" text="Level" />
                </columns>
             </TableView>
-            <Pagination fx:id="pagination" layoutX="14.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="818.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-            <TextField fx:id="txtSearch" layoutX="31.0" layoutY="14.0" prefHeight="40.0" prefWidth="367.0" promptText="Search..." />
-            <FontAwesomeIcon glyphName="SEARCH" layoutX="367.0" layoutY="41.0" size="22" />
+            <Pagination fx:id="pagination" layoutX="14.0" layoutY="77.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0" />
+            <TextField fx:id="txtSearch" layoutX="40.8" layoutY="40.8" prefHeight="40.0" prefWidth="287.0" promptText="Search..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+            <FontAwesomeIcon glyphName="SEARCH" layoutX="290.0" layoutY="58.0" size="22" />
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="909.0" prefWidth="468.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-         <styleClass>
-            <String fx:value="card" />
-            <String fx:value="shadow" />
-         </styleClass>
+      <AnchorPane prefHeight="589.0" prefWidth="471.0" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
          <children>
-            <Label alignment="CENTER_RIGHT" layoutX="112.0" layoutY="66.0" prefHeight="40.0" prefWidth="87.0" text="Sentence Code:" />
+            <Label alignment="CENTER_RIGHT" layoutX="43.0" layoutY="72.0" prefHeight="40.0" prefWidth="87.0" text="Sentence Code:" />
             <!--            <ComboBox fx:id="filterCombo" layoutX="245.0" layoutY="66.0" prefHeight="40.0" prefWidth="241.0" promptText="Select Prisoner ID" visibleRowCount="5" />-->
-            <Label alignment="CENTER_RIGHT" layoutX="114.0" layoutY="131.0" prefHeight="40.0" prefWidth="80.0" text="Weight:" />
-            <TextField fx:id="txtWeight" layoutX="244.0" layoutY="131.0" prefHeight="40.0" prefWidth="241.0" />
-            <Label alignment="CENTER_RIGHT" layoutX="114.0" layoutY="193.0" prefHeight="40.0" prefWidth="80.0" text="Height:" />
-            <TextField fx:id="txtHeight" layoutX="244.0" layoutY="193.0" prefHeight="40.0" prefWidth="241.0" />
-            <Label alignment="CENTER_RIGHT" layoutX="114.0" layoutY="254.0" prefHeight="40.0" prefWidth="80.0" text="Date" />
-            <Label alignment="CENTER_RIGHT" layoutX="72.0" layoutY="320.0" prefHeight="40.0" prefWidth="122.0" text="Level:" />
-            <DatePicker fx:id="dateCheckupDate" layoutX="244.0" layoutY="254.0" prefHeight="40.0" prefWidth="241.0" promptText="YYYY-MM-DD" />
-            <Button layoutX="64.0" layoutY="802.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CREATE">
+            <Label alignment="CENTER_RIGHT" layoutX="47.0" layoutY="132.0" prefHeight="40.0" prefWidth="80.0" text="Weight:" />
+            <TextField fx:id="txtWeight" layoutX="167.0" layoutY="132.0" prefHeight="40.0" prefWidth="241.0" AnchorPane.rightAnchor="52.0" />
+            <Label alignment="CENTER_RIGHT" layoutX="47.0" layoutY="186.0" prefHeight="40.0" prefWidth="80.0" text="Height:" />
+            <TextField fx:id="txtHeight" layoutX="167.0" layoutY="186.0" prefHeight="40.0" prefWidth="241.0" AnchorPane.rightAnchor="52.0" />
+            <Label alignment="CENTER_RIGHT" layoutX="51.0" layoutY="240.0" prefHeight="40.0" prefWidth="80.0" text="Date" />
+            <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="297.0" prefHeight="40.0" prefWidth="122.0" text="Level:" />
+            <DatePicker fx:id="dateCheckupDate" layoutX="170.0" layoutY="240.0" prefHeight="40.0" prefWidth="241.0" promptText="YYYY-MM-DD" AnchorPane.rightAnchor="52.0" />
+            <Button fx:id="createId" mnemonicParsing="false" onAction="#onCreate" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CREATE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="success" />
                </styleClass>
             </Button>
-            <Button layoutX="179.0" layoutY="802.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="EDIT">
+            <Button mnemonicParsing="false" onAction="#onEdit" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="EDIT" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="230.0">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="infor" />
                </styleClass>
             </Button>
-            <Button layoutX="410.0" layoutY="802.0" mnemonicParsing="false" onAction="#onClean" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CLEAN">
+            <Button mnemonicParsing="false" onAction="#onClean" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="CLEAN" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="clear" />
                </styleClass>
             </Button>
-            <Button layoutX="295.0" layoutY="802.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="DELETE">
+            <Button mnemonicParsing="false" onAction="#onDelete" prefHeight="40.0" prefWidth="100.0" stylesheets="@../../css/mainpanel.css" text="DELETE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="120.0">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="danger" />
                </styleClass>
             </Button>
-            <Label alignment="CENTER_RIGHT" layoutX="486.0" layoutY="131.0" prefHeight="40.0" prefWidth="30.0" text="( kg )" />
-            <Label alignment="CENTER_RIGHT" layoutX="486.0" layoutY="193.0" prefHeight="40.0" prefWidth="30.0" text="( m )" />
-            <SearchableComboBox fx:id="filterCombo" layoutX="245.0" layoutY="66.0" prefHeight="40.0" prefWidth="241.0" promptText="Select Sentence Code" />
-            <ComboBox fx:id="cbLevel" layoutX="244.0" layoutY="320.0" prefHeight="40.0" prefWidth="241.0" />
+            <Label alignment="CENTER_RIGHT" layoutX="409.0" layoutY="132.0" prefHeight="40.0" prefWidth="30.0" text="( kg )" />
+            <Label alignment="CENTER_RIGHT" layoutX="409.0" layoutY="186.0" prefHeight="40.0" prefWidth="30.0" text="( m )" />
+            <SearchableComboBox fx:id="filterCombo" layoutX="147.0" layoutY="72.0" prefHeight="40.0" prefWidth="241.0" promptText="Select Sentence Code" AnchorPane.rightAnchor="52.0" />
+            <ComboBox fx:id="cbLevel" layoutX="170.0" layoutY="297.0" prefHeight="40.0" prefWidth="241.0" AnchorPane.rightAnchor="52.0" />
          </children>
+         <styleClass>
+            <String fx:value="card" />
+            <String fx:value="shadow" />
+         </styleClass>
       </AnchorPane>
    </children>
 </AnchorPane>

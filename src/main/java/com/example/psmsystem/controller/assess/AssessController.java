@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.assess;
 
+import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.assess.Assess;
 import com.example.psmsystem.model.assess.IAssessDao;
@@ -8,10 +9,12 @@ import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.model.sentence.SentenceServiceImpl;
 import com.example.psmsystem.service.assessDao.AssessDao;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import com.example.psmsystem.service.sentenceDao.SentenceService;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +43,7 @@ public class AssessController implements Initializable {
     private IPrisonerDao<Prisoner> prisonerDao;
     private IAssessDao<Assess> assessDao;
     private ISentenceDao<Sentence> sentenceDao;
+    private SentenceServiceImpl<SentenceDTO> sentenceService;
 
     @FXML
     private ComboBox<String> cbEventType;
@@ -60,7 +64,7 @@ public class AssessController implements Initializable {
     private TableColumn<Assess, String> eventTypeColumn;
 
     @FXML
-    private SearchableComboBox<Sentence> filterCombo;
+    private SearchableComboBox<SentenceDTO> filterCombo;
 
     @FXML
     private TableColumn<Assess, String> noteColumn;
@@ -69,7 +73,7 @@ public class AssessController implements Initializable {
     private Pagination pagination;
 
     @FXML
-    private TableColumn<Assess, String> prisonerCodeColumn;
+    private TableColumn<Assess, Integer> prisonerCodeColumn;
 
     @FXML
     private TableColumn<Assess, String> prisonerNameColumn;
@@ -89,6 +93,9 @@ public class AssessController implements Initializable {
     @FXML
     private TextField txtSearch;
     private final int itemsPerPage = 12;
+    @FXML
+    private Button createId;
+
 
     Integer index;
     Window window;
@@ -101,12 +108,13 @@ public class AssessController implements Initializable {
         prisonerDao = new PrisonerDAO();
         assessDao = new AssessDao();
         sentenceDao = new SentenceDao();
+        sentenceService = new SentenceService();
 
         listTable.addAll(assessDao.getAssess());
         dataTable.setFixedCellSize(42);
 
-        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": S " );
-        filterCombo.setItems(sentenceDao.getPrisonerName());
+        StringConverter<SentenceDTO> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentence().getSentenceCode() + ": " + sentence.getPrisonerName());
+        filterCombo.setItems(sentenceService.getPrisonerName());
         filterCombo.setConverter(converter);
 
         cbEventType.setItems(FXCollections.observableArrayList("Bonus",  "Breach of discipline"));
@@ -128,6 +136,10 @@ public class AssessController implements Initializable {
         levelMap.put(2, "MODERATE");
         levelMap.put(3, "GOOD");
         levelMap.put(4, "VERY GOOD");
+
+        createId.disableProperty().bind(
+                dataTable.getSelectionModel().selectedIndexProperty().greaterThanOrEqualTo(0)
+        );
 
         loadDataTable();
         setupPagination();
@@ -177,7 +189,7 @@ public class AssessController implements Initializable {
                 if (assess.getProcessCode().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (assess.getSentencesCode().toLowerCase().contains(lowerCaseFilter)) {
+                else if (String.valueOf(assess.getSentencesCode()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (assess.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
@@ -281,13 +293,13 @@ public class AssessController implements Initializable {
             return;
         }
 
-        for (Sentence sentence : filterCombo.getItems()) {
-            if (String.valueOf(sentence.getSentenceCode()).contains(prisonerCodeColumn.getCellData(index))) {
+        for (SentenceDTO sentence : filterCombo.getItems()) {
+            if (sentence.getSentence().getSentenceCode() == (prisonerCodeColumn.getCellData(index))) {
                 filterCombo.setValue(sentence);
                 break;
             }
         }
-        Sentence selectedValue = filterCombo.getValue();
+        SentenceDTO selectedValue = filterCombo.getValue();
 //        String prisonerCode = selectedValue.getPrisonerCode();
         LocalDate date = LocalDate.parse(eventDateColumn.getCellData(index).toString());
         dateEventDate.setValue(date);
@@ -317,6 +329,7 @@ public class AssessController implements Initializable {
         filterCombo.setValue(null);
         filterCombo.setPromptText("Select Sentence Code");
         cbEventType.getSelectionModel().select("Bonus");
+        cbLevel.getSelectionModel().selectFirst();
 //        txtDesctiption.clear();
         txtNote.clear();
         dateEventDate.setValue(null);
@@ -331,12 +344,11 @@ public class AssessController implements Initializable {
             return;
         }
 
-        Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
-        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
+        SentenceDTO selectedValue = filterCombo.getValue();
+        int prisonerId = selectedValue.getPrisonerId();
+        int sentenceCode = selectedValue.getSentence().getSentenceCode();
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
-//        String prisonerName = selectedValue.getPrisonerName();
-        String prisonerName = "Hien onCreate-AssessController";
+        String prisonerName = selectedValue.getPrisonerName();
         String eventType = cbEventType.getValue();
         LocalDate selectedStartDate = dateEventDate.getValue();
         String eventDate = selectedStartDate.toString();
@@ -371,7 +383,7 @@ public class AssessController implements Initializable {
     @FXML
     void onDelete(ActionEvent event) {
         try {
-            Sentence selectedValue = filterCombo.getValue();
+            SentenceDTO selectedValue = filterCombo.getValue();
             if (selectedValue == null) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                         "Please select a prisoner.");
@@ -400,13 +412,13 @@ public class AssessController implements Initializable {
 
                 if (selected != null) {
 
-                    assessDao.deleteAssess(visitationId);
-                    listTable.remove(selected);
-                    dataTable.setItems(listTable);
-                    resetValue();
-                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
-                            "Assess deleted successfully.");
-                }
+                        assessDao.deleteAssess(visitationId);
+                        listTable.remove(selected);
+                        dataTable.setItems(listTable);
+                        resetValue();
+                        AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
+                                "Assess deleted successfully.");
+                    }
 
 
 
@@ -423,12 +435,11 @@ public class AssessController implements Initializable {
         if (!isValidate()) {
             return;
         }
-        Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
-        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
+        SentenceDTO selectedValue = filterCombo.getValue();
+        int prisonerId = selectedValue.getPrisonerId();
+        int sentenceCode = selectedValue.getSentence().getSentenceCode();
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
-//        String prisonerName = selectedValue.getPrisonerName();
-        String prisonerName = "Hien onEdit-AssessController";
+        String prisonerName = selectedValue.getPrisonerName();
         String eventType = cbEventType.getValue();
         LocalDate selectedStartDate = dateEventDate.getValue();
         String eventDate = selectedStartDate.toString();
@@ -475,6 +486,7 @@ public class AssessController implements Initializable {
         filterCombo.setValue(null);
         filterCombo.setPromptText("Select Sentence Code");
         cbEventType.getSelectionModel().select("Bonus");
+        cbLevel.getSelectionModel().selectFirst();
 //        txtDesctiption.clear();
         txtNote.clear();
         dateEventDate.setValue(null);

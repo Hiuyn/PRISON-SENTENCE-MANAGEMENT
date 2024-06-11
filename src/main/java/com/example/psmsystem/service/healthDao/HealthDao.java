@@ -17,7 +17,7 @@ public class HealthDao implements IHealthDao<Health> {
     private static final String DELETE_HEALTH_QUERY = "DELETE FROM healths WHERE health_id = ?";
     private static final String SELECT_BY_HEALTH_QUERY = "SELECT h.health_code, h.sentence_id, s.sentences_code, h.prisoner_id, p.prisoner_name, h.weight, h.height, h.checkup_date, h.status, h.level FROM healths h JOIN sentences s ON s.sentence_id = h.sentence_id JOIN prisoners p ON p.prisoner_id = h.prisoner_id ORDER BY checkup_date";
     private static final String SELECT_BY_CODE_DATE_HEALTH_QUERY = "SELECT * FROM healths WHERE hearthCode = ? AND checkup_date = ?";
-    private static final String COUNT_HEALTH_QUERY = "SELECT COUNT(*) FROM healths";
+    private static final String MAX_HEALTH_CODE_QUERY = "SELECT MAX(CAST(SUBSTRING(health_code, 2) AS UNSIGNED)) AS max_health_code FROM healths WHERE health_code REGEXP '^H[0-9]+$'";
 
     @Override
     public void addHealth(Health health) {
@@ -26,7 +26,7 @@ public class HealthDao implements IHealthDao<Health> {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
             ps.setString(1,health.getHealthCode());
             ps.setString(2,health.getSentenceId());
-            ps.setString(3,health.getPrisonerId());
+            ps.setInt(3,health.getPrisonerId());
             ps.setDouble(4,health.getWeight());
             ps.setDouble(5,health.getHeight());
             ps.setString(6,health.getCheckupDate());
@@ -51,12 +51,12 @@ public class HealthDao implements IHealthDao<Health> {
             while (rs.next()) {
                 Health health = new Health();
                 health.setHealthCode(rs.getString("health_code"));
-                health.setPrisonerId(rs.getString("prisoner_id"));
+                health.setPrisonerId(rs.getInt("prisoner_id"));
                 health.setSentenceId(rs.getString("sentence_id"));
-                health.setSentenceCode(rs.getString("sentences_code"));
+                health.setSentenceCode(rs.getInt("sentences_code"));
                 health.setPrisonerName(rs.getString("prisoner_name"));
                 health.setWeight(rs.getDouble("weight"));
-                health.setHeight(rs.getDouble("weight"));
+                health.setHeight(rs.getDouble("height"));
                 health.setCheckupDate(rs.getString("checkup_date"));
                 health.setStatus(rs.getBoolean("status"));
                 health.setLevel(rs.getInt("level"));
@@ -74,7 +74,7 @@ public class HealthDao implements IHealthDao<Health> {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_HEALTH_QUERY)) {
                 ps.setString(1,health.getHealthCode());
                 ps.setString(2,health.getSentenceId());
-                ps.setString(3,health.getPrisonerId());
+                ps.setInt(3,health.getPrisonerId());
                 ps.setDouble(4,health.getWeight());
                 ps.setDouble(5,health.getHeight());
                 ps.setString(6,health.getCheckupDate());
@@ -123,17 +123,16 @@ public class HealthDao implements IHealthDao<Health> {
 
     @Override
     public int getCountHealth() {
-        int count = 0;
+        int maxNumber = 0;
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(COUNT_HEALTH_QUERY);
+            PreparedStatement ps = connection.prepareStatement(MAX_HEALTH_CODE_QUERY);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                count = rs.getInt(1); // Lấy giá trị của cột đầu tiên (đếm tổng số bản ghi)
+                maxNumber = Integer.parseInt(rs.getString(1));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return count;
+        return maxNumber;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.ManagementVisit;
 
+import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.managementvisit.IManagementVisitDao;
 import com.example.psmsystem.model.managementvisit.ManagementVisit;
@@ -7,9 +8,11 @@ import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.model.sentence.SentenceServiceImpl;
 import com.example.psmsystem.service.managementvisitDao.ManagementVisitDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import com.example.psmsystem.service.sentenceDao.SentenceService;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
@@ -53,6 +56,7 @@ public class ManagementVisitController implements Initializable {
     private static IPrisonerDao<Prisoner> prisonerDao;
     private static IManagementVisitDao<ManagementVisit> managementVisitDao;
     private ISentenceDao<Sentence> sentenceDao;
+    private SentenceServiceImpl<SentenceDTO> sentenceService = new SentenceService();
 
     @FXML
     private TableView<ManagementVisit> dataTable;
@@ -61,7 +65,7 @@ public class ManagementVisitController implements Initializable {
     private DatePicker dateVisitDate;
 
     @FXML
-    private SearchableComboBox<Sentence> filterCombo;
+    private SearchableComboBox<SentenceDTO> filterCombo;
 
     @FXML
     private TableColumn<ManagementVisit, String> noteColumn;
@@ -70,7 +74,7 @@ public class ManagementVisitController implements Initializable {
     private Pagination pagination;
 
     @FXML
-    private TableColumn<ManagementVisit, String> sentenceCodeColumn;
+    private TableColumn<ManagementVisit, Integer> sentenceCodeColumn;
 
     @FXML
     private TableColumn<ManagementVisit, String> prisonernameColumn;
@@ -122,6 +126,9 @@ public class ManagementVisitController implements Initializable {
 
     private final int itemsPerPage = 20;
 
+    @FXML
+    private Button createId;
+
     Integer index;
     Window window;
     int visitationId;
@@ -140,9 +147,9 @@ public class ManagementVisitController implements Initializable {
 
         listTable.addAll(managementVisitDao.getManagementVisits());
         dataTable.setFixedCellSize(37);
-        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ":  " );
-//        + sentence.getPrisonerName()
-        filterCombo.setItems(sentenceDao.getPrisonerName());
+
+        StringConverter<SentenceDTO> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentence().getSentenceCode() + ": " + sentence.getPrisonerName());
+        filterCombo.setItems(sentenceService.getPrisonerName());
         filterCombo.setConverter(converter);
 
         for (int i = 0; i < 24; i++) {
@@ -165,6 +172,10 @@ public class ManagementVisitController implements Initializable {
         endTimeHour.getSelectionModel().selectFirst();
         endTimeMinute.getSelectionModel().selectFirst();
 
+        createId.disableProperty().bind(
+                dataTable.getSelectionModel().selectedIndexProperty().greaterThanOrEqualTo(0)
+        );
+
         loadDataTable();
         setupPagination();
         initUI();
@@ -174,7 +185,6 @@ public class ManagementVisitController implements Initializable {
     private void initUI() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        // Tạo StringConverter tùy chỉnh để chuyển đổi giữa LocalDate và String
         StringConverter<LocalDate> converter = new StringConverter<>() {
             @Override
             public String toString(LocalDate date) {
@@ -252,13 +262,12 @@ public class ManagementVisitController implements Initializable {
             return;
         }
 
-        Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
-        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
+        SentenceDTO selectedValue = filterCombo.getValue();
+        int prisonerId = selectedValue.getPrisonerId();
+        int sentenceCode = selectedValue.getSentence().getSentenceCode();
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-//        String prisonerName = selectedValue.getPrisonerName();
-        String prisonerName = "Hien onCreate-ManagementVisitController";
+        String prisonerName = selectedValue.getPrisonerName();
         String visitorName = txtVisitorName.getText();
         String cccd = txtcccd.getText();
         String relationship = txtRelationship.getText();
@@ -267,8 +276,8 @@ public class ManagementVisitController implements Initializable {
         String date = selectedDate.toString();
 
 
-        if (hasVisitorThisMonth(String.valueOf(selectedValue.getSentenceCode()), selectedDate)) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Sentence code number " + selectedValue.getSentenceCode() + " has had visitors this month.");
+        if (hasVisitorThisMonth(selectedValue.getSentence().getSentenceCode(), selectedDate)) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Sentence code number " + selectedValue.getSentence().getSentenceCode() + " has had visitors this month.");
             filterCombo.requestFocus();
             return;
         }
@@ -300,7 +309,7 @@ public class ManagementVisitController implements Initializable {
     @FXML
     void onDelete(ActionEvent event) {
         try {
-            Sentence selectedValue = filterCombo.getValue();
+            SentenceDTO selectedValue = filterCombo.getValue();
             if (selectedValue == null) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                         "Please select a prisoner.");
@@ -355,13 +364,12 @@ public class ManagementVisitController implements Initializable {
             return;
         }
 
-        Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
-        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
+        SentenceDTO selectedValue = filterCombo.getValue();
+        int prisonerId = selectedValue.getPrisonerId();
+        int sentenceCode = selectedValue.getSentence().getSentenceCode();
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-//        String prisonerName = selectedValue.getPrisonerName();
-        String prisonerName = "Hien onEdit-ManagementVisitController";
+        String prisonerName = selectedValue.getPrisonerName();
         String visitorName = txtVisitorName.getText();
         String cccd = txtcccd.getText();
         String relationship = txtRelationship.getText();
@@ -383,7 +391,7 @@ public class ManagementVisitController implements Initializable {
         String formattedStartTime = startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         String formattedEndTime = endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-        if (visitationId == -1) {
+        if (visitationId <1) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "No visit found for the selected prisoner and date.");
             return;
@@ -424,15 +432,15 @@ public class ManagementVisitController implements Initializable {
         if(index <= -1){
             return;
         }
-
-        for (Sentence sentence : filterCombo.getItems()) {
-            if (String.valueOf(sentence.getSentenceCode()).contains(sentenceCodeColumn.getCellData(index))) {
+        for (SentenceDTO sentence : filterCombo.getItems()) {
+            if (sentence.getSentence().getSentenceCode() == (sentenceCodeColumn.getCellData(index))) {
                 filterCombo.setValue(sentence);
                 break;
             }
         }
-        Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
+
+        SentenceDTO selectedValue = filterCombo.getValue();
+        int prisonerId = selectedValue.getPrisonerId();
         txtVisitorName.setText(visitnameColumn.getCellData(index).toString());
         txtcccd.setText(cccdColumn.getCellData(index).toString());
         txtRelationship.setText(relationshipColumn.getCellData(index).toString());
@@ -486,7 +494,7 @@ public class ManagementVisitController implements Initializable {
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (managementVisit.getSentenceCode().toLowerCase().contains(lowerCaseFilter)) {
+                if (String.valueOf(managementVisit.getSentenceCode()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (managementVisit.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
@@ -593,12 +601,12 @@ public class ManagementVisitController implements Initializable {
         return true;
     }
 
-    private boolean hasVisitorThisMonth(String prisonerCode, LocalDate visitDate) {
+    private boolean hasVisitorThisMonth(int prisonerCode, LocalDate visitDate) {
         LocalDate startOfMonth = visitDate.withDayOfMonth(1);
         LocalDate endOfMonth = visitDate.withDayOfMonth(visitDate.lengthOfMonth());
 
         for (ManagementVisit visit : managementVisitDao.getManagementVisits()) {
-            if (visit.getSentenceCode().equals(prisonerCode)) {
+            if (visit.getSentenceCode() == prisonerCode) {
                 LocalDate visitLocalDate = LocalDate.parse(visit.getVisitDate());
                 if ((visitLocalDate.isEqual(startOfMonth) || visitLocalDate.isAfter(startOfMonth)) &&
                         (visitLocalDate.isEqual(endOfMonth) || visitLocalDate.isBefore(endOfMonth))) {

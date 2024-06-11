@@ -1,57 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-
-
 <AnchorPane prefHeight="637.0" prefWidth="1270.0" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.report.ReportController">
-   <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
-         <styleClass>
-            <String fx:value="card" />
-            <String fx:value="shadow" />
-         </styleClass>
-         <children>
-            <VBox alignment="CENTER" prefHeight="222.0" prefWidth="1222.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label text="Last Update:" />
-                  <Label fx:id="txtUpdate" />
-                  <Button mnemonicParsing="false" onAction="#onUpdate" prefHeight="40.0" prefWidth="100.0" text="Update" />
-               </children>
-            </VBox>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutY="239.0" prefHeight="374.0" prefWidth="1222.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="239.0">
-         <styleClass>
-            <String fx:value="card" />
-            <String fx:value="shadow" />
-         </styleClass>
-         <children>
-            <TextField fx:id="txtSearch" prefHeight="40.0" prefWidth="367.0" promptText="Search..." AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-            <FontAwesomeIcon glyphName="SEARCH" layoutX="357.0" layoutY="48.0" size="22" />
-            <TableView fx:id="dataTable" layoutX="393.0" layoutY="157.0" onMouseClicked="#getItem" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
-               <columns>
-                  <TableColumn fx:id="prisonerCodeColumn" prefWidth="118.0" styleClass="text-center" text="Sentence Code:" />
-                  <TableColumn fx:id="prisonerNameColumn" prefWidth="118.0" styleClass="text-center" text="Prisoner Name" />
-                  <TableColumn fx:id="statusColumn" prefWidth="118.0" styleClass="text-center" text="Status" />
-                  <TableColumn fx:id="levelColumn" prefWidth="118.0" styleClass="text-center" text="Level" />
-                  <TableColumn fx:id="rewardColumn" prefWidth="109.0" styleClass="text-center" text="number of times of reward" />
-                  <TableColumn fx:id="disciplineColumn" prefWidth="117.0" styleClass="text-center" text="number of times of discipline" />
-                  <TableColumn fx:id="releaseDateColumn" prefWidth="81.0" styleClass="text-center" text="Release Date" />
-                  <TableColumn fx:id="paroleEligibilityColumn" minWidth="2.0" prefWidth="106.0" styleClass="text-center" text="Parole Eligibility" />
-               </columns>
-            </TableView>
-            <Pagination fx:id="pagination" layoutX="391.0" layoutY="257.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
-            <Button layoutX="1010.0" layoutY="31.0" mnemonicParsing="false" onAction="#onExport" prefHeight="40.0" prefWidth="100.0" text="Export" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-         </children>
-      </AnchorPane>
-   </children>
+   <VBox alignment="TOP_CENTER" layoutX="20.0" layoutY="20.0" spacing="10.0">
+      <ChoiceBox fx:id="choiceBox" onAction="#handleChoiceBoxAction"/>
+      <Label fx:id="selectedKeyLabel" />
+      <TableView fx:id="dataTable" layoutX="41.6" layoutY="136.8" prefHeight="442.0" prefWidth="1160.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="31.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="126.0">
+         <columns>
+            <TableColumn fx:id="imageColumn" prefWidth="172.80001986026764" styleClass="text-center" text="Image" />
+            <TableColumn fx:id="prisonerNameColumn" prefWidth="172.80001831054688" styleClass="text-center" text="Prisoner Name" />
+            <TableColumn fx:id="identityCardColumn" prefWidth="121.60000610351562" styleClass="text-center" text="Identity Card" />
+            <TableColumn fx:id="sentenceIdColumn" prefWidth="84.00003051757812" styleClass="text-center" text="Sentence ID" />
+            <TableColumn fx:id="sentenceCodeColumn" prefWidth="128.79998779296875" styleClass="text-center" text="Sentence Code" />
+            <TableColumn fx:id="healthColumn" prefWidth="153.5999755859375" styleClass="text-center" text="Health condition" />
+            <TableColumn fx:id="commendationSumColumn" prefWidth="145.599853515625" styleClass="text-center" text="Total of Commendation" />
+            <TableColumn fx:id="disciplinarySumColumn" minWidth="2.0" prefWidth="162.4000244140625" styleClass="text-center" text="Total of Disciplinary" />
+         </columns>
+      </TableView>
+   </VBox>
 </AnchorPane>

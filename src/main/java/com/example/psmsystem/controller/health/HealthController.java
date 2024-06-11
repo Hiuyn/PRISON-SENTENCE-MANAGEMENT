@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.health;
 
+import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.health.IHealthDao;
@@ -7,9 +8,11 @@ import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.model.sentence.SentenceServiceImpl;
 import com.example.psmsystem.service.healthDao.HealthDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import com.example.psmsystem.service.sentenceDao.SentenceService;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,6 +41,7 @@ public class HealthController implements Initializable {
     private static IPrisonerDao<Prisoner> prisonerDao;
     private static IHealthDao<Health> healthDao;
     private ISentenceDao<Sentence> sentenceDao;
+    private SentenceServiceImpl<SentenceDTO> sentenceService = new SentenceService();
 
     @FXML
     private TableColumn<Health, String> checkupDateColumn;
@@ -52,7 +56,7 @@ public class HealthController implements Initializable {
     private ComboBox<String> cbLevel;
 
     @FXML
-    private SearchableComboBox<Sentence> filterCombo;
+    private SearchableComboBox<SentenceDTO> filterCombo;
 
     @FXML
     private TableColumn<Health, Double> heightColumn;
@@ -67,7 +71,7 @@ public class HealthController implements Initializable {
     private TableColumn<Health, Integer> levelColumn;
 
     @FXML
-    private TableColumn<Health, String> prisonercodeColumn;
+    private TableColumn<Health, Integer> prisonercodeColumn;
 
     @FXML
     private TableColumn<Health, String> healthcodeColumn;
@@ -92,6 +96,9 @@ public class HealthController implements Initializable {
 
     private final int itemsPerPage = 20;
 
+    @FXML
+    private Button createId;
+
     Integer index;
     Window window;
     int visitationId;
@@ -107,9 +114,8 @@ public class HealthController implements Initializable {
         listTable.addAll(healthDao.getHealth());
         dataTable.setFixedCellSize(37);
 
-        StringConverter<Sentence> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentenceCode() + ": "  );
-//        sentence.getPrisonerName()
-        filterCombo.setItems(sentenceDao.getPrisonerName());
+        StringConverter<SentenceDTO> converter = FunctionalStringConverter.to(sentence -> (sentence == null) ? "" : sentence.getSentence().getSentenceCode() + ": " + sentence.getPrisonerName());
+        filterCombo.setItems(sentenceService.getPrisonerName());
         filterCombo.setConverter(converter);
 
         cbLevel.setItems(FXCollections.observableArrayList("no illness", "mild", "severe", "requires intervention"));
@@ -120,6 +126,10 @@ public class HealthController implements Initializable {
         levelMap.put(1, "mild");
         levelMap.put(2, "severe");
         levelMap.put(3, "requires intervention");
+
+        createId.disableProperty().bind(
+                dataTable.getSelectionModel().selectedIndexProperty().greaterThanOrEqualTo(0)
+        );
 
         loadDataTable();
         setupPagination();
@@ -134,14 +144,14 @@ public class HealthController implements Initializable {
             return;
         }
 
-        for (Sentence sentence : filterCombo.getItems()) {
-            if (String.valueOf(sentence.getSentenceCode()).contains(prisonercodeColumn.getCellData(index))) {
+        for (SentenceDTO sentence : filterCombo.getItems()) {
+            if (sentence.getSentence().getSentenceCode() == (prisonercodeColumn.getCellData(index))) {
                 filterCombo.setValue(sentence);
                 break;
             }
         }
-        Sentence selectedValue = filterCombo.getValue();
-        int prisonerId = selectedValue.getPrisonerId();
+        SentenceDTO selectedValue = filterCombo.getValue();
+//        String prisonerId = selectedValue.getPrisonerId();
         txtWeight.setText(weightColumn.getCellData(index).toString());
         txtHeight.setText(heightColumn.getCellData(index).toString());
         LocalDate date = LocalDate.parse(checkupDateColumn.getCellData(index).toString());
@@ -274,7 +284,7 @@ public class HealthController implements Initializable {
                 if (health.getHealthCode().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                else if (health.getSentenceCode().toLowerCase().contains(lowerCaseFilter)) {
+                else if (String.valueOf(health.getSentenceCode()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 else if (health.getPrisonerName().toLowerCase().contains(lowerCaseFilter)) {
@@ -365,16 +375,15 @@ public class HealthController implements Initializable {
             return;
         }
 
-        Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
-        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
+        SentenceDTO selectedValue = filterCombo.getValue();
+        int prisonerId = selectedValue.getPrisonerId();
+        int sentenceCode = selectedValue.getSentence().getSentenceCode();
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-        String prisonerName = "Quach Ngoc Hien";
-//        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
         Double height = Double.valueOf(txtHeight.getText());
-        Boolean status = false;
+        boolean status = cbLevel.getSelectionModel().getSelectedIndex() == 0 ? false : true;
         String level = cbLevel.getValue();
 
         LocalDate selectedDate = dateCheckupDate.getValue();
@@ -401,7 +410,7 @@ public class HealthController implements Initializable {
     @FXML
     void onDelete(ActionEvent event) {
         try {
-            Sentence selectedValue = filterCombo.getValue();
+            SentenceDTO selectedValue = filterCombo.getValue();
             if (selectedValue == null) {
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                         "Please select a prisoner.");
@@ -454,13 +463,12 @@ public class HealthController implements Initializable {
             return;
         }
 
-        Sentence selectedValue = filterCombo.getValue();
-        String prisonerId = String.valueOf(selectedValue.getPrisonerId());
-        String sentenceCode = String.valueOf(selectedValue.getSentenceCode());
+        SentenceDTO selectedValue = filterCombo.getValue();
+        int prisonerId = selectedValue.getPrisonerId();
+        int sentenceCode = selectedValue.getSentence().getSentenceCode();
         String sentenceId = String.valueOf(sentenceDao.getSentenceId(sentenceCode));
 
-        String prisonerName = "Quach Ngoc Hien onEdit-HealthController";
-//        String prisonerName = selectedValue.getPrisonerName();
+        String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
         Double height = Double.valueOf(txtHeight.getText());
         Boolean status = false;

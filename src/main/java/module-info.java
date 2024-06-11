@@ -31,9 +31,6 @@ module com.example.psmsystem {
     opens com.example.psmsystem.model.health to javafx.base;
 
     exports com.example.psmsystem.controller.sentence;
-//    exports com.example.psmsystem.controller.sentence;
-
-    exports com.example.psmsystem.service.sentenceDao;
     opens com.example.psmsystem.controller.sentence to javafx.fxml;
     opens com.example.psmsystem.model.sentence to javafx.base;
 
@@ -44,4 +41,8 @@ module com.example.psmsystem {
     exports com.example.psmsystem.controller.assess;
     opens com.example.psmsystem.controller.assess to javafx.fxml;
     opens com.example.psmsystem.model.assess to javafx.base;
+
+    exports com.example.psmsystem.controller.report;
+    opens com.example.psmsystem.controller.report to javafx.fxml;
+    opens com.example.psmsystem.model.report to javafx.base;
 }
