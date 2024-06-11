@@ -18,6 +18,8 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     //    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_id FROM prisoners WHERE status = ? ORDER BY prisoner_id ASC LIMIT 1";
     private  static final String DELETE_PRISONER_BY_ID = "DELETE FROM prisoners WHERE prisoner_id = ?";
     private  static final String DELETE_SENTENCE_BY_ID = "DELETE FROM sentences WHERE prisoner_id = ?";
+    private  static final String UPDATE_PRISONER_STATUS = "UPDATE prisoners SET status = 1 WHERE prisoner_id = ?";
+
     private static final String SELECT_PRISONER_BY_AGE = "SELECT * FROM prisoners " +
             "WHERE TIMESTAMPDIFF(YEAR, date_birth, CURDATE()) BETWEEN ? AND ? " +
             "AND gender = ?";
@@ -125,7 +127,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_PRISONER_QUERY);
-            statement.setBoolean(1,false);
+            statement.setInt(1,0);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -252,20 +254,11 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
         try {
             Connection connection = DbConnection.getDatabaseConnection().getConnection();
-//            connection.setAutoCommit(false); // Bắt đầu giao dịch
-            PreparedStatement psSentence = connection.prepareStatement(DELETE_SENTENCE_BY_ID);
-            PreparedStatement psPrisoner = connection.prepareStatement(DELETE_PRISONER_BY_ID);
-
-            psSentence.setString(1,prisonerCode);
-            psPrisoner.setString(1,prisonerCode);
-
-            psSentence.executeUpdate();
-            psPrisoner.executeUpdate();
-
-
-//            connection.commit(); // Hoàn thành giao dịch
-
-            return true;
+            PreparedStatement ps = connection.prepareStatement(UPDATE_PRISONER_STATUS);
+//            ps.setInt(1, 1);
+            ps.setString(1, prisonerCode);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

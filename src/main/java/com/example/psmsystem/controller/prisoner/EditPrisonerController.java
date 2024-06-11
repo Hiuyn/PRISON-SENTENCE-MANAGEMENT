@@ -360,7 +360,8 @@ public class EditPrisonerController  implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Update successfully!");
             alert.showAndWait();
-            back(actionEvent, () -> prisonerController.refreshPrisonerList());
+            List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
+            back(actionEvent, () -> prisonerController.refreshPrisonerList(prisonerList));
         }
         else
         {

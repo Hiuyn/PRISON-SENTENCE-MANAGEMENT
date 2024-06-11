@@ -8,10 +8,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -117,6 +119,13 @@ public class DetailController implements Initializable {
         }
     }
 
+    public void moreInfo(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("Please go to the Sentence section");
+        alert.showAndWait();
+    }
     public void back(ActionEvent event) {
         Stage stage = (Stage) imgPrisonerAdd.getScene().getWindow();
         stage.close();

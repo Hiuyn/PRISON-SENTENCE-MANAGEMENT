@@ -183,8 +183,8 @@ public class ItemPrisonerViewController {
                         successAlert.setContentText("Prisoner with code: " + prisonerCode + " has been deleted.");
                         successAlert.showAndWait();
 
-                        // Cập nhật giao diện người dùng, ví dụ: làm mới danh sách tù nhân
-                    prisonerController.refreshPrisonerList();
+                        List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
+                    prisonerController.refreshPrisonerList(prisonerList);
                     } else {
                         // Hiển thị thông báo lỗi nếu không thể xóa tù nhân
                         Alert errorAlert = new Alert(Alert.AlertType.ERROR);

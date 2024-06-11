@@ -1,5 +1,173 @@
+//package com.example.psmsystem.controller.prisoner;
+//
+//
+//import com.example.psmsystem.controller.DataStorage;
+//import com.example.psmsystem.model.prisoner.Prisoner;
+//import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+//import javafx.fxml.FXML;
+//import javafx.fxml.FXMLLoader;
+//import javafx.fxml.Initializable;
+//import javafx.scene.control.Button;
+//import javafx.scene.control.Pagination;
+//import javafx.scene.control.TextField;
+//import javafx.scene.input.MouseEvent;
+//import javafx.scene.layout.AnchorPane;
+//import javafx.scene.layout.HBox;
+//import javafx.scene.layout.VBox;
+//import javafx.scene.Scene;
+//import javafx.stage.Modality;
+//import javafx.stage.Stage;
+//import javafx.stage.StageStyle;
+//
+//import java.io.IOException;
+//import java.net.URL;
+//import java.util.List;
+//import java.util.ResourceBundle;
+//
+//public class PrisonerController implements Initializable {
+//
+//    private final int itemsPerPage = 4;
+//    private final int rowsPerPage = 3;
+//    PrisonerDAO  prisonerDAO = new PrisonerDAO();
+//    List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
+//
+//    @FXML
+//    private VBox vbShowItem;
+//
+//    @FXML
+//    private Button btnAdd;
+//
+//    @FXML
+//    private Button btnExport;
+//
+//    @FXML
+//    private Button btnSearch;
+//
+//    @FXML
+//    private Button btnViewAll;
+//
+//    @FXML
+//    private AnchorPane newPrisonerFun;
+//
+//    @FXML
+//    private Pagination pgPagination;
+//
+//    @FXML
+//    private AnchorPane printFun;
+//
+//    @FXML
+//    private TextField txtSearch;
+//
+//    @FXML
+//    private AnchorPane anchoViewAll;
+//
+//    @FXML
+//    private AnchorPane anchorPaneAddPrisoner;
+//
+//    private final String fxmlPath = "/com/example/psmsystem/";
+//
+//    private int userId;
+//
+//
+//    @Override
+//    public void initialize(URL url, ResourceBundle rb) {
+//        DataStorage.setPrisonerController(this);
+//        setupPagination();
+//    }
+//
+//    public void setUserId(int userId)
+//    {
+//        this.userId = userId;
+//    }
+//
+//    private void setupPagination() {
+//        int pageCount = (int) Math.ceil((double) prisonerList.size() / (itemsPerPage * rowsPerPage));
+//        pgPagination.setPageCount(pageCount);
+//        pgPagination.setPageFactory(this::createPage);
+//    }
+//
+//    private VBox createPage(int pageIndex) {
+//        VBox pageBox = new VBox(30);
+//        int startIndex = pageIndex * itemsPerPage * rowsPerPage;
+//        int endIndex = Math.min(startIndex + itemsPerPage * rowsPerPage, prisonerList.size());
+//
+//        for (int i = startIndex; i < endIndex; i += itemsPerPage) {
+//            HBox rowBox = new HBox(30);
+//            int rowEndIndex = Math.min(i + itemsPerPage, prisonerList.size());
+//            for (int j = i; j < rowEndIndex; j++) {
+//                Prisoner prisoner = prisonerList.get(j);
+//                try {
+//                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/" + "ItemPrisonerView.fxml"));
+//                    AnchorPane prisonerItem = fxmlLoader.load();
+//                    ItemPrisonerViewController controller = fxmlLoader.getController();
+//                    controller.setPrisonerController(this);
+//                    controller.setPrisonerItem(prisoner);
+//                    rowBox.getChildren().add(prisonerItem);
+//                } catch (IOException e) {
+//                    System.out.println(e.getMessage());
+//                }
+//            }
+//            pageBox.getChildren().add(rowBox);
+//        }
+//        return pageBox;
+//    }
+//
+//    public void refreshPrisonerList() {
+//        PrisonerDAO prisonerDAO = new PrisonerDAO();
+//        prisonerList = prisonerDAO.getPrisonerInItem();
+//        setupPagination();
+//    }
+//
+//    public void openAddWindow() {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/AddPrisonerView.fxml"));
+//            AnchorPane newWindowContent = loader.load();
+//
+//            AddPrisonerController addPrisonerController = loader.getController();
+//            addPrisonerController.setUserIdAdd(this.userId);
+//            addPrisonerController.setPrisonerController(this);
+//            System.out.println("User id add new : " + this.userId);
+//
+//            Stage newStage = new Stage();
+//            Scene scene = new Scene(newWindowContent);
+//            newStage.setScene(scene);
+//            newStage.initStyle(StageStyle.UNDECORATED);
+//            newStage.initModality(Modality.APPLICATION_MODAL);
+//            newStage.setTitle("New Window");
+//
+//            newStage.show();
+//        } catch (IOException e) {
+//            System.out.println( "PrisonerController: " + e.getMessage());
+//        }
+//    }
+//    public void openFilterWindow() {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/FilterView.fxml"));
+//            AnchorPane newWindowContent = loader.load();
+//            Stage newStage = new Stage();
+//            Scene scene = new Scene(newWindowContent);
+//            newStage.setScene(scene);
+//            newStage.initStyle(StageStyle.UNDECORATED);
+//            newStage.initModality(Modality.APPLICATION_MODAL);
+//            newStage.setTitle("New Window");
+//
+//            newStage.show();
+//        } catch (IOException e) {
+//            System.out.println( "PrisonerController - openFilterWindow: " + e.getMessage());
+//        }
+//    }
+//
+//    @FXML
+//    void loadAddPrisonerView(MouseEvent event) {
+//        openAddWindow();
+//    }
+//
+//    @FXML
+//    void loadFilterView(MouseEvent event) {
+//        openFilterWindow();
+//    }
+//}
 package com.example.psmsystem.controller.prisoner;
-
 
 import com.example.psmsystem.controller.DataStorage;
 import com.example.psmsystem.model.prisoner.Prisoner;
@@ -28,8 +196,8 @@ public class PrisonerController implements Initializable {
 
     private final int itemsPerPage = 4;
     private final int rowsPerPage = 3;
-    PrisonerDAO  prisonerDAO = new PrisonerDAO();
-    List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
+    PrisonerDAO prisonerDAO = new PrisonerDAO();
+    List<Prisoner> prisonerList;
 
     @FXML
     private VBox vbShowItem;
@@ -68,17 +236,21 @@ public class PrisonerController implements Initializable {
 
     private int userId;
 
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         DataStorage.setPrisonerController(this);
+        prisonerList = prisonerDAO.getPrisonerInItem(); // default initialization
         setupPagination();
     }
 
-    public void setUserId(int userId)
-    {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
+
+//    public void setPrisonerList(List<Prisoner> prisonerList) {
+//        this.prisonerList = prisonerList;
+//        refreshPrisonerList();
+//    }
 
     private void setupPagination() {
         int pageCount = (int) Math.ceil((double) prisonerList.size() / (itemsPerPage * rowsPerPage));
@@ -112,9 +284,8 @@ public class PrisonerController implements Initializable {
         return pageBox;
     }
 
-    public void refreshPrisonerList() {
-        PrisonerDAO prisonerDAO = new PrisonerDAO();
-        prisonerList = prisonerDAO.getPrisonerInItem();
+    public void refreshPrisonerList(List<Prisoner> prisonerList) {
+        this.prisonerList = prisonerList;
         setupPagination();
     }
 
@@ -137,9 +308,10 @@ public class PrisonerController implements Initializable {
 
             newStage.show();
         } catch (IOException e) {
-            System.out.println( "PrisonerController: " + e.getMessage());
+            System.out.println("PrisonerController: " + e.getMessage());
         }
     }
+
     public void openFilterWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/FilterView.fxml"));
@@ -153,7 +325,7 @@ public class PrisonerController implements Initializable {
 
             newStage.show();
         } catch (IOException e) {
-            System.out.println( "PrisonerController - openFilterWindow: " + e.getMessage());
+            System.out.println("PrisonerController - openFilterWindow: " + e.getMessage());
         }
     }
 

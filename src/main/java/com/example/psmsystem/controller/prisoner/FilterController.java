@@ -64,7 +64,7 @@ public class FilterController implements Initializable {
                 System.out.println("No time or age ASC DES");
             }
             else if (sortNameType == 1) {
-                Collections.sort(prisonerListByAge, (p1, p2) -> p1.getPrisonerName().compareTo(p2.getPrisonerName()));
+
             } else if (sortNameType == 2) {
 
             }
