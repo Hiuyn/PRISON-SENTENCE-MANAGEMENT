@@ -2,8 +2,10 @@ package com.example.psmsystem.controller.prisoner;
 
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,12 +13,18 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +63,8 @@ public class EditPrisonerController  implements Initializable {
     private TextField txtPrisonerFNAdd;
 
     @FXML
+    private TextField txtIdentity;
+    @FXML
     private Label lbPrisonerId;
 
     @FXML
@@ -82,11 +92,101 @@ public class EditPrisonerController  implements Initializable {
 
     @FXML
     private RadioButton rbtnLimited;
+    private boolean imageSelected;
+    private String getRelativePath;
+    private Prisoner prisoner;
 
     public void setPrisonerEdit(Prisoner prisoner) {
         this.prisonerEdit = prisoner;
         setInformation();
     }
+
+    public static boolean isPositiveInteger(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+
+        for (char ch : str.toCharArray()) {
+            if (!Character.isDigit(ch)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public void checkIdentityCard()
+    {
+        try {
+            List<Prisoner> prisonerList;
+            PrisonerDAO prisonerDAO = new PrisonerDAO();
+            prisonerList = prisonerDAO.getAllPrisoner();
+            boolean prisonerFound = false;
+            String identityCard = txtIdentity.getText();
+            if (identityCard.length() != 12 || !isPositiveInteger(identityCard)) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Add Prisoner");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter a valid identity card (12 integer only)!");
+                alert.showAndWait();
+                return;
+            }
+
+            for (Prisoner prisoner : prisonerList) {
+                if (prisoner.getIdentityCard().equals(txtIdentity.getText())) {
+                    prisonerFound = true;
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Add Prisoner");
+                    alert.setHeaderText("INFORMATION");
+                    alert.setContentText("Prisoner already exists");
+                    alert.showAndWait();
+                    String defaultPath = "/com/example/psmsystem/assets/imagesPrisoner/default.png";
+                    String id = prisoner.getPrisonerCode();
+                    String name = prisoner.getPrisonerName();
+                    String DOB = prisoner.getDOB();
+                    int gender = prisoner.getGender();
+                    String contactName = prisoner.getContactName();
+                    String contactPhone = prisoner.getContactPhone();
+                    String imagePath = prisoner.getImagePath();
+                    lbPrisonerId.setText(id);
+                    txtPrisonerFNAdd.setText(name);
+                    datePrisonerDOBAdd.setValue(LocalDate.parse(DOB));
+                    if (gender == 1) {
+                        rbtnMale.setSelected(true);
+                    }
+                    else if (gender == 2) {
+                        rbtnFemale.setSelected(true);
+                    }else
+                    {
+                        rbtnOther.setSelected(true);
+                    }
+                    txtContactName.setText(contactName);
+                    txtContactPhone.setText(contactPhone);
+                    File imageFile;
+                    if (imagePath != null && !imagePath.isEmpty()) {
+                        imageFile = new File(imagePath);
+                    } else {
+                        imageFile = new File(defaultPath);
+                    }
+                    Image image = new Image(imageFile.toURI().toString());
+                    imgPrisonerAdd.setImage(image);
+                    break;
+                }
+
+            }
+            if (!prisonerFound) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Add Prisoner");
+                alert.setHeaderText("INFORMATION");
+                alert.setContentText("Prisoner not already exists");
+                alert.showAndWait();
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
     public void setInformation() {
         try {
             String defaultPath = "/com/example/psmsystem/assets/imagesPrisoner/default.png";
@@ -96,93 +196,156 @@ public class EditPrisonerController  implements Initializable {
                 PrisonerDAO prisonerDAO = new PrisonerDAO();
                 prisonerList = prisonerDAO.getAllPrisoner();
                 for (Prisoner prisoner : prisonerList) {
-                    if (prisoner.getPrisonerCode().equals(id)) {
-                        String name = prisoner.getPrisonerName();
-                        String DOB = prisoner.getDOB();
-                        int gender = prisoner.getGender();
-                        String contactName = prisoner.getContactName();
-                        String contactPhone = prisoner.getContactPhone();
-                        String imagePath = prisoner.getImagePath();
-                        lbPrisonerId.setText(id);
-                        txtPrisonerFNAdd.setText(name);
-                        datePrisonerDOBAdd.setValue(LocalDate.parse(DOB));
-                        if (gender == 1) {
-                            rbtnMale.setSelected(true);
-                        } else if (gender == 2) {
-                            rbtnFemale.setSelected(true);
-                        } else {
-                            rbtnOther.setSelected(true);
+                        if (prisoner.getPrisonerCode().equals(id)) {
+                            String identity = prisoner.getIdentityCard();
+                            String name = prisoner.getPrisonerName();
+                            String DOB = prisoner.getDOB();
+                            int gender = prisoner.getGender();
+                            String contactName = prisoner.getContactName();
+                            String contactPhone = prisoner.getContactPhone();
+                            String imagePath = prisoner.getImagePath();
+                            txtIdentity.setText(identity);
+                            lbPrisonerId.setText(id);
+                            txtPrisonerFNAdd.setText(name);
+                            datePrisonerDOBAdd.setValue(LocalDate.parse(DOB));
+                            if (gender == 1) {
+                                rbtnMale.setSelected(true);
+                            } else if (gender == 2) {
+                                rbtnFemale.setSelected(true);
+                            } else {
+                                rbtnOther.setSelected(true);
+                            }
+                            txtContactName.setText(contactName);
+                            txtContactPhone.setText(contactPhone);
+                            File imageFile;
+                            if (imagePath != null && !imagePath.isEmpty()) {
+                                imageFile = new File(imagePath);
+                            } else {
+                                imageFile = new File(defaultPath);
+                            }
+                            Image image = new Image(imageFile.toURI().toString());
+                            imgPrisonerAdd.setImage(image);
+                            lbPrisonerId.setVisible(false);
+                            this.getRelativePath = imagePath;
                         }
-                        txtContactName.setText(contactName);
-                        txtContactPhone.setText(contactPhone);
-                        File imageFile;
-                        if (imagePath != null && !imagePath.isEmpty()) {
-                            imageFile = new File(imagePath);
-                        } else {
-                            imageFile = new File(defaultPath);
-                        }
-                        Image image = new Image(imageFile.toURI().toString());
-                        imgPrisonerAdd.setImage(image);
-                        lbPrisonerId.setVisible(false);
-                    }
                 }
-            } else {
-                    System.out.println("prisonerEdit is null");
-                }
+            }
         }catch (Exception e)
         {
             System.out.println("Edit prisoner - setInformation: " + e.getMessage() );
         }
-
-
-//            String name = prisonerEdit.getPrisonerName();
-//            String DOB = prisonerEdit.getDOB();
-//            int gender = prisonerEdit.getGender();
-//            String contactName = prisonerEdit.getContactName();
-//            String contactPhone = prisonerEdit.getContactPhone();
-//            String imagePath = prisonerEdit.getImagePath();
-//
-//            lbPrisonerId.setText(String.valueOf(id));
-//            txtPrisonerFNAdd.setText(name);
-//            datePrisonerDOBAdd.setValue(LocalDate.parse(DOB));
-//            if (gender == 1) {
-//                rbtnMale.setSelected(true);
-//            }
-//            else if (gender == 2) {
-//                rbtnFemale.setSelected(true);
-//            }else
-//            {
-//                rbtnOther.setSelected(true);
-//            }
-//            txtContactName.setText(contactName);
-//            txtContactPhone.setText(contactPhone);
-//            File imageFile;
-//            if (imagePath != null && !imagePath.isEmpty()) {
-//                imageFile = new File(imagePath);
-//            } else {
-//                imageFile = new File(defaultPath);
-//            }
-//            Image image = new Image(imageFile.toURI().toString());
-//            imgPrisonerAdd.setImage(image);
-////            lbPrisonerId.setVisible(false);
     }
-    public void back(ActionEvent event) throws IOException {
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close();
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
-    public void setCbCrimes()
-    {
-        CrimeDao crimeDao = new CrimeDao();
-        List<Crime> crimes;
-        crimes = crimeDao.getCrime();
-        List<String> crimesName = new ArrayList<>();
-        for (Crime crime : crimes)
-        {
-            String name = crime.getCrimeName();
-            crimesName.add(name);
+    public String selectImageFile() {
+        if (!imageSelected) {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.gif"));
+            File selectedFile = fileChooser.showOpenDialog(new Stage());
+
+            if (selectedFile != null) {
+                // Lấy tên tệp từ đường dẫn ban đầu
+                String fileName = selectedFile.getName();
+
+                String destinationFolderPath = "src/main/resources/com/example/psmsystem/imagesPrisoner/";
+
+                String relativePath = destinationFolderPath + fileName;
+                File destFile = new File(relativePath);
+
+                try (InputStream inputStream = new FileInputStream(selectedFile)) {
+                    Files.copy(inputStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+                System.out.println("Tệp đã chọn: " + relativePath);
+                Image image = new Image(selectedFile.toURI().toString());
+                imgPrisonerAdd.setImage(image);
+                imageSelected = true;
+                this.getRelativePath = relativePath;
+                return relativePath;
+            } else {
+                System.out.println("Không có tệp nào được chọn.");
+            }
         }
-        ccbCrimes.getItems().addAll(crimesName);
+        return null;
     }
+
+
+    public boolean getPrisoner()
+    {
+//         public Prisoner(String prisonerCode, String prisonerName, String DOB, int gender, String identityCard, String contactName, String contactPhone, String imagePath, boolean status, int user_id) {
+
+        String identityCard = txtIdentity.getText();
+        int id = Integer.parseInt(lbPrisonerId.getText());
+        String name = txtPrisonerFNAdd.getText();
+        RadioButton genderRadio = (RadioButton) tgGender.getSelectedToggle();
+        String gender = genderRadio.getText();
+        String contactName = txtContactName.getText();
+        String contactPhone = txtContactPhone.getText();
+        LocalDate DOB = datePrisonerDOBAdd.getValue();
+        Date dob = Date.valueOf(DOB);
+        int genderInputDb;
+        if (gender.equals("Male")) {
+            genderInputDb = 1;
+        } else if (gender.equals("Female")) {
+            genderInputDb = 2;
+        } else {
+            genderInputDb = 3;
+        }
+        boolean allZeros = true;
+        for (char ch : identityCard.toCharArray()) {
+            if (ch != '0') {
+                allZeros = false;
+                break;
+            }
+        }
+        if (!(identityCard.matches("\\d{12}")) || allZeros ) {
+            showAlert("Invalid identity card");
+            return false;
+        }
+
+        if (!name.matches("[\\p{L}]+(\\s+[\\p{L}]+)*"
+        )) {
+            showAlert("Invalid prisoner name");
+            return false;
+        }
+
+        if (!contactName.matches("[\\p{L}]+(\\s+[\\p{L}]+)*"
+        )) {
+            showAlert("Invalid contact name");
+            return false;
+        }
+        if (!contactPhone.matches("^0[0-9]{9}$")) {
+            showAlert("Invalid contact phone");
+            return false;
+        }
+        Prisoner prisoner = new Prisoner();
+        prisoner.setPrisonerName(name);
+        prisoner.setDOB(String.valueOf(dob));
+        prisoner.setContactName(contactName);
+        prisoner.setContactPhone(contactPhone);
+        prisoner.setGender(genderInputDb);
+        prisoner.setImagePath(getRelativePath);
+        prisoner.setIdentityCard(identityCard);
+        this.prisoner = prisoner;
+        return true;
+    }
+
+    public void getNewPrisoner(ActionEvent actionEvent) {
+        if (getPrisoner()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Update successfully!");
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -191,9 +354,13 @@ public class EditPrisonerController  implements Initializable {
         rbtnMale.setToggleGroup(tgGender);
         rbtnFemale.setToggleGroup(tgGender);
         rbtnOther.setToggleGroup(tgGender);
-        rbtnLimited.setToggleGroup(tgSentenceType);
-        rbtnUnlimited.setToggleGroup(tgSentenceType);
+//        rbtnLimited.setToggleGroup(tgSentenceType);
+//        rbtnUnlimited.setToggleGroup(tgSentenceType);
         setInformation();
-        setCbCrimes();
+//        setCbCrimes();
+    }
+    public void back(ActionEvent event) throws IOException {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 }

@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -82,7 +83,6 @@ public class ItemPrisonerViewController {
     }
 
     public void setPrisonerItem(Prisoner prisoner) {
-
         prisonerShowEdit = prisoner;
         SentenceDao sentenceDao = new SentenceDao();
         int prisonerIdDb = Integer.parseInt(prisoner.getPrisonerCode());
@@ -92,12 +92,18 @@ public class ItemPrisonerViewController {
         {
             for (Sentence sentence : sentenceList) {
                 if (sentence.getPrisonerId() == prisonerIdDb) {
-                    String start = String.valueOf(sentence.getStartDate());
-                    String end = String.valueOf(sentence.getEndDate());
-                    int years = calYearSentence(start, end);
-                    lblYearSentence.setText("Year: " + years);
-                    System.out.println("Year of sentence: " + years);
-                    break;
+                    String sentenceType = sentence.getSentenceType();
+                    if (sentenceType.equals("limited time")) {
+                        String start = String.valueOf(sentence.getStartDate());
+                        String end = String.valueOf(sentence.getEndDate());
+                        int years = calYearSentence(start, end);
+                        lblYearSentence.setText("Time: " + years + " year");
+                        System.out.println("Year of sentence: " + years);
+                        break;
+                    }else if (sentenceType.equals("life imprisonment")) {
+                        lblYearSentence.setText("Time: life sentence" );
+                        lblYearSentence.setFont(Font.font(13));
+                    }
                 }
             }
         }catch (Exception e)

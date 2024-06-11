@@ -67,8 +67,8 @@
                   <Font name="Agency FB Bold" size="21.0" />
                </font>
             </Label>
-            <DatePicker fx:id="dateIn" layoutX="36.0" layoutY="134.0" prefHeight="26.0" prefWidth="152.0" promptText="Start date"  onMouseEntered="#setEndDate"/>
-            <DatePicker fx:id="dateOut" layoutX="206.0" layoutY="134.0"  prefHeight="26.0" prefWidth="152.0" promptText="End date" />
+            <DatePicker fx:id="dateIn" layoutX="36.0" layoutY="134.0" prefHeight="26.0" prefWidth="152.0" promptText="Start date"  />
+            <DatePicker fx:id="dateOut" layoutX="206.0" layoutY="134.0"  prefHeight="26.0" prefWidth="152.0" promptText="End date" onMouseEntered="#setEndDate" />
             <Label fx:id="lbSentenceId" layoutX="80.0" layoutY="54.0" prefHeight="26.0" prefWidth="138.0" text="40000">
                <font>
                   <Font name="Agency FB Bold" size="21.0" />

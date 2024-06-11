@@ -24,7 +24,8 @@ public class MainPanel extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("view/report/ReportView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/LoginView.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("view/report/ReportView.fxml"));
         Scene scene = new Scene(root);
         stage.setMaximized(false);
         stage.initStyle(StageStyle.UNDECORATED);

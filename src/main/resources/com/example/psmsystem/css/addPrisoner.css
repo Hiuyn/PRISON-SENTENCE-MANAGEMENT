@@ -25,10 +25,10 @@
 }
 .buttonControl
 {
-    -fx-pref-width: 70px;
-    -fx-pref-height: 15px;
-    -fx-max-width: 120px;
-    -fx-max-height: 20px;
+    -fx-pref-width: 135px;
+    -fx-pref-height: 25px;
+    -fx-max-width: 135px;
+    -fx-max-height: 25px;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-background-radius: 3px;
