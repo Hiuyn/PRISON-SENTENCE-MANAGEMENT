@@ -15,11 +15,15 @@ import java.util.Map;
 
 public class HealthDao implements IHealthDao<Health> {
     private static final String INSERT_QUERY = "INSERT INTO healths (health_code, sentence_id, prisoner_id, weight, height, checkup_date, status, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_HEALTH_QUERY = "UPDATE healths SET hearthCode, sentence_id = ?, prisoner_id = ?, weight = ?, height = ?, checkup_date = ?, status = ?, level = ? WHERE health_id = ?";
+    private static final String UPDATE_HEALTH_QUERY = "UPDATE healths SET health_code =?,sentence_id = ?, prisoner_id = ?, weight = ?, height = ?, checkup_date = ?, status = ?, level = ? WHERE health_id = ?";
     private static final String DELETE_HEALTH_QUERY = "DELETE FROM healths WHERE health_id = ?";
-    private static final String SELECT_BY_HEALTH_QUERY = "SELECT h.health_code, h.sentence_id, s.sentences_code, h.prisoner_id, p.prisoner_name, h.weight, h.height, h.checkup_date, h.status, h.level FROM healths h JOIN sentences s ON s.sentence_id = h.sentence_id JOIN prisoners p ON p.prisoner_id = h.prisoner_id ORDER BY checkup_date";
+    private static final String SELECT_BY_HEALTH_QUERY = "SELECT h.*,s.sentences_code,p.prisoner_name " +
+            "FROM healths h JOIN sentences s ON s.sentence_id = h.sentence_id " +
+            "JOIN prisoners p ON p.prisoner_id = h.prisoner_id " +
+            "ORDER BY h.checkup_date";
     private static final String SELECT_BY_CODE_DATE_HEALTH_QUERY = "SELECT * FROM healths WHERE hearthCode = ? AND checkup_date = ?";
     private static final String MAX_HEALTH_CODE_QUERY = "SELECT MAX(CAST(SUBSTRING(health_code, 2) AS UNSIGNED)) AS max_health_code FROM healths WHERE health_code REGEXP '^H[0-9]+$'";
+
     private static final String GET_HEALTH_DATA_BY_MONTH_YEAR = "SELECT "
             + "MONTH(checkup_date) AS month_number, "
             + "SUM(CASE WHEN status = false THEN 1 ELSE 0 END) AS strong_count, "
@@ -67,6 +71,7 @@ public class HealthDao implements IHealthDao<Health> {
                 health.setCheckupDate(rs.getString("checkup_date"));
                 health.setStatus(rs.getBoolean("status"));
                 health.setLevel(rs.getInt("level"));
+                health.setId(rs.getInt("health_id"));
                 healthList.add(health);
             }
         } catch (SQLException e) {

@@ -12,6 +12,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -94,22 +96,35 @@ public class ReportController implements Initializable {
 
         imageColumn.setCellFactory(column -> new TableCell<>() {
             private final ImageView imageView = new ImageView();
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
+
                 if (empty || item == null || item.isEmpty()) {
                     setGraphic(null);
                 } else {
-                    Image image = new Image(item, true);
-                    image.errorProperty().addListener((obs, oldError, newError) -> {
-                        if (newError) {
-                            imageView.setImage(new Image("/static/images.png"));
-                        }
-                    });
-                    imageView.setImage(image);
-                    imageView.setFitWidth(100);
-                    imageView.setFitHeight(100);
-                    setGraphic(imageView);
+                    try {
+                        new URL(item).toURI(); // Kiểm tra xem URL có hợp lệ không
+                        Image image = new Image(item, true);
+
+                        image.errorProperty().addListener((obs, oldError, newError) -> {
+                            if (newError) {
+                                imageView.setImage(new Image("/static/images.png"));
+                            }
+                        });
+
+                        imageView.setImage(image);
+                        imageView.setFitWidth(100);
+                        imageView.setFitHeight(100);
+                        setGraphic(imageView);
+                    } catch (MalformedURLException | URISyntaxException e) {
+                        // Nếu URL không hợp lệ, sử dụng hình ảnh mặc định
+                        imageView.setImage(new Image("/static/images.png"));
+                        imageView.setFitWidth(100);
+                        imageView.setFitHeight(100);
+                        setGraphic(imageView);
+                    }
                 }
             }
         });
