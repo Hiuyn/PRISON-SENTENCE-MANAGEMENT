@@ -8,8 +8,6 @@ import java.util.Map;
 public class DataStorage {
     private static Map<Integer, Integer> crimesTime;
     private static List<Prisoner> prisoners;
-
-
     public static List<Prisoner> getPrisoners() {
         return prisoners;
     }

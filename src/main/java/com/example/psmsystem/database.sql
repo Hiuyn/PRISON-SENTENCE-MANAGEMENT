@@ -37,6 +37,14 @@ create table sentences( -- tù án
                           foreign key (prisoner_id) references prisoners(prisoner_id)
 );
 -- 4
+CREATE TABLE sentence_crimes (
+                                 sentence_id int,
+                                 crime_id int,
+                                 years int, -- số năm tù cho tội danh cụ thể trong sentences
+                                 PRIMARY KEY (sentence_id, crime_id),
+                                 FOREIGN KEY (sentence_id) REFERENCES sentences(sentence_id),
+                                 FOREIGN KEY (crime_id) REFERENCES crimes(crime_id)
+);
 create table crimes( -- tội danh
                        crime_id int primary key auto_increment, -- id
                        crime_name nvarchar(255) not null -- tên tội danh

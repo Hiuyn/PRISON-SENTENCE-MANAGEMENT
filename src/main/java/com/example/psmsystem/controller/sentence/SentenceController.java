@@ -429,7 +429,6 @@ public class SentenceController implements Initializable {
         if (!isValidate()) {
             return;
         }
-
         SentenceDTO selectedValue = filterCombo.getValue();
         int prisonerId = selectedValue.getPrisonerId();
         int sentenceCode = selectedValue.getSentence().getSentenceCode();
