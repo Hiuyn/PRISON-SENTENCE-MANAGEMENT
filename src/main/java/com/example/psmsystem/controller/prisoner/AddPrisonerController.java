@@ -622,8 +622,21 @@ public void getSelectedCrimes() {
         openInputYearWindow();
 
     }
+    public void setImgDefault()
+    {
+        String defaultPath = "src/main/resources/com/example/psmsystem/imagesPrisoner/defaultImage.png";
+        try {
+            File imageFile = new File(defaultPath);
+            Image image = new Image(imageFile.toURI().toString());
+            imgPrisonerAdd.setImage(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error setting image: " + e.getMessage());
+        }
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    setImgDefault();
         setPrisonerId();
         setIdSentence();
         setCbCrimes();

@@ -14,4 +14,5 @@ public interface IPrisonerDao<T> {
 
     int getCountPrisoner();
     Map<String, Integer> countGender();
+    boolean updatePrisoner(T prisoner);
 }
