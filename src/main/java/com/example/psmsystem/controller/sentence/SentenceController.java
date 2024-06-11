@@ -39,6 +39,7 @@ import org.controlsfx.control.SearchableComboBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -64,7 +65,7 @@ public class SentenceController implements Initializable {
     private DatePicker dateStartDate;
 
     @FXML
-    private TableColumn<Sentence, String> endDateColumn;
+    private TableColumn<Sentence, Date> endDateColumn;
 
     @FXML
     private SearchableComboBox<SentenceDTO> filterCombo;
@@ -85,7 +86,7 @@ public class SentenceController implements Initializable {
     private TableColumn<Sentence, String> sentenceTypeColumn;
 
     @FXML
-    private TableColumn<Sentence, String> startDateColumn;
+    private TableColumn<Sentence, Date> startDateColumn;
 
     @FXML
     private TableColumn<Sentence, Boolean> statusColumn;
@@ -350,6 +351,7 @@ public class SentenceController implements Initializable {
         }
 
         LocalDate startDate = LocalDate.parse(startDateColumn.getCellData(index).toString());
+
         dateStartDate.setValue(startDate);
 
         String endDateCellValue = endDateColumn.getCellData(index) != null ? endDateColumn.getCellData(index).toString() : null;

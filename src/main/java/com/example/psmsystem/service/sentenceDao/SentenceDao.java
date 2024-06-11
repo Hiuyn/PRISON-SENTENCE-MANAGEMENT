@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SentenceDao implements ISentenceDao<Sentence> {
     private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_id, sentences_code, sentence_type, crimes_code, start_date, end_date, release_date, status, parole_eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET sentence_id = ?, prisoner_id = ?, sentences_code = ?, sentence_type = ?, crimes_code = ?, start_date = ?, end_date = ?, release_date = ?, status = ?, parole_eligibility = ?WHERE sentence_id = ?";
+    private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET prisoner_id = ?, sentences_code = ?, sentence_type = ?, crimes_code = ?, start_date = ?, end_date = ?, release_date = ?, status = ?, parole_eligibility = ?WHERE sentence_id = ?";
     private static final String DELETE_SENTENCE_QUERY = "DELETE FROM sentences WHERE sentence_id = ?";
     private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.sentence_id, s.prisoner_id, p.prisoner_name, s.sentence_type, s.sentences_code, s.crimes_code, s.start_date, s.end_date, s.release_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_id = s.prisoner_id";
     private static final String SELECT_BY_CODE_SENTENCE_QUERY = "SELECT * FROM sentences WHERE sentences_code = ?";
@@ -100,17 +100,17 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     public void updateSentence(Sentence sentence, int id) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_SENTENCE_QUERY)) {
-                ps.setInt(1, sentence.getSentenceId());
-                ps.setInt(2,sentence.getPrisonerId());
-                ps.setInt(3,sentence.getSentenceCode());
-                ps.setString(4,sentence.getSentenceType());
-                ps.setString(5,sentence.getCrimesCode());
-                ps.setDate(6, (Date) sentence.getStartDate());
-                ps.setDate(7, (Date) sentence.getEndDate());
-                ps.setDate(8, (Date) sentence.getReleaseDate());
-                ps.setBoolean(9,sentence.isStatus());
-                ps.setString(10,sentence.getParole());
-                ps.setInt(11, id);
+//                ps.setInt(1, sentence.getSentenceId());
+                ps.setInt(1,sentence.getPrisonerId());
+                ps.setInt(2,sentence.getSentenceCode());
+                ps.setString(3,sentence.getSentenceType());
+                ps.setString(4,sentence.getCrimesCode());
+                ps.setDate(5, (Date) sentence.getStartDate());
+                ps.setDate(6, (Date) sentence.getEndDate());
+                ps.setDate(7, (Date) sentence.getReleaseDate());
+                ps.setBoolean(8,sentence.isStatus());
+                ps.setString(9,sentence.getParole());
+                ps.setInt(10, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
