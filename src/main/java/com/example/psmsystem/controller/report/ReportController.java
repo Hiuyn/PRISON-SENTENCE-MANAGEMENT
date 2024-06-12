@@ -127,8 +127,8 @@ public class ReportController implements Initializable {
                     setGraphic(null);
                 } else {
                     try {
-                        new URL(item).toURI(); // Kiểm tra xem URL có hợp lệ không
-                        Image image = new Image(item, true);
+                        URL imageUrl = getClass().getClassLoader().getResource(item);
+                        Image image = new Image(imageUrl.toExternalForm());
 
                         image.errorProperty().addListener((obs, oldError, newError) -> {
                             if (newError) {
@@ -140,7 +140,7 @@ public class ReportController implements Initializable {
                         imageView.setFitWidth(100);
                         imageView.setFitHeight(100);
                         setGraphic(imageView);
-                    } catch (MalformedURLException | URISyntaxException e) {
+                    } catch ( Exception e) {
                         // Nếu URL không hợp lệ, sử dụng hình ảnh mặc định
                         imageView.setImage(new Image("/static/images.png"));
                         imageView.setFitWidth(100);
@@ -183,50 +183,7 @@ public class ReportController implements Initializable {
         // Định dạng ngày theo chuẩn "YYYY-MM-DD hh:mm:ss"
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = sdf.format(currentDate);
-        // Xử lý thưởng
-//        for (Report report : reports) {
-//            if (report.getTotalReward() == 25 && report.getLevel() == 4 && (report.getLevel() == 0 || report.getLevel() == 2) && report.getTotalDiscipline() == 0) {
-//                // Giảm án 1 năm
-//                report.setParoleEligibility("Reduce sentence by 1 year");
-//                reportDao.updateSentence(report.getSentenceCode(), subtractYear(report.getReleaseDate(), 1), "Reduce sentence by 1 year");
-//            } else if (report.getTotalReward() == 25 && report.getLevel() == 3 && (report.getLevel() == 0 || report.getLevel() == 2) && report.getTotalDiscipline() == 0) {
-//                // Giảm án 6 tháng
-//                report.setParoleEligibility("Reduce sentence by 6 months");
-//                reportDao.updateSentence(report.getSentenceCode(), subtractMonth(report.getReleaseDate(), 6), "Reduce sentence by 6 months");
-//            } else if (report.getTotalReward() == 30 && report.getLevel() == 2 && (report.getLevel() == 0 || report.getLevel() == 2) && report.getTotalDiscipline() == 0) {
-//                // Giảm án 1 tháng
-//                report.setParoleEligibility("Reduce sentence by 1 month");
-//                reportDao.updateSentence(report.getSentenceCode(), subtractMonth(report.getReleaseDate(), 1), "Reduce sentence by 1 month");
-//            } else if (report.getTotalReward() == 20 && report.getLevel() == 1 && (report.getLevel() == 0 || report.getLevel() == 2) && report.getTotalDiscipline() == 2) {
-//                // Tặng quà
-//                report.setParoleEligibility("Gift award");
-//                reportDao.updateSentence(report.getSentenceCode(), report.getReleaseDate(), "Gift award");
-//            }
-//        }
-//
-//        // Xử lý phạt
-//        for (Report report : reports) {
-//            if (report.getTotalReward() >= 5 && report.getTotalDiscipline() <= 10 && report.getLevel() == 1 && (report.getLevel() == 1 || report.getLevel() == 2 || report.getLevel() == 3)) {
-//                // Phạt 12 giờ lao động
-//                report.setParoleEligibility("12-hour labor penalty");
-//                reportDao.updateSentence(report.getSentenceCode(), report.getReleaseDate(), "12-hour labor penalty");
-//            } else if (report.getTotalDiscipline() >= 11 && report.getTotalDiscipline() <= 15 && (report.getLevel() == 1 || report.getLevel() == 2) && (report.getLevel() == 1 || report.getLevel() == 2 || report.getLevel() == 3)) {
-//                // Phạt 36 giờ lao động
-//                report.setParoleEligibility("36-hour labor penalty");
-//                reportDao.updateSentence(report.getSentenceCode(), report.getReleaseDate(), "36-hour labor penalty");
-//            } else if (report.getTotalDiscipline() >= 16 && report.getTotalDiscipline() <= 20 && (report.getLevel() == 1 || report.getLevel() == 2 ) && (report.getLevel() == 1 || report.getLevel() == 2 || report.getLevel() == 3)) {
-//                // Phạt không gặp người thân và lao động 48 tiếng
-//                report.setParoleEligibility("No meeting with relatives and 48-hour labor penalty");
-//                reportDao.updateSentence(report.getSentenceCode(), report.getReleaseDate(), "No meeting with relatives and 48-hour labor penalty");
-//            } else if ((report.getTotalDiscipline() == 20 && (report.getLevel() == 2 || report.getLevel() == 3)) || (report.getTotalDiscipline() == 10 && report.getLevel() == 4)) {
-//                // Biệt giam
-//                report.setParoleEligibility("Solitary confinement");
-//                reportDao.updateSentence(report.getSentenceCode(), report.getReleaseDate(), "Solitary confinement");
-//            }
-//        }
 
-        // Cập nhật lại dữ liệu sau khi xử lý
-//        loadReports();
         txtUpdate.setText("Data updated on: " + formattedDate);
         reportDao.updateUpdateLog(currentDate);
     }
@@ -241,7 +198,7 @@ public class ReportController implements Initializable {
 
         String fileName = selectedKey.trim().split(":")[0] + ".xlsx";
         // Đường dẫn thư mục
-        String folderPath = "FileExcel";
+        String folderPath = "excel";
         File directory = new File(folderPath);
 
         // Kiểm tra và tạo thư mục nếu chưa tồn tại
@@ -277,7 +234,7 @@ public class ReportController implements Initializable {
 
             try (FileOutputStream outputStream = new FileOutputStream(new File(directory, fileName))) {
                 workbook.write(outputStream);
-                AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Exported data to " + fileName + " successfully.");
+                AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Exported successfully. Please check: " + System.getProperty("user.dir") + "\\" + directory + "\\" + fileName);
             } catch (IOException e) {
                 e.printStackTrace();
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "An error occurred while exporting data.");

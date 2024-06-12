@@ -8,6 +8,7 @@ import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,7 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -24,16 +24,22 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class ItemPrisonerViewController {
+public class ItemPrisonerController implements Initializable {
 
     @FXML
     private Label lblYearSentence;
+
+    @FXML
+    private Label lblYearSentence1;
+
     @FXML
     private AnchorPane ItemPrisoner;
     @FXML
@@ -57,6 +63,11 @@ public class ItemPrisonerViewController {
     private Prisoner prisonerShowEdit;
     private PrisonerController prisonerController;
     private int prisonerIdDetail;
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     public void btnEditOnAction() {
         try {
@@ -101,8 +112,8 @@ public class ItemPrisonerViewController {
                         System.out.println("Year of sentence: " + years);
                         break;
                     }else if (sentenceType.equals("life imprisonment")) {
-                        lblYearSentence.setText("Time: life sentence" );
-                        lblYearSentence.setFont(Font.font(13));
+                        lblYearSentence.setVisible(false);
+                        lblYearSentence1.setVisible(true);
                     }
                 }
             }
@@ -230,4 +241,6 @@ public class ItemPrisonerViewController {
     void loadDetailView(ActionEvent event) {
         openDetailWindow();
     }
+
+
 }

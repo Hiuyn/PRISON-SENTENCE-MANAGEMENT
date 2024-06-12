@@ -36,7 +36,9 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String COUNT_PRISONER_QUERY = "SELECT COUNT(*) FROM prisoners";
     private static final String COUNT_GENDER_QUERY = "SELECT gender, COUNT(*) as count FROM prisoners GROUP BY gender";
 
+    private static final String SEARCH_PRISONER_BY_ID = "SELECT * FROM prisoners WHERE prisoner_id = ?";
 ////    private static final String INSERT_INTO_PRISONER_QUERY = "INSERT INTO  prisoner VALUES (prisonerId = ?)";
+    private static final String SEARCH_PRISONER_LIKE_NAME = "SELECT * FROM prisoners WHERE prisoner_name LIKE ?";
 
     @Override
     public List<Prisoner> getAllPrisoner() {
@@ -119,7 +121,6 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
                 prisoner.setContactPhone(rs.getString("contacter_phone"));
                 prisoner.setImagePath(rs.getString("image"));
                 prisoner.setStatus(rs.getBoolean("status"));
-                prisoner.setUser_id(rs.getInt("user_id"));
                 prisonerList.add(prisoner);
             }
         }catch (Exception e){
@@ -148,6 +149,59 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         }
         return PrisonerList;
     }
+
+    public Prisoner searchPrisonerById(String prisonerId) {
+        Prisoner prisoner = new Prisoner();
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+
+            PreparedStatement statement = connection.prepareStatement(SEARCH_PRISONER_BY_ID);
+            statement.setString(1, prisonerId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+
+                prisoner.setPrisonerCode(rs.getString("prisoner_id"));
+                prisoner.setPrisonerName(rs.getString("prisoner_name"));
+                prisoner.setDOB(rs.getString("date_birth"));
+                prisoner.setGender(rs.getInt("gender"));
+                prisoner.setIdentityCard(rs.getString("identity_card"));
+                prisoner.setContactName(rs.getString("contacter_name"));
+                prisoner.setContactPhone(rs.getString("contacter_phone"));
+                prisoner.setImagePath(rs.getString("image"));
+                prisoner.setStatus(rs.getBoolean("status"));
+            }
+        } catch (Exception e) {
+            System.out.println("PrisonerDAO - searchPrisonerById: " + e.getMessage());
+        }
+        return prisoner;
+    }
+
+    // Phương thức tìm kiếm tù nhân gần giống tên
+    public List<Prisoner> searchPrisonersByName(String name) {
+        List<Prisoner> prisoners = new ArrayList<>();
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+
+            PreparedStatement statement = connection.prepareStatement(SEARCH_PRISONER_LIKE_NAME);
+            statement.setString(1, "%" + name + "%");
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Prisoner prisoner = new Prisoner();
+                prisoner.setPrisonerCode(rs.getString("prisoner_id"));
+                prisoner.setPrisonerName(rs.getString("prisoner_name"));
+                prisoner.setDOB(rs.getString("date_birth"));
+                prisoner.setGender(rs.getInt("gender"));
+                prisoner.setIdentityCard(rs.getString("identity_card"));
+                prisoner.setContactName(rs.getString("contacter_name"));
+                prisoner.setContactPhone(rs.getString("contacter_phone"));
+                prisoner.setImagePath(rs.getString("image"));
+                prisoner.setStatus(rs.getBoolean("status"));
+                prisoners.add(prisoner);
+            }
+        } catch (Exception e) {
+            System.out.println("PrisonerDAO - searchPrisonersByName: " + e.getMessage());
+        }
+        return prisoners;
+    }
+
     @Override
     public ObservableList<Prisoner> getPrisonerName() {
         List<Prisoner> prisoners = getItemComboboxPrisoner();

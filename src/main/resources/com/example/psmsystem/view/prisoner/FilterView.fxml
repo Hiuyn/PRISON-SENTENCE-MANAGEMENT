@@ -20,7 +20,7 @@
             <RadioButton fx:id="rbtnFemale" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="female" text="Female" onAction="#getGenderFilter"/>
             <RadioButton fx:id="rbtnOther" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="other" stylesheets="@../../css/filer.css" text="Other" textFill="WHITE" onAction="#getGenderFilter"/>
          </children></HBox>
-      <Button fx:id="btnBack" layoutX="92.0" layoutY="298.0" mnemonicParsing="false" onAction="#back" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="140.0" />
+      <Button fx:id="btnBack" layoutX="92.0" layoutY="298.0" mnemonicParsing="false" onAction="#backPrisoner" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="140.0" />
       <Button fx:id="btnFilter" layoutX="194.0" layoutY="272.0" onAction="#onFilter" text="Filter" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="140.0" />
       <AnchorPane layoutX="112.0" layoutY="119.0" prefHeight="25.0" prefWidth="225.0" AnchorPane.leftAnchor="112.0" AnchorPane.rightAnchor="42.0">
          <children>

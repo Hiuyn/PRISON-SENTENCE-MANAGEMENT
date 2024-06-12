@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -38,6 +39,13 @@ public class MainPanel extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        String currentDirectory = System.getProperty("user.dir");
+        System.out.println("Đường dẫn hiện tại của dự án: " + currentDirectory);
+
+        // Hoặc có thể lấy đường dẫn của một tệp cụ thể trong dự án
+        File file = new File("src/main/resources/sample.txt"); // Thay đổi thành tên tệp bạn muốn kiểm tra
+        String absolutePath = file.getAbsolutePath();
+        System.out.println("Đường dẫn tuyệt đối của tệp: " + absolutePath);
         launch(args);
     }
 }
