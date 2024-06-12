@@ -412,13 +412,13 @@ public class AssessController implements Initializable {
 
                 if (selected != null) {
 
-                        assessDao.deleteAssess(visitationId);
-                        listTable.remove(selected);
-                        dataTable.setItems(listTable);
-                        resetValue();
-                        AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
-                                "Assess deleted successfully.");
-                    }
+                    assessDao.deleteAssess(visitationId);
+                    listTable.remove(selected);
+                    dataTable.setItems(listTable);
+                    resetValue();
+                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
+                            "Assess deleted successfully.");
+                }
 
 
 

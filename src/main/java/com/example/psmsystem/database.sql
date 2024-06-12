@@ -9,6 +9,8 @@ create table users(
                       password nvarchar(500) not null -- hash password
 );
 
+insert into users(full_name,username,password) values ('admin nè','admin123','5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5');
+
 -- 2
 create table prisoners(  -- tù nhân
                           prisoner_id int primary key auto_increment, -- id
@@ -104,7 +106,10 @@ create table incareration_process(
 
 CREATE TABLE update_log (
                             id INT PRIMARY KEY auto_increment,
-                            date_update DATETIME
+                            date_update DATETIME,
+                            note text,
+                            user_id int,
+                            foreign key (user_id) references users(user_id)
 );
 
 -- Thêm dữ liệu vào bảng prisoners
@@ -146,7 +151,7 @@ INSERT INTO sentences (prisoner_id, sentences_code, sentence_type, crimes_code, 
                                                                                                                                       (12, 112, 'life imprisonment', 'Human Trafficking', '2019-11-03', '9999-12-31', false, 'Eligible for parole after 25 years'),
                                                                                                                                       (13, 113, 'limited time', 'Money Laundering', '2018-01-09', '2034-01-09', false, 'Parole eligibility in 4 years'),
                                                                                                                                       (14, 114, 'life imprisonment', 'Extortion', '2022-02-20', '9999-12-31', false, 'Eligible for parole after 20 years'),
-                                                                                                                                      (15, 115, 'limited time', 'Bribery', '20222-09-14', '2031-09-14', false, 'Good behavior may reduce sentence'),
+                                                                                                                                      (15, 115, 'limited time', 'Bribery', '2022-09-14', '2031-09-14', false, 'Good behavior may reduce sentence'),
                                                                                                                                       (16, 116, 'limited time', 'Cybercrime', '2019-03-25', '2029-03-25', false, 'Parole eligibility in 6 years'),
                                                                                                                                       (17, 117, 'life imprisonment', 'Manslaughter', '2017-07-17', '9999-12-31', false, 'Eligible for parole after 20 years'),
                                                                                                                                       (18, 118, 'limited time', 'Domestic Violence', '2016-12-11', '2026-12-11', false, 'Parole eligibility in 3 years'),
@@ -242,26 +247,106 @@ INSERT INTO healths (health_code, sentence_id, prisoner_id, weight, height, chec
 
 
 INSERT INTO incareration_process (process_code, sentence_id, prisoner_id, date_of_occurrence, event_type, level, note) VALUES
-                                                                                                                           ('P1', 1, 1, '2023-06-01', 'Breach of discipline', 1, 'Minor misconduct.'),
-                                                                                                                           ('P2', 2, 2, '2023-06-02', 'Bonus', 4, 'Exemplary behavior.'),
-                                                                                                                           ('P3', 3, 3, '2023-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
-                                                                                                                           ('P4', 4, 4, '2023-06-04', 'Bonus', 3, 'Good behavior.'),
-                                                                                                                           ('P5', 5, 5, '2023-06-05', 'Breach of discipline', 1, 'Minor misconduct again.'),
-                                                                                                                           ('P6', 6, 6, '2023-06-06', 'Bonus', 4, 'Very good behavior.'),
-                                                                                                                           ('P7', 7, 7, '2023-06-07', 'Breach of discipline', 2, 'Moderate misconduct again.'),
-                                                                                                                           ('P8', 8, 8, '2023-06-08', 'Bonus', 3, 'Good behavior again.'),
-                                                                                                                           ('P9', 9, 9, '2023-06-09', 'Breach of discipline', 1, 'Another minor misconduct.'),
-                                                                                                                           ('P10', 10, 10, '2023-06-10', 'Bonus', 4, 'Outstanding behavior.'),
-                                                                                                                           ('P11', 11, 11, '2023-06-11', 'Breach of discipline', 1, 'Minor misconduct.'),
-                                                                                                                           ('P12', 12, 12, '2023-06-12', 'Bonus', 4, 'Excellent behavior.'),
-                                                                                                                           ('P13', 13, 13, '2023-06-13', 'Breach of discipline', 2, 'Moderate misconduct.'),
-                                                                                                                           ('P14', 14, 14, '2023-06-14', 'Bonus', 3, 'Good behavior.'),
+                                                                                                                           ('P1', 1, 1, '2024-06-01', 'Breach of discipline', 1, 'Minor misconduct.'),
+                                                                                                                           ('P1', 1, 1, '2024-06-01', 'Breach of discipline', 1, 'Minor misconduct.'),
+                                                                                                                           ('P1', 1, 1, '2024-06-01', 'Breach of discipline', 1, 'Minor misconduct.'),
+                                                                                                                           ('P1', 1, 1, '2024-06-01', 'Breach of discipline', 1, 'Minor misconduct.'),
+                                                                                                                           ('P1', 1, 1, '2024-06-01', 'Breach of discipline', 1, 'Minor misconduct.'),
+                                                                                                                           ('P2', 2, 2, '2024-06-02', 'Bonus', 4, 'Exemplary behavior.'),
+                                                                                                                           ('P2', 2, 2, '2024-06-02', 'Bonus', 4, 'Exemplary behavior.'),
+                                                                                                                           ('P2', 2, 2, '2024-06-02', 'Bonus', 4, 'Exemplary behavior.'),
+                                                                                                                           ('P2', 2, 2, '2024-06-02', 'Bonus', 4, 'Exemplary behavior.'),
+                                                                                                                           ('P2', 2, 2, '2024-06-02', 'Bonus', 4, 'Exemplary behavior.'),
+                                                                                                                           ('P3', 3, 3, '2024-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
+                                                                                                                           ('P3', 3, 3, '2024-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
+                                                                                                                           ('P3', 3, 3, '2024-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
+                                                                                                                           ('P3', 3, 3, '2024-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
+                                                                                                                           ('P3', 3, 3, '2024-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
+                                                                                                                           ('P3', 3, 3, '2024-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
+                                                                                                                           ('P3', 3, 3, '2024-06-03', 'Breach of discipline', 2, 'Moderate misconduct.'),
+                                                                                                                           ('P4', 4, 4, '2024-06-04', 'Bonus', 3, 'Good behavior.'),
+                                                                                                                           ('P6', 6, 6, '2024-06-06', 'Bonus', 4, 'Very good behavior.'),
+                                                                                                                           ('P7', 7, 7, '2024-06-07', 'Breach of discipline', 4, 'Moderate misconduct again.'),
+                                                                                                                           ('P7', 7, 7, '2024-06-07', 'Breach of discipline', 4, 'Moderate misconduct again.'),
+                                                                                                                           ('P7', 7, 7, '2024-06-07', 'Breach of discipline', 4, 'Moderate misconduct again.'),
+                                                                                                                           ('P7', 7, 7, '2024-06-07', 'Breach of discipline', 4, 'Moderate misconduct again.'),
+                                                                                                                           ('P7', 7, 7, '2024-06-07', 'Breach of discipline', 4, 'Moderate misconduct again.'),
+                                                                                                                           ('P7', 7, 7, '2024-06-07', 'Breach of discipline', 4, 'Moderate misconduct again.'),
+                                                                                                                           ('P7', 7, 7, '2024-06-07', 'Breach of discipline', 4, 'Moderate misconduct again.'),
+                                                                                                                           ('P7', 7, 7, '2024-06-07', 'Breach of discipline', 4, 'Moderate misconduct again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P8', 5, 5, '2024-06-08', 'Bonus', 4, 'Good behavior again.'),
+                                                                                                                           ('P9', 9, 9, '2024-06-09', 'Breach of discipline', 1, 'Another minor misconduct.'),
+                                                                                                                           ('P10', 10, 10, '2024-06-10', 'Bonus', 4, 'Outstanding behavior.'),
+                                                                                                                           ('P11', 11, 11, '2024-06-11', 'Breach of discipline', 1, 'Minor misconduct.'),
+                                                                                                                           ('P12', 12, 12, '2024-06-12', 'Bonus', 4, 'Excellent behavior.'),
+                                                                                                                           ('P13', 13, 13, '2024-06-13', 'Breach of discipline', 2, 'Moderate misconduct.'),
+                                                                                                                           ('P14', 14, 14, '2024-06-14', 'Bonus', 3, 'Good behavior.'),
                                                                                                                            ('P15', 15, 15, '2023-06-15', 'Breach of discipline', 1, 'Minor misconduct again.'),
-                                                                                                                           ('P16', 16, 16, '2023-06-16', 'Bonus', 4, 'Very good behavior.'),
-                                                                                                                           ('P17', 17, 17, '2023-06-17', 'Breach of discipline', 2, 'Moderate misconduct again.'),
-                                                                                                                           ('P18', 18, 18, '2023-06-18', 'Bonus', 3, 'Good behavior again.'),
-                                                                                                                           ('P19', 19, 19, '2023-06-19', 'Breach of discipline', 1, 'Another minor misconduct.'),
-                                                                                                                           ('P20', 20, 20, '2023-06-20', 'Bonus', 4, 'Outstanding behavior.');
+                                                                                                                           ('P16', 16, 16, '2024-06-16', 'Bonus', 4, 'Very good behavior.'),
+                                                                                                                           ('P17', 17, 17, '2024-06-17', 'Breach of discipline', 2, 'Moderate misconduct again.'),
+                                                                                                                           ('P18', 18, 18, '2024-06-18', 'Bonus', 3, 'Good behavior again.'),
+                                                                                                                           ('P19', 19, 19, '2024-06-19', 'Breach of discipline', 1, 'Another minor misconduct.'),
+                                                                                                                           ('P20', 20, 20, '2024-06-20', 'Bonus', 4, 'Outstanding behavior.');
 
 
 -- Thêm dữ liệu vào bảng crimes
@@ -287,10 +372,4 @@ INSERT INTO crimes (crime_name) VALUES
                                     ('Human Trafficking (Buôn người)'),
                                     ('Money Laundering (Rửa tiền)');
 
--- Thêm dữ liệu vào bảng disciplinary_measures
-
--- Thêm dữ liệu vào bảng commendations
-
--- Thêm dữ liệu vào bảng visit_log
-
--- Thêm dữ liệu vào bảng healths
+-

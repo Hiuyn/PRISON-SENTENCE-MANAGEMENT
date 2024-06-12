@@ -118,7 +118,28 @@ public class SentenceDao implements ISentenceDao<Sentence> {
 
     @Override
     public void deleteSentence(int id) {
+
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            //delete commendations
+            try(PreparedStatement deleteCommendationsPs = connection.prepareStatement("DELETE FROM commendations WHERE sentence_id = ?"))  {
+                deleteCommendationsPs.setInt(1,id);
+            }
+            //delete disciplinary
+            try(PreparedStatement deleteDisciplinaryPs = connection.prepareStatement("DELETE FROM disciplinary_measures WHERE sentence_id = ?"))  {
+                deleteDisciplinaryPs.setInt(1,id);
+            }
+            //delete health
+            try(PreparedStatement delHealthsPs = connection.prepareStatement("DELETE FROM healths WHERE sentence_id = ?"))  {
+                delHealthsPs.setInt(1,id);
+            }
+            //delete ignored
+            try(PreparedStatement delIgoreePs = connection.prepareStatement("DELETE FROM incareration_process WHERE sentence_id = ?"))  {
+                delIgoreePs.setInt(1,id);
+            }
+            //delete vitsit
+            try(PreparedStatement delVisitPs = connection.prepareStatement("DELETE FROM visit_log WHERE sentence_id = ?"))  {
+                delVisitPs.setInt(1,id);
+            }
             try(PreparedStatement ps = connection.prepareStatement(DELETE_SENTENCE_QUERY)) {
                 ps.setInt(1, id);
                 ps.executeUpdate();

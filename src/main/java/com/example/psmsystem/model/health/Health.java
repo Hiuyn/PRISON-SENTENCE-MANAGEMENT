@@ -2,6 +2,21 @@ package com.example.psmsystem.model.health;
 
 public class Health {
     private int id;
+    private String information;
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(int level) {
+        switch (level) {
+            case 0 -> this.information = "Strong";
+            case 1 -> this.information = "Minor illness";
+            case 2 -> this.information = "Severe illness";
+            case 3 -> this.information = "disease requiring intervention";
+            default -> this.information = null;
+        }
+    }
 
     public Health(int id, String healthCode, int prisonerId, String sentenceId, int sentenceCode, String prisonerName, Double weight, Double height, String checkupDate, Boolean status, int level) {
         this.id = id;

@@ -541,7 +541,7 @@ public class SentenceController implements Initializable {
                     }
                     else {
                         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
-                                "Cannot delete record because end date is not before today.");
+                                "Delete failed: This sentence is either ongoing or hasn't reached its full 20-year duration.");
                     }
                 }
                 else {

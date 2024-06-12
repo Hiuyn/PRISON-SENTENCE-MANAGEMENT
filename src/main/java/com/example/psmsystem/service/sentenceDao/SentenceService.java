@@ -106,6 +106,8 @@ public class SentenceService implements SentenceServiceImpl<SentenceDTO> {
             }
             for (Consider consider : considerList) {
                 int healthCheck = 0;
+                int commendationSum = 0;
+                int disciplinarySum = 0;
                 int commendationLevel4Count = 0;
                 int commendationLevel3Count = 0;
                 int commendationLevel2Count = 0;
@@ -138,89 +140,125 @@ public class SentenceService implements SentenceServiceImpl<SentenceDTO> {
                     continue;
                 }
                 //set health
-                // Get commendation levels
-                try (PreparedStatement getCommendationLevelPs = connection.prepareStatement(
-                        "SELECT level FROM commendations WHERE (date_of_occurrence BETWEEN ? AND ?) AND sentence_id = ?")) {
-                    getCommendationLevelPs.setDate(1, Date.valueOf(firstDayOfYear));
-                    getCommendationLevelPs.setDate(2, Date.valueOf(lastDayOfYear));
-                    getCommendationLevelPs.setInt(3, consider.getSentenceId());
-                    ResultSet getCommendationLevelRs = getCommendationLevelPs.executeQuery();
+                consider.setHealth(healthCheck);
 
-                    // sum
-                    int commendationSum = 0;
-                    while (getCommendationLevelRs.next()) {
-                        int level = getCommendationLevelRs.getInt("level");
-
-                        //sum
-                        commendationSum++;
-
-                        //count by level
-                        switch (level) {
+                //get ignored
+                try(PreparedStatement ignoredPs = connection.prepareStatement("SELECT event_type, level FROM incareration_process " +
+                        "WHERE sentence_id = ? AND date_of_occurrence BETWEEN ? AND ?")) {
+                    ignoredPs.setInt(1,consider.getSentenceId());
+                    ignoredPs.setDate(2,Date.valueOf(firstDayOfYear));
+                    ignoredPs.setDate(3,Date.valueOf(lastDayOfYear));
+                    ResultSet ignoreRs = ignoredPs.executeQuery();
+                    while (ignoreRs.next()) {
+                        if(ignoreRs.getString("event_type").equals("Bonus")) {
+                            switch (ignoreRs.getInt("level")) {
                             case 1->commendationLevel1Count++;
                             case 2->commendationLevel2Count++;
                             case 3->commendationLevel3Count++;
                             case 4->commendationLevel4Count++;
+                            }
+                        } else {
+                            switch (ignoreRs.getInt("level")) {
+                                case 1->disciplinaryLevel1Count++;
+                                case 2->disciplinaryLevel2Count++;
+                                case 3->disciplinaryLevel3Count++;
+                                case 4->disciplinaryLevel4Count++;
+                            }
                         }
                     }
-                    //set sum
+                    // total
+                    commendationSum = commendationLevel1Count + commendationLevel2Count + commendationLevel3Count + commendationLevel4Count;
+                    disciplinarySum = disciplinaryLevel1Count + disciplinaryLevel2Count + disciplinaryLevel3Count + disciplinaryLevel4Count;
+                    //set
                     consider.setCommendationSum(commendationSum);
-                }
-
-
-                // Get disciplinary measures
-                try (PreparedStatement getDisciplinaryLevelPs = connection.prepareStatement(
-                        "SELECT level FROM disciplinary_measures WHERE (date_of_occurrence BETWEEN ? AND ?) AND sentence_id = ?")) {
-                    getDisciplinaryLevelPs.setDate(1, Date.valueOf(firstDayOfYear));
-                    getDisciplinaryLevelPs.setDate(2, Date.valueOf(lastDayOfYear));
-                    getDisciplinaryLevelPs.setInt(3, consider.getSentenceId());
-                    ResultSet getDisciplinaryLevelRs = getDisciplinaryLevelPs.executeQuery();
-
-                    //sum disciplinary
-                    int disciplinarySum = 0;
-                    while (getDisciplinaryLevelRs.next()) {
-                        //sum
-                        disciplinarySum++;
-                        int level = getDisciplinaryLevelRs.getInt("level");
-                        //count by level
-                        switch (level) {
-                            case 1->disciplinaryLevel1Count++;
-                            case 2->disciplinaryLevel2Count++;
-                            case 3->disciplinaryLevel3Count++;
-                            case 4->disciplinaryLevel4Count++;
-                        }
-                        isHaveDisciplinary = true;
-                    }
-                    //set sum
                     consider.setDisciplinaryMeasureSum(disciplinarySum);
-
+                    //check disciplinary
+                    isHaveDisciplinary = disciplinarySum > 0;
                 }
+
+                // Get commendation levels
+//                try (PreparedStatement getCommendationLevelPs = connection.prepareStatement(
+//                        "SELECT level FROM commendations WHERE (date_of_occurrence BETWEEN ? AND ?) AND sentence_id = ?")) {
+//                    getCommendationLevelPs.setDate(1, Date.valueOf(firstDayOfYear));
+//                    getCommendationLevelPs.setDate(2, Date.valueOf(lastDayOfYear));
+//                    getCommendationLevelPs.setInt(3, consider.getSentenceId());
+//                    ResultSet getCommendationLevelRs = getCommendationLevelPs.executeQuery();
+//
+//                    // sum
+//                    int commendationSum = 0;
+//                    while (getCommendationLevelRs.next()) {
+//                        int level = getCommendationLevelRs.getInt("level");
+//
+//                        //sum
+//                        commendationSum++;
+//
+//                        //count by level
+//                        switch (level) {
+//                            case 1->commendationLevel1Count++;
+//                            case 2->commendationLevel2Count++;
+//                            case 3->commendationLevel3Count++;
+//                            case 4->commendationLevel4Count++;
+//                        }
+//                    }
+//                    //set sum
+//                    consider.setCommendationSum(commendationSum);
+//                }
+//
+//
+//                // Get disciplinary measures
+//                try (PreparedStatement getDisciplinaryLevelPs = connection.prepareStatement(
+//                        "SELECT level FROM disciplinary_measures WHERE (date_of_occurrence BETWEEN ? AND ?) AND sentence_id = ?")) {
+//                    getDisciplinaryLevelPs.setDate(1, Date.valueOf(firstDayOfYear));
+//                    getDisciplinaryLevelPs.setDate(2, Date.valueOf(lastDayOfYear));
+//                    getDisciplinaryLevelPs.setInt(3, consider.getSentenceId());
+//                    ResultSet getDisciplinaryLevelRs = getDisciplinaryLevelPs.executeQuery();
+//
+//                    //sum disciplinary
+//                    int disciplinarySum = 0;
+//                    while (getDisciplinaryLevelRs.next()) {
+//                        //sum
+//                        disciplinarySum++;
+//                        int level = getDisciplinaryLevelRs.getInt("level");
+//                        //count by level
+//                        switch (level) {
+//                            case 1->disciplinaryLevel1Count++;
+//                            case 2->disciplinaryLevel2Count++;
+//                            case 3->disciplinaryLevel3Count++;
+//                            case 4->disciplinaryLevel4Count++;
+//                        }
+//                        isHaveDisciplinary = true;
+//                    }
+//                    //set sum
+//                    consider.setDisciplinaryMeasureSum(disciplinarySum);
+//
+ //               }
                 // Evaluate the prisoner based on criteria
                 //Sentence reduction by one year
-                if (commendationLevel4Count >= 25 && healthCheck <= 1 && !isHaveDisciplinary) {
+                if (commendationLevel4Count >= 20 && healthCheck <= 1 && !isHaveDisciplinary) {
                     considers2.add(consider);
                 }
                 //Sentence reduction by six months
-                else if (commendationLevel3Count + commendationLevel4Count >= 25 && healthCheck <= 1 && isHaveDisciplinary) {
+                else if (commendationLevel3Count + commendationLevel4Count >= 25 && healthCheck <= 1 && !isHaveDisciplinary) {
                     considers3.add(consider);
                 }
                 //Sentence reduction by one month
-                else if (commendationLevel2Count + commendationLevel3Count + commendationLevel4Count >= 30 && healthCheck <= 1 && isHaveDisciplinary) {
+                else if (commendationLevel2Count + commendationLevel3Count + commendationLevel4Count >= 30 && healthCheck <= 1 && !isHaveDisciplinary) {
                     considers4.add(consider);
                 }
                 //Gift and an additional health check-up
-                else if (commendationLevel1Count + commendationLevel2Count + commendationLevel3Count + commendationLevel4Count >= 20 && healthCheck == 2 && disciplinaryLevel1Count <= 2){
+                else if (commendationSum >= 20 && healthCheck == 2 && disciplinaryLevel1Count <= 2){
                     considers6.add(consider);
                 }
                 //Gift
-                else if (commendationLevel1Count + commendationLevel2Count + commendationLevel3Count + commendationLevel4Count >= 20 && healthCheck <= 1 && disciplinaryLevel1Count <= 2) {
+                else if (commendationSum >= 20 && healthCheck <= 1 && disciplinaryLevel1Count <= 2) {
                     considers5.add(consider);
                 }
                 //Solitary confinement
-                else if (disciplinaryLevel1Count + disciplinaryLevel2Count + disciplinaryLevel3Count + disciplinaryLevel4Count >= 25 || disciplinaryLevel4Count >= 5) {
+                else if (disciplinarySum >= 25 || disciplinaryLevel4Count >= 5) {
                     considers7.add(consider);
                 }
                 //Enforce
-                else if (disciplinaryLevel1Count + disciplinaryLevel2Count + disciplinaryLevel3Count + disciplinaryLevel4Count >= 20 || disciplinaryLevel4Count >= 3) {
+                else if (disciplinarySum >= 20 || disciplinaryLevel4Count >= 3) {
                     considers8.add(consider);
                 }
                 //Punishment of no family visits and labor for 48 hours
@@ -228,7 +266,7 @@ public class SentenceService implements SentenceServiceImpl<SentenceDTO> {
                     considers9.add(consider);
                 }
                 //labor for 36 hours
-                else if (disciplinaryLevel1Count + disciplinaryLevel2Count >= 11 || commendationLevel2Count >= 3) {
+                else if (disciplinaryLevel1Count + disciplinaryLevel2Count >= 11 || disciplinaryLevel2Count >= 3) {
                     considers10.add(consider);
                 }
                 //labor for 12 hours
