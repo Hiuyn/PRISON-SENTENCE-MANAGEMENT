@@ -196,15 +196,15 @@ public class SentenceService implements SentenceServiceImpl<SentenceDTO> {
                 }
                 // Evaluate the prisoner based on criteria
                 //Sentence reduction by one year
-                if (commendationLevel4Count >= 25 && healthCheck <= 1 && !isHaveDisciplinary) {
+                if (commendationLevel4Count >= 20 && healthCheck <= 1 && !isHaveDisciplinary) {
                     considers2.add(consider);
                 }
                 //Sentence reduction by six months
-                else if (commendationLevel3Count + commendationLevel4Count >= 25 && healthCheck <= 1 && isHaveDisciplinary) {
+                else if (commendationLevel3Count + commendationLevel4Count >= 25 && healthCheck <= 1 && !isHaveDisciplinary) {
                     considers3.add(consider);
                 }
                 //Sentence reduction by one month
-                else if (commendationLevel2Count + commendationLevel3Count + commendationLevel4Count >= 30 && healthCheck <= 1 && isHaveDisciplinary) {
+                else if (commendationLevel2Count + commendationLevel3Count + commendationLevel4Count >= 30 && healthCheck <= 1 && !isHaveDisciplinary) {
                     considers4.add(consider);
                 }
                 //Gift and an additional health check-up

@@ -83,7 +83,7 @@
                   <TableColumn fx:id="sentenceCodeColumn" prefWidth="133.0" styleClass="text-center" text="Sentence Code" />
                   <TableColumn fx:id="prisonernameColumn" prefWidth="133.0" styleClass="text-center" text="Prisoner Name" />
                   <TableColumn fx:id="visitnameColumn" prefWidth="109.0" styleClass="text-center" text="Visit Name" />
-                  <TableColumn fx:id="cccdColumn" prefWidth="109.0" styleClass="text-center" text="CCCD/CMD" />
+                  <TableColumn fx:id="cccdColumn" prefWidth="109.0" styleClass="text-center" text="Identity card" />
                   <TableColumn fx:id="relationshipColumn" prefWidth="109.0" styleClass="text-center" text="Relationship" />
                   <TableColumn fx:id="visitdateColumn" prefWidth="109.0" styleClass="text-center" text="Visit Date" />
                   <TableColumn fx:id="startTimeColumn" prefWidth="109.0" styleClass="text-center" text="Start Time" />

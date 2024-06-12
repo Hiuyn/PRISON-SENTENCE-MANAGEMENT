@@ -1,15 +1,21 @@
 package com.example.psmsystem.service.prisonerDAO;
 
 import com.example.psmsystem.database.DbConnection;
+import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.Sentence;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PrisonerDAO implements IPrisonerDao<Prisoner> {
+    Logger LOGGER = Logger.getLogger(PrisonerDAO.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_name, date_birth, gender, identity_card, contacter_name, contacter_phone, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_QUERY = "UPDATE prisoners SET prisoner_name = ?, date_birth = ?, gender = ?, identity_card = ?, contacter_name = ?, contacter_phone = ?, image = ?, status = ? WHERE prisoner_id = ?";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
@@ -264,5 +270,73 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
             return false;
         }
     }
+
+
+    //get list sentence by prisoner Id
+    public List<Sentence> getSentencesByPrisonerId(int id) {
+        List<Sentence> sentences = new ArrayList<>();
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()){
+            try (PreparedStatement ps = connection.prepareStatement("SELECT sentence_id,sentences_code,sentence_type,status,crimes_code FROM sentences WHERE prisoner_id = ?")){
+                ps.setInt(1,id);
+                ResultSet rs = ps.executeQuery();
+                //if not -> exception
+                if(!rs.next()) throw new RuntimeException("This prisoner not have sentence");
+                while (rs.next()) {
+                    Sentence sentence = new Sentence();
+                    sentence.setSentenceId(rs.getInt("sentence_id"));
+                    sentence.setSentenceCode(rs.getInt("sentences_code"));
+                    sentence.setStatus(rs.getBoolean("status"));
+                    sentence.setSentenceType(rs.getString("sentence_type"));
+                    sentence.setSentenceType(rs.getString("crimes_code"));
+                    sentences.add(sentence);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE,"get sentences failed: ",e);
+            throw new RuntimeException("Coming soon");
+        }
+        return sentences;
+    }
+
+//    //get All information by sentence id
+//    public HashMap<String,List<Object>> getAllinforBySentenceId(int id) {
+//        HashMap<String,List<Object>> allInformation = new HashMap<>();
+//        List<Health> healths = new ArrayList<>();
+//        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()){
+//            //get list health
+//            try(PreparedStatement getHealthPs = connection.prepareStatement("SELECT health_code, weight, height,level,checkup_date " +
+//                    "FROM healths WHERE sentence_id = ?")) {
+//                getHealthPs.setInt(1,id);
+//                ResultSet getHealthRs = getHealthPs.executeQuery();
+//                while (getHealthRs.next()) {
+//                    Health health = new Health();
+//                    health.setHealthCode(getHealthRs.getString("health_code"));
+//                    health.setWeight(getHealthRs.getDouble("weight"));
+//                    health.setHeight(getHealthRs.getDouble("height"));
+//                    health.setInformation(getHealthRs.getInt("level"));
+//                    health.setCheckupDate(String.valueOf(getHealthRs.getDate("checkup_date")));
+//                    healths.add(health);
+//                }
+//            }
+//            //get list commendations
+//            try(PreparedStatement getHealthPs = connection.prepareStatement("SELECT date_of_occurrence, note, note " +
+//                    "FROM commendations WHERE sentence_id = ?")) {
+//                getHealthPs.setInt(1,id);
+//                ResultSet getHealthRs = getHealthPs.executeQuery();
+//                while (getHealthRs.next()) {
+//                    Health health = new Health();
+//                    health.setHealthCode(getHealthRs.getString("health_code"));
+//                    health.setWeight(getHealthRs.getDouble("weight"));
+//                    health.setHeight(getHealthRs.getDouble("height"));
+//                    health.setInformation(getHealthRs.getInt("level"));
+//                    health.setCheckupDate(String.valueOf(getHealthRs.getDate("checkup_date")));
+//                    healths.add(health);
+//                }
+//            }
+//        } catch (SQLException e) {
+//
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 }
