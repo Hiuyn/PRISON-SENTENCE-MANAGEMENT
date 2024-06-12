@@ -11,7 +11,6 @@ public class DataStorage {
     private static List<Prisoner> prisoners;
     private static PrisonerController prisonerController;
 
-
     public static PrisonerController getPrisonerController() {
         return prisonerController;
     }

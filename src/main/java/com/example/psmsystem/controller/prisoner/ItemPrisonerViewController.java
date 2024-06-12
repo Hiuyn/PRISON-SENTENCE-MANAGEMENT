@@ -1,6 +1,7 @@
 package com.example.psmsystem.controller.prisoner;
 
 
+import com.example.psmsystem.controller.DataStorage;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
@@ -8,6 +9,7 @@ import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -24,13 +26,15 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class ItemPrisonerViewController {
+public class ItemPrisonerViewController implements Initializable {
 
     @FXML
     private Label lblYearSentence;
@@ -57,6 +61,11 @@ public class ItemPrisonerViewController {
     private Prisoner prisonerShowEdit;
     private PrisonerController prisonerController;
     private int prisonerIdDetail;
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     public void btnEditOnAction() {
         try {
@@ -230,4 +239,6 @@ public class ItemPrisonerViewController {
     void loadDetailView(ActionEvent event) {
         openDetailWindow();
     }
+
+
 }

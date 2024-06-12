@@ -4,14 +4,19 @@ import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class FilterController implements Initializable {
 
@@ -52,61 +57,134 @@ public class FilterController implements Initializable {
     private int sortTimeType;
     private int genderFilter;
     private boolean sortCheck;
+    private PrisonerController prisonerController;
+
     @FXML
-    private void onFilter() {
+    public void onFilter(ActionEvent event) {
         try
         {
             PrisonerDAO prisonerDAO = new PrisonerDAO();
-            List<Prisoner> prisonerListByAge = prisonerDAO.getPrisonerByAge(this.ageFilter, this.genderFilter);
+//            List<Prisoner> prisonerListByAge = prisonerDAO.getPrisonerByAge(this.ageFilter, this.genderFilter);
+            List<Prisoner> prisonerList = prisonerDAO.getAllPrisoner();
+            if (genderFilter != 0) {
+                prisonerList = filterByGender(prisonerList);
+            }
 
-            if (sortNameType == 0   && sortTimeType ==0)
+            if (ageFilter != 0) {
+                prisonerList = filterByAge(prisonerList);
+            }
+
+            if (sortNameType != 0 && (genderFilter == 0 || ageFilter == 0)) {
+                prisonerList = sortByName(prisonerList);
+            }
+
+            if (sortTimeType != 0 && (genderFilter == 0 || ageFilter == 0)) {
+                prisonerList = sortByTime(prisonerList);
+            }
+
+
+
+            if (this.prisonerController != null)
             {
-                System.out.println("No time or age ASC DES");
+                System.out.println("Prisonert controller : " + prisonerController);
             }
-            else if (sortNameType == 1) {
+            System.out.println("gender : " + genderFilter);
+            System.out.println("AgeFilter : " + ageFilter);
+            System.out.println("name : " + sortNameType);
+            System.out.println("time : " + sortTimeType);
 
-            } else if (sortNameType == 2) {
+            List<Prisoner> prisonerFilter = prisonerList;
+            if (!prisonerFilter.isEmpty())
+            {
+                back(event,()->prisonerController.refreshPrisonerList(prisonerFilter));
+            }
+            else
+            {
+                showAlert("Not Found prisoner match the filter");
+            }
 
-            }
-            for (Prisoner prisoner : prisonerListByAge) {
-                System.out.println("prisoner id sort test : " + prisoner.getPrisonerCode());
-                System.out.println("prisoner name sort test : " + prisoner.getPrisonerName());
-            }
+
         }catch (Exception e)
         {
             System.out.println("Filter controller - onFilter : "+ e.getMessage());
         }
     }
 
+    private List<Prisoner> filterByGender(List<Prisoner> prisoners) {
+        return prisoners.stream()
+                .filter(prisoner -> prisoner.getGender() == genderFilter)
+                .collect(Collectors.toList());
+    }
+
+    private List<Prisoner> filterByAge(List<Prisoner> prisoners) {
+        LocalDate now = LocalDate.now();
+        return prisoners.stream()
+                .filter(prisoner -> {
+                    LocalDate birthDate = LocalDate.parse(prisoner.getDOB());
+                    Period period = Period.between(birthDate, now);
+                    int age = period.getYears();
+
+                    switch (ageFilter) {
+                        case 1:
+                            return age < 18;
+                        case 2:
+                            return age < 40;
+                        case 3:
+                            return age < 60;
+                        case 4:
+                            return age >= 60;
+                        default:
+                            return true;
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<Prisoner> sortByName(List<Prisoner> prisoners) {
+        if (sortNameType == 1) {
+            return prisoners.stream()
+                    .sorted((p1, p2) -> p1.getPrisonerName().compareToIgnoreCase(p2.getPrisonerName()))
+                    .collect(Collectors.toList());
+        } else if (sortNameType == 2) {
+            return prisoners.stream()
+                    .sorted((p1, p2) -> p2.getPrisonerName().compareToIgnoreCase(p1.getPrisonerName()))
+                    .collect(Collectors.toList());
+        }
+        return prisoners;
+    }
+
+    private List<Prisoner> sortByTime(List<Prisoner> prisoners) {
+        // Sử dụng logic tương tự nhưng với thời gian giam giữ
+
+        return prisoners;
+    }
+
+
+
+    public void setPrisonerController(PrisonerController prisonerController)
+    {
+        this.prisonerController = prisonerController;
+    }
+
+
     public void getGenderFilter(ActionEvent event) {
         if (tgGender.getSelectedToggle() == rbtnMale)
         {
             genderFilter = 1;
-            btnU18.setDisable(true);
-            btnU40.setDisable(true);
-            btnU60.setDisable(true);
-            btnOver60.setDisable(true);
         } else if (tgGender.getSelectedToggle() == rbtnFemale) {
             genderFilter = 2;
-            btnU18.setDisable(true);
-            btnU40.setDisable(true);
-            btnU60.setDisable(true);
-            btnOver60.setDisable(true);
         } else if (tgGender.getSelectedToggle() == rbtnOther) {
             genderFilter = 3;
-            btnU18.setDisable(true);
-            btnU40.setDisable(true);
-            btnU60.setDisable(true);
-            btnOver60.setDisable(true);
-        }
-        else
-        {
-            btnU18.setDisable(false);
-            btnU40.setDisable(false);
-            btnU60.setDisable(false);
-            btnOver60.setDisable(false);
         }
         System.out.println("genderFilter :" + genderFilter);
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @Override
@@ -124,9 +202,6 @@ public class FilterController implements Initializable {
             Button clickedButton = (Button) event.getSource();
 //            System.out.println(getAgeRange(clickedButton));
             getAgeRange(clickedButton);
-            rbtnMale.setDisable(true);
-            rbtnFemale.setDisable(true);
-            rbtnOther.setDisable(true);
         }catch (Exception e)
         {
             System.out.println("getAgeFilter: "+ e.getMessage());
@@ -213,8 +288,23 @@ public class FilterController implements Initializable {
         return 0;
     }
 
-    public void back() {
-        Stage stage = (Stage) lbTitle.getScene().getWindow();
-        stage.close();
+    public interface Callback {
+        void execute();
+    }
+
+    public void back(ActionEvent event, Callback callback)  {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
+        System.out.println("Cửa sổ đã được đóng");
+        if (callback != null) {
+            System.out.println("Thực hiện callback");
+            callback.execute();
+        }
+    }
+
+    public void backPrisoner(ActionEvent event)
+    {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 }

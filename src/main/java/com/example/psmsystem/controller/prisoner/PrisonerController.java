@@ -175,6 +175,7 @@ import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -190,6 +191,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class PrisonerController implements Initializable {
@@ -212,9 +214,6 @@ public class PrisonerController implements Initializable {
     private Button btnSearch;
 
     @FXML
-    private Button btnViewAll;
-
-    @FXML
     private AnchorPane newPrisonerFun;
 
     @FXML
@@ -224,7 +223,7 @@ public class PrisonerController implements Initializable {
     private AnchorPane printFun;
 
     @FXML
-    private TextField txtSearch;
+    private TextField txtSearchInput;
 
     @FXML
     private AnchorPane anchoViewAll;
@@ -289,6 +288,46 @@ public class PrisonerController implements Initializable {
         setupPagination();
     }
 
+    @FXML
+    public void onSearch(MouseEvent event) {
+        String searchText = txtSearchInput.getText();
+        if (searchText.isEmpty()) {
+            showAlert("Please enter a search term.");
+            return;
+        }
+
+        if (isNumeric(searchText)) {
+            if (Integer.parseInt(searchText) > prisonerList.size()) {
+                showAlert("Prisoner with ID " + searchText + " not found.");
+                return;
+            }
+            Prisoner prisoner = prisonerDAO.searchPrisonerById(searchText);
+            if (prisoner != null) {
+                prisonerList = List.of(prisoner);
+            } else {
+                showAlert("Prisoner with ID " + searchText + " not found.");
+            }
+        } else {
+            prisonerList = prisonerDAO.searchPrisonersByName(searchText);
+            if (prisonerList.isEmpty()) {
+                showAlert("No prisoners matching " + searchText + " found.") ;
+            }
+        }
+        setupPagination();
+        txtSearchInput.clear();
+    }
+    private boolean isNumeric(String str) {
+        return str != null && str.matches("[0-9]+");
+    }
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
     public void openAddWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/AddPrisonerView.fxml"));
@@ -316,6 +355,8 @@ public class PrisonerController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/FilterView.fxml"));
             AnchorPane newWindowContent = loader.load();
+            FilterController filterController = loader.getController();
+            filterController.setPrisonerController(this);
             Stage newStage = new Stage();
             Scene scene = new Scene(newWindowContent);
             newStage.setScene(scene);
@@ -328,6 +369,14 @@ public class PrisonerController implements Initializable {
             System.out.println("PrisonerController - openFilterWindow: " + e.getMessage());
         }
     }
+    public void openExportWindow() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Export");
+        alert.setHeaderText(null);
+        alert.setContentText("COMING SOON!");
+        alert.showAndWait();
+
+    }
 
     @FXML
     void loadAddPrisonerView(MouseEvent event) {
@@ -337,5 +386,10 @@ public class PrisonerController implements Initializable {
     @FXML
     void loadFilterView(MouseEvent event) {
         openFilterWindow();
+    }
+
+    @FXML
+    void loadExportView(MouseEvent event) {
+        openExportWindow();
     }
 }

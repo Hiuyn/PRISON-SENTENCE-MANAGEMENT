@@ -55,7 +55,6 @@ public class SentenceDao implements ISentenceDao<Sentence> {
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_SENTENCE_QUERY);
             ResultSet rs = statement.executeQuery();
-
             while (rs.next()) {
                 Sentence sentence = new Sentence();
                 sentence.setSentenceId(rs.getInt("sentence_id"));

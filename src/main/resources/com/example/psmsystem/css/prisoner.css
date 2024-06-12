@@ -24,9 +24,19 @@
 }
 .card
 {
-    -fx-background-color: #6e797a;
+    -fx-background-color: #7a7a7a;
     -fx-background-radius: 5px;
     -fx-border-radius: 5px;
     -fx-font-family: "Courier New";
     -fx-font-size: 14px;
+}
+
+.txtSearch {
+    -fx-font-size: 12px;
+    -fx-text-fill: #333;
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
 }
