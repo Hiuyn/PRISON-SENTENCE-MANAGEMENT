@@ -562,9 +562,7 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
     public void back(ActionEvent event, Callback callback)  {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
-        System.out.println("Cửa sổ đã được đóng");
         if (callback != null) {
-            System.out.println("Thực hiện callback");
             callback.execute();
         }
     }
@@ -662,6 +660,7 @@ public void getSelectedCrimes() {
         rbtnOther.setToggleGroup(tgGender);
         rbtnLimited.setToggleGroup(tgSentenceType);
         rbtnUnlimited.setToggleGroup(tgSentenceType);
+
         tgSentenceType.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             RadioButton selectedRadioButton = (RadioButton) newValue;
             if (selectedRadioButton == rbtnUnlimited)
@@ -675,15 +674,14 @@ public void getSelectedCrimes() {
                 ccbCrimes.setDisable(false);
                 btnShowYearInput.setDisable(false);
             }
-//            setEndDate();
         });
         dateIn.valueProperty().addListener((observable, oldValue, newValue) -> {
             setEndDate();
         });
         LocalDate initialDate = dateOut.getValue();
         dateOut.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(initialDate)) { // Nếu giá trị mới không giống với giá trị ban đầu
-                setEndDate();// Đặt lại giá trị về giá trị ban đầu
+            if (!newValue.equals(initialDate)) {
+                setEndDate();
             }
         });
 

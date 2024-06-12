@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.controlsfx.control.*?>
 
-<?import org.controlsfx.control.CheckComboBox?>
-<AnchorPane fx:id="anchorPaneAddPrisoner" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="670.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
+<AnchorPane fx:id="anchorPaneAddPrisoner" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="670.0" prefWidth="600.0" styleClass="formAdd" stylesheets="@../../css/addPrisoner.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.prisoner.AddPrisonerController">
    <children>
       <AnchorPane layoutX="79.0" layoutY="108.0" prefHeight="262.0" prefWidth="492.0" styleClass="prisonerForm" stylesheets="@../../css/addPrisoner.css" AnchorPane.rightAnchor="35.0">
          <children>
@@ -25,7 +20,7 @@
                </children>
             </HBox>
              <Label layoutX="31.0" layoutY="163.0" prefHeight="25.0" prefWidth="42.0" text="Sex:" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="160.0" />
-            <Button fx:id="btnAddImage" layoutX="332.0" layoutY="204.0" mnemonicParsing="false" onAction="#selectImageFile" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Add Image" AnchorPane.bottomAnchor="32.0" />
+            <Button fx:id="btnAddImage" layoutX="332.0" layoutY="204.0" mnemonicParsing="false" onAction="#selectImageFile" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Add Image" AnchorPane.bottomAnchor="33.0" />
             <TextField fx:id="txtContactName" layoutX="31.0" layoutY="204.0" prefHeight="26.0" prefWidth="128.0" promptText="Contact name" styleClass="txt" stylesheets="@../../css/addPrisoner.css" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="210.0" />
             <TextField fx:id="txtContactPhone" layoutX="173.0" layoutY="204.0" prefHeight="26.0" prefWidth="128.0" promptText="Contact phone" styleClass="txt" stylesheets="@../../css/addPrisoner.css" AnchorPane.bottomAnchor="32.0" />
             <Label layoutX="27.0" layoutY="14.0" prefHeight="26.0" prefWidth="152.0" text="Prisoner information">
@@ -40,14 +35,18 @@
                </font>
             </Label>
             <TextField fx:id="txtIdentityCard" layoutX="27.0" layoutY="59.0" prefHeight="26.0" prefWidth="128.0" promptText="Identity card" styleClass="txt" stylesheets="@../../css/addPrisoner.css" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="60.0" />
-            <DatePicker fx:id="datePrisonerDOBAdd" layoutX="177.0" layoutY="111.0" prefHeight="26.0" prefWidth="120.0" promptText="Date of birth" AnchorPane.topAnchor="110.0" />
-            <Button fx:id="btnCheckIdentity" layoutX="176.0" layoutY="59.0" mnemonicParsing="false" onAction="#checkIdentityCard" prefHeight="26.0" prefWidth="120.0" styleClass="buttonAddImg" stylesheets="@../../css/addPrisoner.css" text="Check" AnchorPane.topAnchor="60.0" />
+            <DatePicker fx:id="datePrisonerDOBAdd" layoutX="179.0" layoutY="110.0" prefHeight="26.0" prefWidth="120.0" promptText="Date of birth" AnchorPane.topAnchor="110.0" />
+            <AnchorPane layoutX="179.0" layoutY="61.0" prefHeight="25.0" prefWidth="120.0">
+               <children>
+                  <Button fx:id="btnCheckIdentity" layoutX="14.0" layoutY="54.0" maxHeight="27.0" mnemonicParsing="false" onAction="#checkIdentityCard" prefHeight="27.0" prefWidth="120.0" styleClass="buttonControl" stylesheets="@../../css/addPrisoner.css" text="Check" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="33.0" layoutY="398.0" prefHeight="236.0" prefWidth="403.0" styleClass="sentenceForm" stylesheets="@../../css/addPrisoner.css" AnchorPane.leftAnchor="35.0">
          <children>
             <CheckComboBox fx:id="ccbCrimes" layoutX="36.0" layoutY="181.0" prefHeight="26.0" prefWidth="152.0" title="Crimes" />
-            <Button fx:id="btnShowYearInput" layoutX="204.0" layoutY="181.0" onAction="#loadInputYearCrimeView" prefHeight="26.0" prefWidth="152.0" text="Time of crime" AnchorPane.rightAnchor="45.0" />
+            <Button fx:id="btnShowYearInput" layoutX="204.0" layoutY="181.0" onAction="#loadInputYearCrimeView" prefHeight="26.0" prefWidth="152.0" styleClass="buttonAddTime" stylesheets="@../../css/addPrisoner.css" text="Time of crime" AnchorPane.rightAnchor="45.0" />
             <HBox fx:id="rbtnSentenceType" layoutX="159.0" layoutY="89.0" prefHeight="30.0" prefWidth="206.0" AnchorPane.rightAnchor="45.0">
                <children>
                   <RadioButton fx:id="rbtnUnlimited" mnemonicParsing="false" prefHeight="30.0" prefWidth="124.0" text="Life imprisonment">

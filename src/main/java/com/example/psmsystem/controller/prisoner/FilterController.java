@@ -187,7 +187,6 @@ public class FilterController implements Initializable {
         } else if (tgGender.getSelectedToggle() == rbtnOther) {
             genderFilter = 3;
         }
-        System.out.println("genderFilter :" + genderFilter);
     }
 
     private void showAlert(String message) {
@@ -227,7 +226,6 @@ public class FilterController implements Initializable {
         {
             this.ageFilter = 0;
         }
-        System.out.println("AgeFilter :" + this.ageFilter);
     }
 
 
@@ -281,7 +279,6 @@ public class FilterController implements Initializable {
             btnNameAsc.setDisable(!isCurrentlyDisabled);
             btnNameDes.setDisable(!isCurrentlyDisabled);
         }
-        System.out.println("get asc des Time : " + getSortTimeType(clickedButton));
         this.sortTimeType = getSortTimeType(clickedButton);
     }
     private int getSortTimeType(Button button) {
@@ -300,9 +297,7 @@ public class FilterController implements Initializable {
     public void back(ActionEvent event, Callback callback)  {
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currentStage.close();
-        System.out.println("Cửa sổ đã được đóng");
         if (callback != null) {
-            System.out.println("Thực hiện callback");
             callback.execute();
         }
     }

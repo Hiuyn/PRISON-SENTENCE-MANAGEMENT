@@ -109,7 +109,6 @@ public class ItemPrisonerController implements Initializable {
                         String end = String.valueOf(sentence.getEndDate());
                         int years = calYearSentence(start, end);
                         lblYearSentence.setText("Time: " + years + " year");
-                        System.out.println("Year of sentence: " + years);
                         break;
                     }else if (sentenceType.equals("life imprisonment")) {
                         lblYearSentence.setVisible(false);

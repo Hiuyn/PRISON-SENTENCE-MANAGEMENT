@@ -146,3 +146,32 @@
     -fx-background-color: #4c4c4c;
     -fx-background-radius: 3px;
 }
+.buttonControl
+{
+    -fx-pref-width: 70px;
+    -fx-pref-height: 25px;
+    -fx-max-width:  70px;
+    -fx-max-height: 25px;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-background-color: #a8a8a8;
+}
+.buttonControl:hover
+{
+    -fx-pref-width:  70px;
+    -fx-pref-height: 25px;
+    -fx-max-width:  70px;
+    -fx-max-height: 25px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-text-fill: #5c5c5c;
+    -fx-border-radius: 3px;
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0.2em;
+    -fx-border-color: gray;
+    -fx-padding: 2px;
+
+}
