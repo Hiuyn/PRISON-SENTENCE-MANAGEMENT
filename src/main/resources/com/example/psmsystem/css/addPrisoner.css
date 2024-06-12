@@ -74,3 +74,13 @@
 .vbNameCrime,.vbYOC {
     spacing: 10px; /* Khoảng cách giữa các phần tử trong VBox */
 }
+.txt{
+    -fx-background-color: rgba(230, 226, 228, 0.2); /* Màu nền */
+    -fx-border-color: transparent transparent #515151 transparent; /* Màu viền dưới */
+    -fx-border-width: 0 0 0.2em 0; /* Độ rộng viền, chỉ viền dưới */
+    -fx-border-radius: 0.2em 0.2em 0 0; /* Bo tròn góc */
+    -fx-padding: 0.4em; /* Khoảng cách đệm */
+    -fx-text-fill: #0b0a0a; /* Màu văn bản */
+    -fx-font-size: 1em; /* Cỡ chữ */
+}
+

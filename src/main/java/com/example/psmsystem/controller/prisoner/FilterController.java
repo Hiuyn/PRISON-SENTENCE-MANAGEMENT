@@ -59,6 +59,17 @@ public class FilterController implements Initializable {
     private boolean sortCheck;
     private PrisonerController prisonerController;
 
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        tgGender = new ToggleGroup();
+        rbtnFemale.setToggleGroup(tgGender);
+        rbtnMale.setToggleGroup(tgGender);
+
+        rbtnOther.setToggleGroup(tgGender);
+//        rbtnMale.setSelected(true);
+    }
+
     @FXML
     public void onFilter(ActionEvent event) {
         try
@@ -128,9 +139,9 @@ public class FilterController implements Initializable {
                         case 1:
                             return age < 18;
                         case 2:
-                            return age < 40;
+                            return   18 < age  &&  age < 40;
                         case 3:
-                            return age < 60;
+                            return age >= 40 && age < 60;
                         case 4:
                             return age >= 60;
                         default:
@@ -187,13 +198,6 @@ public class FilterController implements Initializable {
         alert.showAndWait();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        tgGender = new ToggleGroup();
-        rbtnMale.setToggleGroup(tgGender);
-        rbtnFemale.setToggleGroup(tgGender);
-        rbtnOther.setToggleGroup(tgGender);
-    }
 
 
     @FXML
@@ -201,6 +205,7 @@ public class FilterController implements Initializable {
         try {
             Button clickedButton = (Button) event.getSource();
 //            System.out.println(getAgeRange(clickedButton));
+//            clickedButton.getStyleClass().
             getAgeRange(clickedButton);
         }catch (Exception e)
         {

@@ -31,12 +31,23 @@
     -fx-font-size: 14px;
 }
 
+/*.txtSearch {*/
+/*    appearance: none;*/
+/*    border: none;*/
+/*    outline: none;*/
+/*    border-bottom: .2em solid #E91E63;*/
+/*    background: rgba(#E91E63, .2em);*/
+/*    border-radius: .2em .2em 0 0;*/
+/*    padding: .4em;*/
+/*    color: #E91E63;*/
+/*}*/
 .txtSearch {
-    -fx-font-size: 12px;
-    -fx-text-fill: #333;
-    -fx-background-color: #f5f5f5;
-    -fx-border-color: #ccc;
-    -fx-border-width: 1px;
-    -fx-border-radius: 5px;
-    -fx-padding: 5px 10px;
+    -fx-background-color: rgba(255, 253, 253, 0.2); /* Màu nền */
+    -fx-border-color: transparent transparent #716f6f transparent; /* Màu viền dưới */
+    -fx-border-width: 0 0 0.2em 0; /* Độ rộng viền, chỉ viền dưới */
+    -fx-border-radius: 0.2em 0.2em 0 0; /* Bo tròn góc */
+    -fx-padding: 0.4em; /* Khoảng cách đệm */
+    -fx-text-fill: #0b0a0a; /* Màu văn bản */
+    -fx-font-size: 1em; /* Cỡ chữ */
 }
+
