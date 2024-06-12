@@ -15,6 +15,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -239,6 +240,15 @@ public class ReportController implements Initializable {
         }
 
         String fileName = selectedKey.trim().split(":")[0] + ".xlsx";
+        // Đường dẫn thư mục
+        String folderPath = "FileExcel";
+        File directory = new File(folderPath);
+
+        // Kiểm tra và tạo thư mục nếu chưa tồn tại
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Report Data");
 
@@ -265,7 +275,7 @@ public class ReportController implements Initializable {
                 row.createCell(5).setCellValue(consider.getDisciplinaryMeasureSum());
             }
 
-            try (FileOutputStream outputStream = new FileOutputStream("C:\\ZSomething\\" + fileName)) {
+            try (FileOutputStream outputStream = new FileOutputStream(new File(directory, fileName))) {
                 workbook.write(outputStream);
                 AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Exported data to " + fileName + " successfully.");
             } catch (IOException e) {
