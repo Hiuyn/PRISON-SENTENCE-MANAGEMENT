@@ -70,12 +70,12 @@
                   <Font name="Agency FB" size="21.0" />
                </font>
             </Label>
-            <Label layoutX="251.0" layoutY="364.0" prefHeight="26.0" prefWidth="60.0" text="BIRTH : " AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="364.0">
+            <Label layoutX="251.0" layoutY="364.0" prefHeight="26.0" prefWidth="60.0" text="BIRTH : " AnchorPane.topAnchor="364.0">
                <font>
                   <Font name="Agency FB Bold" size="21.0" />
                </font>
             </Label>
-            <Label fx:id="lbDOB" layoutX="303.0" layoutY="364.0" prefHeight="26.0" prefWidth="92.0" text="21/10/1999" AnchorPane.rightAnchor="108.0" AnchorPane.topAnchor="364.0">
+            <Label fx:id="lbDOB" layoutX="303.0" layoutY="364.0" prefHeight="26.0" prefWidth="92.0" text="21/10/1999" AnchorPane.topAnchor="364.0">
                <font>
                   <Font name="Agency FB" size="21.0" />
                </font>

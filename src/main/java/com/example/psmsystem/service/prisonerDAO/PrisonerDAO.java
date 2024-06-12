@@ -32,6 +32,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
     private static final String SEARCH_PRISONER_BY_ID = "SELECT * FROM prisoners WHERE prisoner_id = ?";
 ////    private static final String INSERT_INTO_PRISONER_QUERY = "INSERT INTO  prisoner VALUES (prisonerId = ?)";
+    private static final String SEARCH_PRISONER_LIKE_NAME = "SELECT * FROM prisoners WHERE prisoner_name LIKE ?";
 
     @Override
     public List<Prisoner> getAllPrisoner() {
@@ -172,8 +173,8 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     public List<Prisoner> searchPrisonersByName(String name) {
         List<Prisoner> prisoners = new ArrayList<>();
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
-            String query = "SELECT * FROM prisoners WHERE name LIKE ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+
+            PreparedStatement statement = connection.prepareStatement(SEARCH_PRISONER_LIKE_NAME);
             statement.setString(1, "%" + name + "%");
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
