@@ -48,9 +48,6 @@ public class AppConfig {
         }
         return instance;
     }
-    public String getPropertiesKey(String key) {
-        return properties.getProperty(key);
-    }
 
     public String getUsernameData() {
         return usernameData;

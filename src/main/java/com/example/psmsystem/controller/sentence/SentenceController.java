@@ -601,8 +601,40 @@ public class SentenceController implements Initializable {
         LocalDate selectedStartDate = dateStartDate.getValue();
         LocalDate selectedEndDate = dateEndDate.getValue();
         LocalDate selectedReleaseDate = dateReleaseDate.getValue();
+        //check startDate must not null
+        if(selectedStartDate == null || selectedStartDate.isAfter(LocalDate.now())) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "The sentence must have a start date, and it must be either today or a past date.");
+            return;
+        }
+        boolean status = false;
 
-        Boolean status = false;
+        //check sentenceType
+        if(sentenceType.equals("limited time")) {
+
+            //end Date must not null
+            if(selectedEndDate == null ) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "A fixed-term prison sentence must have an expected release date.");
+                return;
+            } else { //end date not null
+                //end date must be < 30years(start)
+                if(selectedEndDate.isAfter(selectedStartDate.plusYears(30))) {
+                    AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "The sentence is a maximum of 30 years.");
+                    return;
+                }
+                if(selectedReleaseDate != null) {  //release not null
+                    status = true;
+                    if(selectedReleaseDate.isAfter(selectedEndDate) || selectedReleaseDate.isBefore(selectedStartDate.plusMonths(3))) {
+                        AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "The actual release date must be before the end date of the sentence and at least 3 months after the start date.");
+                        return;
+                    }
+                }
+            }
+
+        } else { // life: endDate and releaseDate must null
+            selectedEndDate = null;
+            selectedReleaseDate = null;
+        }
+
         String paroleEligibility = txtParoleEligibility.getText();
 
         if (visitationId == -1) {
@@ -614,24 +646,6 @@ public class SentenceController implements Initializable {
         java.sql.Date startDate = selectedStartDate != null ? java.sql.Date.valueOf(selectedStartDate) : null;
         java.sql.Date endDate = selectedEndDate != null ? java.sql.Date.valueOf(selectedEndDate) : null;
         java.sql.Date releaseDate = selectedReleaseDate != null ? java.sql.Date.valueOf(selectedReleaseDate) : null;
-        if(sentenceType.equals("limited time")) {
-            //end Date must not null
-            if(endDate == null) {
-                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "A fixed-term prison sentence must have an expected release date.");
-                return;
-            }
-            //release <=  endDate
-            if(releaseDate != null && endDate.before(releaseDate)) {
-                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "The end date of the prison sentence cannot be before the release date.");
-                return;
-            }
-
-        } else { // life: endDate and releaseDate must null
-            if(endDate != null || releaseDate != null) {
-                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "A life sentence cannot have an end date or a release date.");
-                return;
-            }
-        }
 
         Sentence sentence = new Sentence(prisonerId, prisonerName, sentenceCode, sentenceType, crimeCode, startDate, endDate, releaseDate, status, paroleEligibility);
         try {
