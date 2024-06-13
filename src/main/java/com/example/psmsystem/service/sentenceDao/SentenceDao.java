@@ -118,8 +118,11 @@ public class SentenceDao implements ISentenceDao<Sentence> {
             try (PreparedStatement isStatusSentencesPs = connection.prepareStatement("SELECT COUNT(*) FROM sentences WHERE prisoner_id = ? AND status = false")){
                 isStatusSentencesPs.setInt(1,sentence.getPrisonerId());
                 ResultSet isStatusSentencesRs = isStatusSentencesPs.executeQuery();
-                int count = isStatusSentencesRs.getInt(1);
-                if(count > 1) throw new RuntimeException("The status cannot be updated to false if the prisoner already has one false sentence.");
+                if(isStatusSentencesRs.next()) {
+                    int count = isStatusSentencesRs.getInt(1);
+                    if(count > 1) throw new RuntimeException("The status cannot be updated to false if the prisoner already has one false sentence.");
+
+                }
             }
             //update sentence
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_SENTENCE_QUERY)) {
