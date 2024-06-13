@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.ManagementVisit;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.managementvisit.IManagementVisitDao;
@@ -9,10 +10,13 @@ import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.model.sentence.SentenceServiceImpl;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.managementvisitDao.ManagementVisitDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import com.example.psmsystem.service.sentenceDao.SentenceService;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
@@ -57,6 +61,7 @@ public class ManagementVisitController implements Initializable {
     private static IManagementVisitDao<ManagementVisit> managementVisitDao;
     private ISentenceDao<Sentence> sentenceDao;
     private SentenceServiceImpl<SentenceDTO> sentenceService = new SentenceService();
+    private IUserLogDao userlogDao = new UserLogDao();
 
     @FXML
     private TableView<ManagementVisit> dataTable;
@@ -303,6 +308,10 @@ public class ManagementVisitController implements Initializable {
 
         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Visit created successfully.");
 
+        ApplicationState appState = ApplicationState.getInstance();
+        UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Created Visit name " + visitorName);
+        userlogDao.insertUserLog(userLog);
+
         onClean(event);
     }
 
@@ -350,6 +359,10 @@ public class ManagementVisitController implements Initializable {
                 resetValue();
                 AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                         "Visit deleted successfully.");
+
+                ApplicationState appState = ApplicationState.getInstance();
+                UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Visit name " + selected.getVisitorName());
+                userlogDao.insertUserLog(userLog);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -419,6 +432,9 @@ public class ManagementVisitController implements Initializable {
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                     "Visit updated successfully.");
 
+            ApplicationState appState = ApplicationState.getInstance();
+            UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Visit name " + visitorName);
+            userlogDao.insertUserLog(userLog);
             onClean(event);
         } else {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",

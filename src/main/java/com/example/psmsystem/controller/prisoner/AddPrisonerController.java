@@ -1,11 +1,15 @@
 package com.example.psmsystem.controller.prisoner;
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.controller.DataStorage;
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,13 +33,14 @@ import org.controlsfx.control.CheckComboBox;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 
 public class AddPrisonerController implements Initializable {
-
+    private IUserLogDao userlogDao = new UserLogDao();
     @FXML
     private TextField txtIdentityCard;
     @FXML
@@ -137,6 +142,13 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                 Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
                 alert1.setHeaderText("Add new information");
                 alert1.setContentText("Add prisoner success!");
+
+                ApplicationState appState = ApplicationState.getInstance();
+                UserLog userLog1 = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Created Prisoner code " + prisoner.getPrisonerCode());
+                userlogDao.insertUserLog(userLog1);
+                UserLog userLog2 = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Created Sentence code " + this.sentence.getSentenceCode());
+                userlogDao.insertUserLog(userLog2);
+
                 alert1.showAndWait();
                 List<Prisoner> prisonerList = prisonerDao.getPrisonerInItem();
                 back(event, () -> prisonerController.refreshPrisonerList(prisonerList));
@@ -151,6 +163,11 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                 SentenceDao sentenceDao = new SentenceDao();
                 PrisonerDAO prisonerDao = new PrisonerDAO();
                 sentenceDao.addSentence(this.sentence);
+
+                ApplicationState appState = ApplicationState.getInstance();
+                UserLog userLog1 = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Created Sentence code " + this.sentence.getSentenceCode());
+                userlogDao.insertUserLog(userLog1);
+
                 List<Prisoner> prisonerList = prisonerDao.getPrisonerInItem();
                 back(event, () -> prisonerController.refreshPrisonerList(prisonerList));
             }

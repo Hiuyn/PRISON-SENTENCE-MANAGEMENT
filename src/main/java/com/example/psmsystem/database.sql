@@ -371,5 +371,3 @@ INSERT INTO crimes (crime_name) VALUES
                                     ('Tax Evasion (Trốn thuế)'),
                                     ('Human Trafficking (Buôn người)'),
                                     ('Money Laundering (Rửa tiền)');
-
--

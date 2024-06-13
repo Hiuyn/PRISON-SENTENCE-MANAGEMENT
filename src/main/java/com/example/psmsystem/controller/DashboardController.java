@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller;
 
+import com.example.psmsystem.controller.userlog.UserLogController;
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.crime.ICrimeDao;
 import com.example.psmsystem.model.managementvisit.IManagementVisitDao;
@@ -8,21 +9,31 @@ import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.assessDao.AssessDao;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.healthDao.HealthDao;
 import com.example.psmsystem.service.managementvisitDao.ManagementVisitDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
-import javafx.collections.FXCollections;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -31,6 +42,7 @@ public class DashboardController implements Initializable {
     private IManagementVisitDao<ManagementVisit> managementVisitDao;
     private ICrimeDao<Crime> crimeDao;
     private ISentenceDao<Sentence> sentenceDao;
+    private IUserLogDao userLogDao = new UserLogDao();
 
     @FXML
     private AreaChart<String, Number> areaChart;
@@ -59,6 +71,16 @@ public class DashboardController implements Initializable {
     @FXML
     private Label txtVisitor;
 
+    private static final int ITEMS_PER_PAGE = 10;
+
+    private List<UserLog> userLogs;
+    private int currentOffset = 0;
+
+    @FXML
+    private ScrollPane scrollPane;
+
+    private VBox vBox;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         prisonerDao = new PrisonerDAO();
@@ -71,10 +93,92 @@ public class DashboardController implements Initializable {
         txtCrime.setText(String.valueOf(crimeDao.getCountCrime()));
 
         areaChartController();
-        lineChartController();
         barChartController();
         pieChartController();
         stackedAreaChartController();
+
+//        userLogDao.selectAllUserLogs();
+        loadDataUserLog();
+
+//        List<UserLog> userLogs = userLogDao.selectAllUserLogs();
+//        try {
+//            loadUserLogs(userLogs);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    private void loadDataUserLog() {
+        vBox = new VBox();
+        scrollPane.setContent(vBox);
+        AnchorPane.setTopAnchor(scrollPane, 0.0);
+        AnchorPane.setRightAnchor(scrollPane, 0.0);
+        AnchorPane.setBottomAnchor(scrollPane, 0.0);
+        AnchorPane.setLeftAnchor(scrollPane, 0.0);
+
+
+        // Initialize userLogs
+        userLogs = userLogDao.selectAllUserLogs();; // You need to replace this with your actual method to load user logs
+
+        loadInitialUserLogs();
+
+        // Add scroll listener
+        scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() == scrollPane.getVmax()) {
+                // Load more data when scrolled to the bottom
+                Platform.runLater(this::loadMoreUserLogs);
+            }
+        });
+    }
+
+    private void loadInitialUserLogs() {
+        // Load the first set of user logs
+        List<UserLog> initialLogs = getNextUserLogs();
+        try {
+            loadUserLogs(initialLogs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadMoreUserLogs() {
+        // Load the next set of user logs
+        List<UserLog> moreLogs = getNextUserLogs();
+        if (!moreLogs.isEmpty()) {
+            try {
+                loadUserLogs(moreLogs);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private List<UserLog> getNextUserLogs() {
+        // This method should return the next set of user logs from your data source
+        int nextOffset = currentOffset + ITEMS_PER_PAGE;
+        List<UserLog> nextLogs = new ArrayList<>();
+        if (currentOffset < userLogs.size()) { // Check if currentOffset is less than userLogs size
+            if (nextOffset <= userLogs.size()) {
+                nextLogs = userLogs.subList(currentOffset, nextOffset);
+            } else {
+                nextLogs = userLogs.subList(currentOffset, userLogs.size());
+            }
+            currentOffset = nextOffset;
+        }
+
+        return nextLogs;
+    }
+
+    private void loadUserLogs(List<UserLog> userLogs) throws IOException {
+        for (UserLog userLog : userLogs) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/psmsystem/view/userlog/UserLogView.fxml"));
+            AnchorPane itemUserLog = loader.load();
+            UserLogController controller = loader.getController();
+            controller.setUserLogData(userLog.getUserName(), userLog.getDateUpdate().toString(), userLog.getNote());
+            vBox.getChildren().add(itemUserLog);
+//            vBox.getStyleClass().add("scroll-vbox");
+
+        }
     }
 
     public void areaChartController() {
@@ -85,15 +189,7 @@ public class DashboardController implements Initializable {
         barChartBonus.getYAxis().setLabel("Count");
 
         AssessDao assessDao = new AssessDao();
-//        Map<String, Integer> breachData = assessDao.getBreachOfDisciplineData();
         Map<String, Integer> bonusData = assessDao.getBonusData();
-
-//        System.out.println("breachData"+breachData);
-//        System.out.println("bonusData"+bonusData);
-
-//        XYChart.Series<String, Number> breachSeries = new XYChart.Series<>();
-//        breachSeries.setName("Breach of Discipline");
-//        breachData.forEach((prisonerName, breachCount) -> breachSeries.getData().add(new XYChart.Data<>(prisonerName, breachCount)));
 
         XYChart.Series<String, Number> bonusSeries = new XYChart.Series<>();
         bonusSeries.setName("Bonus");
@@ -130,22 +226,10 @@ public class DashboardController implements Initializable {
 
         AssessDao assessDao = new AssessDao();
         Map<String, Integer> breachData = assessDao.getBreachOfDisciplineData();
-//        xAxis.setLabel("Sentence Type");
-//        yAxis.setLabel("Number of Prisoners");
-//
-//        barChart.setTitle("Number of Prisoners by Sentence Type");
-
-//        XYChart.Series<String, Number> series = new XYChart.Series<>();
-//        series.setName("Prisoners");
 
         XYChart.Series<String, Number> breachSeries = new XYChart.Series<>();
         breachSeries.setName("Breach of Discipline");
         breachData.forEach((prisonerName, breachCount) -> breachSeries.getData().add(new XYChart.Data<>(prisonerName, breachCount)));
-
-//        Map<String, Integer> prisonersBySentenceType = sentenceDao.countPrisonersBySentenceType();
-//        for (Map.Entry<String, Integer> entry : prisonersBySentenceType.entrySet()) {
-//            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-//        }
 
         barChartDiscipline.getData().add(breachSeries);
     }
@@ -162,7 +246,7 @@ public class DashboardController implements Initializable {
 
     public void stackedAreaChartController() {
         HealthDao healthDao = new HealthDao();
-        int year = LocalDate.now().getYear(); // Lấy năm hiện tại
+        int year = LocalDate.now().getYear();
         Map<Integer, Integer> strongHealthData = healthDao.getStrongHealthDataByMonthYear(year);
         Map<Integer, Integer> weakHealthData = healthDao.getWeakHealthDataByMonthYear(year);
 

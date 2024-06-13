@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.sentence;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.crime.Crime;
@@ -9,10 +10,13 @@ import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.model.sentence.SentenceServiceImpl;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import com.example.psmsystem.service.sentenceDao.SentenceService;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +44,7 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -50,6 +55,7 @@ public class SentenceController implements Initializable {
     private ICrimeDao<Crime> crimeDao;
     private ISentenceDao<Sentence> sentenceDao;
     private SentenceServiceImpl<SentenceDTO> sentenceService = new SentenceService();
+    private IUserLogDao userlogDao = new UserLogDao();
 
     @FXML
     private ComboBox<String> cbSentenceType;
@@ -523,21 +529,25 @@ public class SentenceController implements Initializable {
                     LocalDate releaseDate = Instant.ofEpochMilli(releaseTimeMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                     LocalDate today = LocalDate.now();
 
-                    System.out.println(selected.isStatus());
-                    System.out.println((releaseDate != null) + ""+ releaseDate);
-                    System.out.println((releaseDate.plusYears(20).isBefore(today)));
+//                    System.out.println(selected.isStatus());
+//                    System.out.println((releaseDate != null) + ""+ releaseDate);
+//                    System.out.println((releaseDate.plusYears(20).isBefore(today)));
 
 //                    if (endDate == null) {
 //                        AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
 //                                "Cannot delete record because the prisoner is life imprisonment.");
 //                    }
-                     if (selected.isStatus() && releaseDate != null && releaseDate.plusYears(20).isBefore(today)) {
+                     if (selected.isStatus() && releaseDate != null && releaseDate.plusYears(1).isBefore(today)) {
                         sentenceDao.deleteSentence(visitationId);
                         listTable.remove(selected);
                         dataTable.setItems(listTable);
                         resetValue();
                         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                                 "Sentence deleted successfully.");
+
+                         ApplicationState appState = ApplicationState.getInstance();
+                         UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Sentence code " + selected.getSentenceCode());
+                         userlogDao.insertUserLog(userLog);
                     }
                     else {
                         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
@@ -629,6 +639,9 @@ public class SentenceController implements Initializable {
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                     "Sentence updated successfully.");
 
+            ApplicationState appState = ApplicationState.getInstance();
+            UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Sentence code " + sentenceCode);
+            userlogDao.insertUserLog(userLog);
             onClean(event);
         } else {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
