@@ -184,9 +184,8 @@ public class ItemPrisonerController implements Initializable {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     PrisonerDAO prisonerDAO = new PrisonerDAO();
-                    boolean isDeleted = prisonerDAO.deletePrisoner(prisonerCode);
-
-                    if (isDeleted) {
+                    try {
+                        prisonerDAO.deletePrisoner(prisonerCode);
                         // Hiển thị thông báo thành công
                         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                         successAlert.setTitle("Deletion Successful");
@@ -195,13 +194,13 @@ public class ItemPrisonerController implements Initializable {
                         successAlert.showAndWait();
 
                         List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
-                    prisonerController.refreshPrisonerList(prisonerList);
-                    } else {
+                        prisonerController.refreshPrisonerList(prisonerList);
+                    } catch (RuntimeException e) {
                         // Hiển thị thông báo lỗi nếu không thể xóa tù nhân
                         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                         errorAlert.setTitle("Deletion Failed");
                         errorAlert.setHeaderText(null);
-                        errorAlert.setContentText("Failed to delete prisoner with code: " + prisonerCode + ".");
+                        errorAlert.setContentText(e.getMessage());
                         errorAlert.showAndWait();
                     }
                 }

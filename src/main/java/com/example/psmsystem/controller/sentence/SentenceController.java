@@ -604,10 +604,33 @@ public class SentenceController implements Initializable {
         java.sql.Date startDate = selectedStartDate != null ? java.sql.Date.valueOf(selectedStartDate) : null;
         java.sql.Date endDate = selectedEndDate != null ? java.sql.Date.valueOf(selectedEndDate) : null;
         java.sql.Date releaseDate = selectedReleaseDate != null ? java.sql.Date.valueOf(selectedReleaseDate) : null;
+        if(sentenceType.equals("limited time")) {
+            //end Date must not null
+            if(endDate == null) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "A fixed-term prison sentence must have an expected release date.");
+                return;
+            }
+            //release <=  endDate
+            if(releaseDate != null && endDate.before(releaseDate)) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "The end date of the prison sentence cannot be before the release date.");
+                return;
+            }
 
+        } else { // life: endDate and releaseDate must null
+            if(endDate != null || releaseDate != null) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "A life sentence cannot have an end date or a release date.");
+                return;
+            }
+        }
 
         Sentence sentence = new Sentence(prisonerId, prisonerName, sentenceCode, sentenceType, crimeCode, startDate, endDate, releaseDate, status, paroleEligibility);
-        sentenceDao.updateSentence(sentence, visitationId);
+        try {
+            sentenceDao.updateSentence(sentence, visitationId);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    "Update sentence failed: " + e.getMessage());
+            return;
+        }
 
         index = dataTable.getSelectionModel().getSelectedIndex();
 
@@ -630,9 +653,11 @@ public class SentenceController implements Initializable {
                     "Sentence updated successfully.");
 
             onClean(event);
+
         } else {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "No health selected.");
+                    "No sentence selected.");
+            return;
         }
     }
 

@@ -211,6 +211,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
     public boolean insertPrisonerDB(Prisoner prisoner)
     {
+        if (prisoner.getImagePath() == null) throw new RuntimeException("Please add a photo of the prisoner.");
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
@@ -229,7 +230,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
                 return true;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("An Error in System. Please try again in a few minutes.",e.getCause());
         }
         return false;
     }
@@ -309,19 +310,24 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         return genderCount;
     }
 
-    public boolean deletePrisoner(String prisonerCode)
+    public void deletePrisoner(String prisonerCode)
     {
-
-        try {
-            Connection connection = DbConnection.getDatabaseConnection().getConnection();
-            PreparedStatement ps = connection.prepareStatement(UPDATE_PRISONER_STATUS);
-//            ps.setInt(1, 1);
-            ps.setString(1, prisonerCode);
-            int rowsUpdated = ps.executeUpdate();
-            return rowsUpdated > 0;
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()){
+            //check sentence
+            try (PreparedStatement isSentences = connection.prepareStatement("SELECT * FROM sentences WHERE prisoner_id = ?")){
+                isSentences.setString(1,prisonerCode);
+                ResultSet isSentencesRs = isSentences.executeQuery();
+                //if have sentence -> cannot delete
+                if(isSentencesRs.next()) throw new RuntimeException("Please delete this prisoner's sentence first.");
+            }
+            //delete prisoner
+            try (PreparedStatement delPrisonerPs = connection.prepareStatement("DELETE FROM prisoners WHERE prisoner_id = ?")){
+                delPrisonerPs.setString(1,prisonerCode);
+                delPrisonerPs.executeUpdate();
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            LOGGER.log(Level.SEVERE,"Delete prisoner failed: ",e);
+            throw new RuntimeException("Delete failed: An error in System. Please try again in few minutes");
         }
     }
 

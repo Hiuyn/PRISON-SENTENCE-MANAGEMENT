@@ -29,6 +29,7 @@ import org.controlsfx.control.CheckComboBox;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -127,30 +128,52 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
     }
     if (getPrisoner()) {
         if (getSentence()) {
+            //get date startDate and dOB
+            LocalDate startDate = this.sentence.getStartDate().toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate dOB = LocalDate.parse(this.prisoner.getDOB(),formatter);
+            //if start Date before 18year dOb -> error message
+            if(startDate.isBefore(dOB.plusYears(18))) {
+                showAlert("Court sentence start date cannot be set before the prisoner turns 18 years old.");
+                return;
+            }
+            SentenceDao sentenceDao = new SentenceDao();
+            PrisonerDAO prisonerDao = new PrisonerDAO();
             if (!checkIdentity) {
                 System.out.print("insert All");
-                SentenceDao sentenceDao = new SentenceDao();
-                PrisonerDAO prisonerDao = new PrisonerDAO();
-                prisonerDao.insertPrisonerDB(prisoner);
-                sentenceDao.addSentence(this.sentence);
 
-                Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
-                alert1.setHeaderText("Add new information");
-                alert1.setContentText("Add prisoner success!");
-                alert1.showAndWait();
-                List<Prisoner> prisonerList = prisonerDao.getPrisonerInItem();
-                back(event, () -> prisonerController.refreshPrisonerList(prisonerList));
+                //add prisoner
+                try {
+                    prisonerDao.insertPrisonerDB(prisoner);
+                } catch (RuntimeException e) {
+                    showAlert(e.getMessage());
+                }
+                //add sentence
+                try {
+                    sentenceDao.addSentence(this.sentence);
+                    Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert1.setHeaderText("Add new information");
+                    alert1.setContentText("Add prisoner success!");
+                    alert1.showAndWait();
+                    List<Prisoner> prisonerList = prisonerDao.getPrisonerInItem();
+                    back(event, () -> prisonerController.refreshPrisonerList(prisonerList));
+                } catch (RuntimeException e) {
+                    showAlert(e.getMessage());
+                }
             }
             else
             {
-                System.out.print("insert Sentence");
-                Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
-                alert1.setHeaderText("Add new information");
-                alert1.setContentText("Add Sentence success!");
-                alert1.showAndWait();
-                SentenceDao sentenceDao = new SentenceDao();
-                PrisonerDAO prisonerDao = new PrisonerDAO();
-                sentenceDao.addSentence(this.sentence);
+                try {
+                    sentenceDao.addSentence(this.sentence);
+                    System.out.print("insert Sentence");
+                    Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert1.setHeaderText("Add new information");
+                    alert1.setContentText("Add Sentence success!");
+                    alert1.showAndWait();
+                } catch (RuntimeException e) {
+                    showAlert(e.getMessage());
+                }
+
                 List<Prisoner> prisonerList = prisonerDao.getPrisonerInItem();
                 back(event, () -> prisonerController.refreshPrisonerList(prisonerList));
             }
@@ -352,11 +375,7 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
 
             // Thiết lập giá trị cho dateOut
             Date startDate = convertToDate(dateInput);
-            Date releaseDate = Date.valueOf(dateInput.plusYears(100));
-            LocalDate now = LocalDate.now();
-            Date updateDate = Date.valueOf(now);
-            boolean status = false;
-            this.sentence = new Sentence(prisonerId, txtPrisonerFNAdd.getText(), Integer.parseInt(lbSentenceId.getText()), sentenceTypeText, "", startDate, releaseDate, releaseDate, status, "");
+            this.sentence = new Sentence(prisonerId, txtPrisonerFNAdd.getText(), Integer.parseInt(lbSentenceId.getText()), sentenceTypeText, "", startDate, null, null, false, "");
         }
         // Chọn "limited time"
         else if (sentenceTypeText.equals("limited time")) {
@@ -369,18 +388,14 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                 showAlert("Select crime and input times");
                 return false;
             }
-
             Date startDate = convertToDate(dateInput);
             Date endDate = Date.valueOf(dateOut.getValue());
-            LocalDate now = LocalDate.now();
-            Date updateDate = Date.valueOf(now);
-            boolean status = false;
-            this.sentence = new Sentence(prisonerId, txtPrisonerFNAdd.getText(), Integer.parseInt(lbSentenceId.getText()), sentenceTypeText, crimeCode, startDate, endDate, endDate, status, "");
+            this.sentence = new Sentence(prisonerId, txtPrisonerFNAdd.getText(), Integer.parseInt(lbSentenceId.getText()), sentenceTypeText, crimeCode, startDate, endDate, null, false, "");
         }
         return true;
     } catch (Exception e) {
         System.out.println("getSentence - addPrisonerController : " + e.getMessage());
-        showAlert("An error occurred. Please check your input.");
+        showAlert("An error in system. Please try again in a few minutes.");
     }
     return false;
 }

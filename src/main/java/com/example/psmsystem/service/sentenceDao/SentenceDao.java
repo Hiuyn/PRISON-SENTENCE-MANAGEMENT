@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SentenceDao implements ISentenceDao<Sentence> {
     private static final String INSERT_QUERY = "INSERT INTO sentences (prisoner_id, sentences_code, sentence_type, crimes_code, start_date, end_date, release_date, status, parole_eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET prisoner_id = ?, sentences_code = ?, sentence_type = ?, crimes_code = ?, start_date = ?, end_date = ?, release_date = ?, status = ?, parole_eligibility = ?WHERE sentence_id = ?";
+    private static final String UPDATE_SENTENCE_QUERY = "UPDATE sentences SET prisoner_id = ?, sentences_code = ?, sentence_type = ?, crimes_code = ?, start_date = ?, end_date = ?, release_date = ?, status = ?, parole_eligibility = ? WHERE sentence_id = ?";
     private static final String DELETE_SENTENCE_QUERY = "DELETE FROM sentences WHERE sentence_id = ?";
     private static final String SELECT_BY_SENTENCE_QUERY = "SELECT s.sentence_id, s.prisoner_id, p.prisoner_name, s.sentence_type, s.sentences_code, s.crimes_code, s.start_date, s.end_date, s.release_date, s.status, s.parole_eligibility FROM sentences s JOIN prisoners p ON p.prisoner_id = s.prisoner_id";
     private static final String SELECT_BY_CODE_SENTENCE_QUERY = "SELECT * FROM sentences WHERE sentences_code = ?";
@@ -32,19 +32,24 @@ public class SentenceDao implements ISentenceDao<Sentence> {
             ps.setString(3,sentence.getSentenceType());
             ps.setString(4,sentence.getCrimesCode());
             ps.setDate(5, sentence.getStartDate());
-            ps.setDate(6, sentence.getEndDate());
-            ps.setDate(7, sentence.getReleaseDate());
-            ps.setBoolean(8,sentence.isStatus());
-            ps.setString(9,sentence.getParole());
-            int rowAffected = ps. executeUpdate();
-            if (rowAffected > 0)
-            {
-                return true;
+            if(sentence.getEndDate() == null) {
+                ps.setNull(6, Types.DATE);
+            } else {
+                ps.setDate(6, sentence.getEndDate());
             }
+            if(sentence.getReleaseDate() == null){
+                ps.setNull(7,Types.DATE);
+                ps.setBoolean(8,false);
+            } else {
+                ps.setDate(7, sentence.getReleaseDate());
+                ps.setBoolean(8,true);
+            }
+            ps.setString(9,sentence.getParole());
+            ps. executeUpdate();
+            return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Add failed: an error in system. Please try again in a few minutes.");
         }
-        return false;
     }
 
     @Override
@@ -105,14 +110,25 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 ps.setString(4,sentence.getCrimesCode());
                 ps.setDate(5, (Date) sentence.getStartDate());
                 ps.setDate(6, (Date) sentence.getEndDate());
-                ps.setDate(7, (Date) sentence.getReleaseDate());
-                ps.setBoolean(8,sentence.isStatus());
+                if(sentence.getReleaseDate() != null) {
+                    ps.setDate(7, (Date) sentence.getReleaseDate());
+                    ps.setBoolean(8,true);
+                } else {
+                    ps.setNull(7,Types.DATE);
+                    ps.setBoolean(8,false);
+                }
                 ps.setString(9,sentence.getParole());
                 ps.setInt(10, id);
                 ps.executeUpdate();
+                //update status prisoner
+                try (PreparedStatement setStatusPrisonerPs = connection.prepareStatement("UPDATE `prisoners` SET `status` = ? WHERE `prisoner_id` = ?")){
+                    setStatusPrisonerPs.setBoolean(1,sentence.getReleaseDate() != null);
+                    setStatusPrisonerPs.setInt(2,sentence.getPrisonerId());
+                    setStatusPrisonerPs.executeUpdate();
+                }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Update sentence failed: Please try again in a few minutes.",e);
         }
     }
 
@@ -123,22 +139,27 @@ public class SentenceDao implements ISentenceDao<Sentence> {
             //delete commendations
             try(PreparedStatement deleteCommendationsPs = connection.prepareStatement("DELETE FROM commendations WHERE sentence_id = ?"))  {
                 deleteCommendationsPs.setInt(1,id);
+                deleteCommendationsPs.executeUpdate();
             }
             //delete disciplinary
             try(PreparedStatement deleteDisciplinaryPs = connection.prepareStatement("DELETE FROM disciplinary_measures WHERE sentence_id = ?"))  {
                 deleteDisciplinaryPs.setInt(1,id);
+                deleteDisciplinaryPs.executeUpdate();
             }
             //delete health
             try(PreparedStatement delHealthsPs = connection.prepareStatement("DELETE FROM healths WHERE sentence_id = ?"))  {
                 delHealthsPs.setInt(1,id);
+                delHealthsPs.executeUpdate();
             }
             //delete ignored
             try(PreparedStatement delIgoreePs = connection.prepareStatement("DELETE FROM incareration_process WHERE sentence_id = ?"))  {
                 delIgoreePs.setInt(1,id);
+                delIgoreePs.executeUpdate();
             }
             //delete vitsit
             try(PreparedStatement delVisitPs = connection.prepareStatement("DELETE FROM visit_log WHERE sentence_id = ?"))  {
                 delVisitPs.setInt(1,id);
+                delVisitPs.executeUpdate();
             }
             try(PreparedStatement ps = connection.prepareStatement(DELETE_SENTENCE_QUERY)) {
                 ps.setInt(1, id);

@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.report;
 
+import com.example.psmsystem.config.AppConfig;
 import com.example.psmsystem.dto.Consider;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.report.IReportDao;
@@ -127,12 +128,11 @@ public class ReportController implements Initializable {
                     setGraphic(null);
                 } else {
                     try {
-                        URL imageUrl = getClass().getClassLoader().getResource(item);
-                        Image image = new Image(imageUrl.toExternalForm());
+                        Image image = new Image(item);
 
                         image.errorProperty().addListener((obs, oldError, newError) -> {
                             if (newError) {
-                                imageView.setImage(new Image("/static/images.png"));
+                                imageView.setImage(new Image(AppConfig.getInstance().getImagePathDefault()));
                             }
                         });
 
@@ -142,7 +142,7 @@ public class ReportController implements Initializable {
                         setGraphic(imageView);
                     } catch ( Exception e) {
                         // Nếu URL không hợp lệ, sử dụng hình ảnh mặc định
-                        imageView.setImage(new Image("/static/images.png"));
+                        imageView.setImage(new Image(AppConfig.getInstance().getImagePathDefault()));
                         imageView.setFitWidth(100);
                         imageView.setFitHeight(100);
                         setGraphic(imageView);
