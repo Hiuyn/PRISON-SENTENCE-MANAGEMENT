@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.userLogDao;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.userlog.IUserLogDao;
 import com.example.psmsystem.model.userlog.UserLog;
@@ -9,10 +10,14 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserLogDao implements IUserLogDao<UserLog> {
+    Logger LOGGER = Logger.getLogger(UserLog.class.getName());
     private static final String INSERT_USER_LOG_SQL = "INSERT INTO update_log (date_update, note, user_id) VALUES (?, ?, ?)";
     private static final String SELECT_ALL_USER_LOGS = "SELECT ul.user_id, u.username, ul.date_update, ul.note FROM update_log ul JOIN users u ON ul.user_id = u.user_id";
+
     private static final String DELETE_USER_LOG_SQL = "DELETE FROM update_log WHERE user_id = ? AND note LIKE '%Updated the latest data%'";
     private static final String SELECT_USER_LOG_SQL = "SELECT date_update FROM update_log WHERE user_id = ? AND note LIKE '%Updated the latest data%'";
 
@@ -44,6 +49,48 @@ public class UserLogDao implements IUserLogDao<UserLog> {
         } catch (SQLException e) {
         }
         return userLogs;
+//        List<UserLog> userLogs = new ArrayList<>();
+//        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+//            //select all if role = ultimate
+//            if(ApplicationState.getInstance().getRoleName().contains(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+//                try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USER_LOGS)){
+//                    ResultSet rs = preparedStatement.executeQuery();
+//                    while (rs.next()) {
+//                        String username = rs.getString("username");
+//                        LocalDateTime updateDate = rs.getTimestamp("date_update").toLocalDateTime();
+//                        String note = rs.getString("note");
+//                        userLogs.add(new UserLog(rs.getInt("user_id"), username, updateDate, note));
+//                    }
+//                }
+//            } else { //select by role
+//                //return null If there are no permissions.
+//                if(ApplicationState.getInstance().getRoleName().size() == 0) return userLogs;
+//                String sql = "SELECT ul.user_id, ul.date_update, ul.note FROM update_log ul " +
+//                        "JOIN user_role ur ON ur.user_id = ul.user_id " +
+//                        "JOIN roles r ON r.role_id = ur.role_id " +
+//                        "WHERE ";
+//
+//                for (int i = 0 ;i < ApplicationState.getInstance().getRoleName().size(); i ++) {
+//                    sql += "r.name = " + ApplicationState.getInstance().getRoleName().get(i);
+//                    if(i < ApplicationState.getInstance().getRoleName().size() - 1) {
+//                        sql += " OR ";
+//                    }
+//                }
+//                try (PreparedStatement getLogByRolePs = connection.prepareStatement(sql)){
+//                    ResultSet getLogByRoleRs = getLogByRolePs.executeQuery();
+//                    while (getLogByRoleRs.next()) {
+//                        String username = getLogByRoleRs.getString("username");
+//                        LocalDateTime updateDate = getLogByRoleRs.getTimestamp("date_update").toLocalDateTime();
+//                        String note = getLogByRoleRs.getString("note");
+//                        userLogs.add(new UserLog(getLogByRoleRs.getInt("user_id"), username, updateDate, note));
+//                    }
+//                }
+//            }
+//            return userLogs;
+//        } catch (SQLException e) {
+//            LOGGER.log(Level.SEVERE,"get log failed: ",e);
+//            throw  new RuntimeException("Get log failed!");
+//        }
     }
 
     public void deleteUserLogUpdateDate(UserLog userLog) {

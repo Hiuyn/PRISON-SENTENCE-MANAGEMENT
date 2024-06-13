@@ -377,7 +377,7 @@ public class EditPrisonerController  implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText(null);
-                alert.setContentText("Update fail!");
+                alert.setContentText(e.getMessage());
                 alert.showAndWait();
             }
         }
