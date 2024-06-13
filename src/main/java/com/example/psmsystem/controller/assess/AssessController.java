@@ -425,8 +425,14 @@ public class AssessController implements Initializable {
                 Assess selected = dataTable.getSelectionModel().getSelectedItem();
 
                 if (selected != null) {
+                    try {
+                        assessDao.deleteAssess(visitationId);
+                    } catch (RuntimeException e) {
+                        AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                                e.getMessage());
+                        return;
+                    }
 
-                    assessDao.deleteAssess(visitationId);
                     listTable.remove(selected);
                     dataTable.setItems(listTable);
                     resetValue();

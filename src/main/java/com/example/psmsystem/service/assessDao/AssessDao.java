@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.assessDao;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.assess.Assess;
 import com.example.psmsystem.model.assess.IAssessDao;
@@ -14,8 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AssessDao implements IAssessDao<Assess> {
+    Logger LOGGER = Logger.getLogger(AssessDao.class.getName());
+
     private static final String INSERT_QUERY = "INSERT INTO incareration_process (process_code, sentence_id, prisoner_id, date_of_occurrence, event_type, level, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_ASSESS_QUERY = "UPDATE incareration_process SET process_code = ?, sentence_id = ?, prisoner_id = ?, date_of_occurrence = ?, event_type = ?, level = ?, note = ? WHERE process_id = ?";
     private static final String DELETE_ASSESS_QUERY = "DELETE FROM incareration_process WHERE process_id = ?";
@@ -27,6 +32,17 @@ public class AssessDao implements IAssessDao<Assess> {
 
     @Override
     public void addAssess(Assess assess) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if(r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             //check visit date ith start end release,start,end of sentence
@@ -66,6 +82,7 @@ public class AssessDao implements IAssessDao<Assess> {
 
 
         } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE,"add failed: ", e);
             throw new RuntimeException("Add assess failed!");
         }
     }
@@ -100,6 +117,16 @@ public class AssessDao implements IAssessDao<Assess> {
 
     @Override
     public void updateAssess(Assess assess, int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if(r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             //check visit date ith start end release,start,end of sentence
             //get sentence
@@ -136,19 +163,31 @@ public class AssessDao implements IAssessDao<Assess> {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE,"update assess failed: ",e);
             throw new RuntimeException("Update assess failed.");
         }
     }
 
     @Override
     public void deleteAssess(int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if(r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(DELETE_ASSESS_QUERY)) {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE,"delete Failed: ",e);
+            throw new RuntimeException("Delete Assess failed!");
         }
     }
 

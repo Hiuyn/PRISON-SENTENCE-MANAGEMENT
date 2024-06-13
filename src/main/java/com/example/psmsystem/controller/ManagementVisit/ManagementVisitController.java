@@ -355,17 +355,23 @@ public class ManagementVisitController implements Initializable {
 
             // Xử lý phản hồi của người dùng
             if (result.isPresent() && result.get() == okButton) {
-                managementVisitDao.deleteManagementVisit(visitationId);
-                ManagementVisit selected = dataTable.getSelectionModel().getSelectedItem();
-                listTable.remove(selected);
-                dataTable.setItems(listTable);
-                resetValue();
-                AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
-                        "Visit deleted successfully.");
+                try {
+                    managementVisitDao.deleteManagementVisit(visitationId);
+                    ManagementVisit selected = dataTable.getSelectionModel().getSelectedItem();
+                    listTable.remove(selected);
+                    dataTable.setItems(listTable);
+                    resetValue();
+                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
+                            "Visit deleted successfully.");
 
-                ApplicationState appState = ApplicationState.getInstance();
-                UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Visit name " + selected.getVisitorName());
-                userlogDao.insertUserLog(userLog);
+                    ApplicationState appState = ApplicationState.getInstance();
+                    UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Visit name " + selected.getVisitorName());
+                    userlogDao.insertUserLog(userLog);
+                } catch (RuntimeException e) {
+                    AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                            e.getMessage());
+                    return;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

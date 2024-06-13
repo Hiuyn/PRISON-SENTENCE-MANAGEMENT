@@ -60,9 +60,10 @@ public class LoginController implements Initializable{
         if (this.isValidated()) {
             String usernameText = username.getText();
             String passwordText = password.getText();
-            User user = userDao.checkLogin(usernameText, passwordText);
-            if (user != null) {
-                loginButton.getScene().getWindow().hide();
+            try {
+                User user = userDao.checkLogin(usernameText, passwordText);
+                if (user != null) {
+                    loginButton.getScene().getWindow().hide();
 
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/MainPanelView.fxml"));
@@ -80,12 +81,21 @@ public class LoginController implements Initializable{
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-            }
-            else{
-                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                }
+                else{
+                    AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                             "Invalid username and password.");
                     username.requestFocus();
+                }
+            } catch (RuntimeException e) {
+
+                    AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                            "Invalid username and password.");
+                    username.requestFocus();
+
             }
+
+
         }
     }
 

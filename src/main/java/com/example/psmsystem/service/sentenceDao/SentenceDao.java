@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.sentenceDao;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
@@ -27,8 +28,21 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     private static final String INSERT_SENTENCE_CRIME = "INSERT INTO sentence_crimes VALUE (?, ?, ?)";
     @Override
     public boolean addSentence(Sentence sentence) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
+
             //check start > 18years(dob)
             try (PreparedStatement checkDOBPrisonerPs = connection.prepareStatement("SELECT date_birth FROM prisoners WHERE prisoner_id = ?")){
                 checkDOBPrisonerPs.setInt(1,sentence.getPrisonerId());
@@ -78,6 +92,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
 
             return true;
         } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE,"add sentence failed: ",e);
             throw new RuntimeException("Add failed: an error in system. Please try again in a few minutes.");
         }
     }
@@ -131,6 +146,18 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     }
     @Override
     public void updateSentence(Sentence sentence, int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         //check crime
         if(sentence.getCrimesCode() == null) throw new RuntimeException("Please select crimes for sentence");
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
@@ -187,6 +214,18 @@ public class SentenceDao implements ISentenceDao<Sentence> {
 
     @Override
     public void deleteSentence(int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
 
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             //delete commendations
@@ -219,7 +258,8 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE,"delete sentence failed: ",e);
+            throw new RuntimeException("delete failed!");
         }
     }
 

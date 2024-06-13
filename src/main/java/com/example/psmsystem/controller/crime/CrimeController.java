@@ -88,7 +88,13 @@ public class CrimeController implements Initializable {
 
         String crimeName = txtCrime.getText();
         Crime crime = new Crime(crimeName);
-        crimeDao.addCrime(crime);
+        try {
+            crimeDao.addCrime(crime);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", e.getMessage());
+            return;
+        }
+
         listTable.add(crime);
         dataTable.setItems(listTable);
 
@@ -124,16 +130,22 @@ public class CrimeController implements Initializable {
                 Crime crime = dataTable.getSelectionModel().getSelectedItem();
 
                 if (crime != null) {
-                    crimeDao.deleteCrime(visitationId);
-                    listTable.remove(crime);
-                    dataTable.setItems(listTable);
-                    resetValue();
-                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
-                            "Sentence deleted successfully.");
+                    try {
+                        crimeDao.deleteCrime(visitationId);
+                        listTable.remove(crime);
+                        dataTable.setItems(listTable);
+                        resetValue();
+                        AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
+                                "Sentence deleted successfully.");
 
-                    ApplicationState appState = ApplicationState.getInstance();
-                    UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Crime id " + visitationId);
-                    userlogDao.insertUserLog(userLog);
+                        ApplicationState appState = ApplicationState.getInstance();
+                        UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Crime id " + visitationId);
+                        userlogDao.insertUserLog(userLog);
+                    } catch (RuntimeException e) {
+                        AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                                e.getMessage());
+                        return;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -158,7 +170,14 @@ public class CrimeController implements Initializable {
         }
 
         Crime crime = new Crime(nameCrime);
-        crimeDao.updateCrime(crime, visitationId);
+        try {
+            crimeDao.updateCrime(crime, visitationId);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    "No Crime selected.");
+            return;
+        }
+
 
         index = dataTable.getSelectionModel().getSelectedIndex();
 

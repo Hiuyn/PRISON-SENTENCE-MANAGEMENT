@@ -359,19 +359,27 @@ public class EditPrisonerController  implements Initializable {
     public void updatePrisoner(ActionEvent actionEvent) {
         if (getPrisoner()) {
             PrisonerDAO prisonerDAO = new PrisonerDAO();
-            prisonerDAO.updatePrisoner(this.prisoner);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Update successfully!");
+            try {
+                prisonerDAO.updatePrisoner(this.prisoner);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("Update successfully!");
 
-            ApplicationState appState = ApplicationState.getInstance();
-            UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Prisoner code " + this.prisoner.getPrisonerCode());
-            userlogDao.insertUserLog(userLog);
+                ApplicationState appState = ApplicationState.getInstance();
+                UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Prisoner code " + this.prisoner.getPrisonerCode());
+                userlogDao.insertUserLog(userLog);
 
-            alert.showAndWait();
-            List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
-            back(actionEvent, () -> prisonerController.refreshPrisonerList(prisonerList));
+                alert.showAndWait();
+                List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
+                back(actionEvent, () -> prisonerController.refreshPrisonerList(prisonerList));
+            } catch (RuntimeException e) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+                alert.setContentText("Update fail!");
+                alert.showAndWait();
+            }
         }
         else
         {

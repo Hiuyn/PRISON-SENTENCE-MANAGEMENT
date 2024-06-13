@@ -544,7 +544,14 @@ public class SentenceController implements Initializable {
 //                                "Cannot delete record because the prisoner is life imprisonment.");
 //                    }
                      if (selected.isStatus() && releaseDate != null && releaseDate.plusYears(1).isBefore(today)) {
-                        sentenceDao.deleteSentence(visitationId);
+                         try {
+                             sentenceDao.deleteSentence(visitationId);
+                         } catch (RuntimeException e) {
+                             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                                     "An error occurred while deleting the sentence.");
+                             return;
+                         }
+
                         listTable.remove(selected);
                         dataTable.setItems(listTable);
                         resetValue();

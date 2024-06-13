@@ -202,6 +202,21 @@ public class ReportController implements Initializable {
 
     @FXML
     private void onExport(ActionEvent event) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if ( r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Warning", "You do not have permission to perform this operation.");
+            return;
+        }
+
         String selectedKey = choiceBox.getValue();
         if (selectedKey == null || selectedKey.isEmpty()) {
             AlertHelper.showAlert(Alert.AlertType.WARNING, window, "Warning", "Please select a key from the ChoiceBox.");

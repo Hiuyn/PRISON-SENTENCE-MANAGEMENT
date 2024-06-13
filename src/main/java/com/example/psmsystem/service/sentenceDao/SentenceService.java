@@ -23,6 +23,7 @@ public class SentenceService implements SentenceServiceImpl<SentenceDTO> {
     @Override
     public List<SentenceDTO> getSentence() {
 
+
         List<SentenceDTO> sentenceList = new ArrayList<>();
         try {
 
@@ -63,6 +64,7 @@ public class SentenceService implements SentenceServiceImpl<SentenceDTO> {
     }
     //consider
     public HashMap<String,List<Consider>> classify() {
+
         List<Consider> considerList = new ArrayList<>();
         // get year(now)
         int currentYear = LocalDate.now().getYear();

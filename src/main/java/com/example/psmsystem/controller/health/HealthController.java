@@ -423,6 +423,7 @@ public class HealthController implements Initializable {
         } catch (RuntimeException e) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     e.getMessage());
+            return;
         }
         listTable.add(health);
         dataTable.setItems(listTable);
@@ -471,17 +472,22 @@ public class HealthController implements Initializable {
             Optional<ButtonType> result = confirmationDialog.showAndWait();
 
             if (result.isPresent() && result.get() == okButton) {
-                healthDao.deleteHealth(healthId);
-                Health selected = dataTable.getSelectionModel().getSelectedItem();
-                listTable.remove(selected);
-                dataTable.setItems(listTable);
-                resetValue();
-                AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
-                        "Health deleted successfully.");
-
-                ApplicationState appState = ApplicationState.getInstance();
-                UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Health code " + selected.getHealthCode());
-                userlogDao.insertUserLog(userLog);
+                try {
+                    healthDao.deleteHealth(healthId);
+                    Health selected = dataTable.getSelectionModel().getSelectedItem();
+                    listTable.remove(selected);
+                    dataTable.setItems(listTable);
+                    resetValue();
+                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
+                            "Health deleted successfully.");
+                    ApplicationState appState = ApplicationState.getInstance();
+                    UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Health code " + selected.getHealthCode());
+                    userlogDao.insertUserLog(userLog);
+                } catch (RuntimeException e) {
+                    AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                            "An error occurred while deleting the health.");
+                    return;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

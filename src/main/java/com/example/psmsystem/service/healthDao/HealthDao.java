@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.healthDao;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.health.IHealthDao;
@@ -38,6 +39,18 @@ public class HealthDao implements IHealthDao<Health> {
             + "GROUP BY month_number";
     @Override
     public void addHealth(Health health) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.HEALTH_EXAMINER) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             //check visit date ith start end release,start,end of sentence
@@ -113,6 +126,18 @@ public class HealthDao implements IHealthDao<Health> {
 
     @Override
     public void updateHealth(Health health, int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.HEALTH_EXAMINER) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
 
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             //check visit date ith start end release,start,end of sentence
@@ -158,13 +183,26 @@ public class HealthDao implements IHealthDao<Health> {
 
     @Override
     public void deleteHealth(int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.HEALTH_EXAMINER) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(DELETE_HEALTH_QUERY)) {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE,"delete health failed!",e);
+            throw new RuntimeException("delete Health failed!");
         }
     }
 

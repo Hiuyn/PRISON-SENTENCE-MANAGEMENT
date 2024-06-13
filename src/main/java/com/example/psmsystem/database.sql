@@ -1,16 +1,31 @@
 drop database prisoner_sentence;
 create database prisoner_sentence;
 use prisoner_sentence;
--- 1
+-- 2
 create table users(
                       user_id int auto_increment primary key, -- id
                       full_name nvarchar(50) not null, -- full name
                       username nvarchar(15) BINARY not null, -- username
                       password nvarchar(500) not null -- hash password
 );
+create table roles(
+                      role_id int auto_increment primary key,
+                      name nvarchar(500) not null
+);
+insert into roles(name) values('PRISONER_MANAGEMENT'),('HEALTH_EXAMINER'),('VISIT_CONTROL'),('ULTIMATE_AUTHORITY');
+create table user_role(
+                          user_id int,
+                          role_id int,
+                          primary key (user_id,role_id) ,
+                          foreign key (user_id) references users(user_id),
+                          foreign key (role_id) references roles(role_id)
+);
 
-insert into users(full_name,username,password) values ('admin nè','admin123','5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5');
-
+insert into users(full_name,username,password) values ('admin nè','admin','5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5'),
+                                                      ('health nè','health','5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5'),
+                                                      ('visit nè','visit','5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5'),
+                                                      ('prison nè','prison','5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5');
+insert into user_role(user_id,role_id) values(1,4),(2,3),(2,2),(3,3),(4,1);
 -- 2
 create table prisoners(  -- tù nhân
                           prisoner_id int primary key auto_increment, -- id
@@ -371,3 +386,11 @@ INSERT INTO crimes (crime_name) VALUES
                                     ('Tax Evasion (Trốn thuế)'),
                                     ('Human Trafficking (Buôn người)'),
                                     ('Money Laundering (Rửa tiền)');
+
+-- Thêm dữ liệu vào bảng disciplinary_measures
+
+-- Thêm dữ liệu vào bảng commendations
+
+-- Thêm dữ liệu vào bảng visit_log
+
+-- Thêm dữ liệu vào bảng healths

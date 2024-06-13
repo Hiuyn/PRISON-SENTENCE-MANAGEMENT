@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.managementvisitDao;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.managementvisit.IManagementVisitDao;
 import com.example.psmsystem.model.managementvisit.ManagementVisit;
@@ -24,6 +25,18 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
 
     @Override
     public void addManagementVisit(ManagementVisit managementVisit) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.VISIT_CONTROL) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
 
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
@@ -101,6 +114,18 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
 
     @Override
     public void updateManagementVisit(ManagementVisit managementVisit, int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.VISIT_CONTROL) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
 
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             //check visit date ith start end release,start,end of sentence
@@ -146,13 +171,25 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
 
     @Override
     public void deleteManagementVisit(int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.VISIT_CONTROL) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(DELETE_MANAGEMENTVISIT_QUERY)) {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Delete visit failed!");
         }
     }
 
