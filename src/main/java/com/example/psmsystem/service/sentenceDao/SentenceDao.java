@@ -29,26 +29,53 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     public boolean addSentence(Sentence sentence) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
-            PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
-            ps.setInt(1,sentence.getPrisonerId());
-            ps.setInt(2,sentence.getSentenceCode());
-            ps.setString(3,sentence.getSentenceType());
-            ps.setString(4,sentence.getCrimesCode());
-            ps.setDate(5, sentence.getStartDate());
-            if(sentence.getEndDate() == null) {
-                ps.setNull(6, Types.DATE);
-            } else {
-                ps.setDate(6, sentence.getEndDate());
+            //check start > 18years(dob)
+            try (PreparedStatement checkDOBPrisonerPs = connection.prepareStatement("SELECT date_birth FROM prisoners WHERE prisoner_id = ?")){
+                checkDOBPrisonerPs.setInt(1,sentence.getPrisonerId());
+                ResultSet checkDOBPrisonerRs = checkDOBPrisonerPs.executeQuery();
+                if(!checkDOBPrisonerRs.next()) throw  new RuntimeException("Prisoner not found.");
+                if(sentence.getStartDate().toLocalDate().isBefore(checkDOBPrisonerRs.getDate("date_birth").toLocalDate().plusYears(18)))
+                    throw new RuntimeException("The sentence can only start after the prisoner's 18th birthday.");
             }
-            if(sentence.getReleaseDate() == null){
-                ps.setNull(7,Types.DATE);
-                ps.setBoolean(8,false);
-            } else {
-                ps.setDate(7, sentence.getReleaseDate());
-                ps.setBoolean(8,true);
+
+            // The status cannot be updated to false if the prisoner already has one false sentence.
+            try (PreparedStatement isStatusSentencesPs = connection.prepareStatement("SELECT COUNT(*) FROM sentences WHERE prisoner_id = ? AND status = false")){
+                isStatusSentencesPs.setInt(1,sentence.getPrisonerId());
+                ResultSet isStatusSentencesRs = isStatusSentencesPs.executeQuery();
+                if(isStatusSentencesRs.next()) {
+                    int count = isStatusSentencesRs.getInt(1);
+                    if(count > 1) throw new RuntimeException("This prisoner is currently undergoing rehabilitation under another sentence and cannot have their release date removed.");
+                }
             }
-            ps.setString(9,sentence.getParole());
-            ps. executeUpdate();
+            //create Sentence
+            try (PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);){
+                ps.setInt(1,sentence.getPrisonerId());
+                ps.setInt(2,sentence.getSentenceCode());
+                ps.setString(3,sentence.getSentenceType());
+                ps.setString(4,sentence.getCrimesCode());
+                ps.setDate(5, sentence.getStartDate());
+                if(sentence.getEndDate() == null) {
+                    ps.setNull(6, Types.DATE);
+                } else {
+                    ps.setDate(6, sentence.getEndDate());
+                }
+                if(sentence.getReleaseDate() == null){
+                    ps.setNull(7,Types.DATE);
+                    ps.setBoolean(8,false);
+                } else {
+                    ps.setDate(7, sentence.getReleaseDate());
+                    ps.setBoolean(8,true);
+                }
+                ps.setString(9,sentence.getParole());
+                ps. executeUpdate();
+            }
+            //update status prisoner
+            try (PreparedStatement setStatusPrisonerPs = connection.prepareStatement("UPDATE `prisoners` SET `status` = ? WHERE `prisoner_id` = ?")){
+                setStatusPrisonerPs.setBoolean(1,sentence.getReleaseDate() != null);
+                setStatusPrisonerPs.setInt(2,sentence.getPrisonerId());
+                setStatusPrisonerPs.executeUpdate();
+            }
+
             return true;
         } catch (SQLException e) {
             throw new RuntimeException("Add failed: an error in system. Please try again in a few minutes.");
@@ -122,7 +149,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 ResultSet isStatusSentencesRs = isStatusSentencesPs.executeQuery();
                 if(isStatusSentencesRs.next()) {
                     int count = isStatusSentencesRs.getInt(1);
-                    if(count > 1) throw new RuntimeException("The status cannot be updated to false if the prisoner already has one false sentence.");
+                    if(count > 1) throw new RuntimeException("This prisoner is currently undergoing rehabilitation under another sentence and cannot have their release date removed.");
 
                 }
             }
@@ -145,12 +172,12 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 ps.setString(9,sentence.getParole());
                 ps.setInt(10, id);
                 ps.executeUpdate();
-                //update status prisoner
-                try (PreparedStatement setStatusPrisonerPs = connection.prepareStatement("UPDATE `prisoners` SET `status` = ? WHERE `prisoner_id` = ?")){
-                    setStatusPrisonerPs.setBoolean(1,sentence.getReleaseDate() != null);
-                    setStatusPrisonerPs.setInt(2,sentence.getPrisonerId());
-                    setStatusPrisonerPs.executeUpdate();
-                }
+            }
+            //update status prisoner
+            try (PreparedStatement setStatusPrisonerPs = connection.prepareStatement("UPDATE `prisoners` SET `status` = ? WHERE `prisoner_id` = ?")){
+                setStatusPrisonerPs.setBoolean(1,sentence.getReleaseDate() != null);
+                setStatusPrisonerPs.setInt(2,sentence.getPrisonerId());
+                setStatusPrisonerPs.executeUpdate();
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE,"Update sentence failed: ",e);
