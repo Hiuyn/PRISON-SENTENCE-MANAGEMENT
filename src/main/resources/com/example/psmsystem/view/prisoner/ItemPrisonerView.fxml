@@ -18,9 +18,9 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
-      <Button fx:id="btnEdit" layoutX="11.0" layoutY="100.0" mnemonicParsing="false" onAction="#loadEditPrisonerView" styleClass="btnControl" stylesheets="@../../css/itemPrisoner.css" text="Edit" />
-      <Button fx:id="btnDelete" layoutX="161.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDeleteOnAction" prefHeight="26.0" prefWidth="69.0" styleClass="btnControl" stylesheets="@../../css/itemPrisoner.css" text="Delete" />
-      <Button fx:id="btnDetail" layoutX="87.0" layoutY="100.0" mnemonicParsing="false" onAction="#loadDetailView" styleClass="btnControl" stylesheets="@../../css/itemPrisoner.css" text="Detail" />
+      <Button fx:id="btnEdit" layoutX="11.0" layoutY="100.0" mnemonicParsing="false" onAction="#loadEditPrisonerView" styleClass="buttonControl" stylesheets="@../../css/itemPrisoner.css" text="Edit" />
+      <Button fx:id="btnDelete" layoutX="161.0" layoutY="100.0" mnemonicParsing="false" onAction="#btnDeleteOnAction" prefHeight="26.0" prefWidth="69.0" styleClass="buttonControl" stylesheets="@../../css/itemPrisoner.css" text="Delete" />
+      <Button fx:id="btnDetail" layoutX="87.0" layoutY="100.0" mnemonicParsing="false" onAction="#loadDetailView" styleClass="buttonControl" stylesheets="@../../css/itemPrisoner.css" text="Detail" />
       <Label layoutX="11.0" layoutY="12.0" prefHeight="20.0" prefWidth="35.0" text="ID:">
          <font>
             <Font name="System Bold" size="12.0" />

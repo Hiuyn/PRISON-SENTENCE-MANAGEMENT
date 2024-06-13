@@ -46,4 +46,8 @@ module com.example.psmsystem {
     exports com.example.psmsystem.controller.report;
     opens com.example.psmsystem.controller.report to javafx.fxml;
     opens com.example.psmsystem.model.report to javafx.base;
+
+    exports com.example.psmsystem.controller.userlog;
+    opens com.example.psmsystem.controller.userlog to javafx.fxml;
+    opens com.example.psmsystem.model.userlog to javafx.base;
 }

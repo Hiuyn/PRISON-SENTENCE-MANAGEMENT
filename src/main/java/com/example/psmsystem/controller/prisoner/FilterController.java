@@ -59,6 +59,17 @@ public class FilterController implements Initializable {
     private boolean sortCheck;
     private PrisonerController prisonerController;
 
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        tgGender = new ToggleGroup();
+        rbtnFemale.setToggleGroup(tgGender);
+        rbtnMale.setToggleGroup(tgGender);
+
+        rbtnOther.setToggleGroup(tgGender);
+//        rbtnMale.setSelected(true);
+    }
+
     @FXML
     public void onFilter(ActionEvent event) {
         try
@@ -128,9 +139,9 @@ public class FilterController implements Initializable {
                         case 1:
                             return age < 18;
                         case 2:
-                            return age < 40;
+                            return   18 < age  &&  age < 40;
                         case 3:
-                            return age < 60;
+                            return age >= 40 && age < 60;
                         case 4:
                             return age >= 60;
                         default:
@@ -176,7 +187,6 @@ public class FilterController implements Initializable {
         } else if (tgGender.getSelectedToggle() == rbtnOther) {
             genderFilter = 3;
         }
-        System.out.println("genderFilter :" + genderFilter);
     }
 
     private void showAlert(String message) {
@@ -187,13 +197,6 @@ public class FilterController implements Initializable {
         alert.showAndWait();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        tgGender = new ToggleGroup();
-        rbtnMale.setToggleGroup(tgGender);
-        rbtnFemale.setToggleGroup(tgGender);
-        rbtnOther.setToggleGroup(tgGender);
-    }
 
 
     @FXML
@@ -201,6 +204,7 @@ public class FilterController implements Initializable {
         try {
             Button clickedButton = (Button) event.getSource();
 //            System.out.println(getAgeRange(clickedButton));
+//            clickedButton.getStyleClass().
             getAgeRange(clickedButton);
         }catch (Exception e)
         {
@@ -222,7 +226,6 @@ public class FilterController implements Initializable {
         {
             this.ageFilter = 0;
         }
-        System.out.println("AgeFilter :" + this.ageFilter);
     }
 
 
@@ -276,7 +279,6 @@ public class FilterController implements Initializable {
             btnNameAsc.setDisable(!isCurrentlyDisabled);
             btnNameDes.setDisable(!isCurrentlyDisabled);
         }
-        System.out.println("get asc des Time : " + getSortTimeType(clickedButton));
         this.sortTimeType = getSortTimeType(clickedButton);
     }
     private int getSortTimeType(Button button) {
@@ -295,9 +297,7 @@ public class FilterController implements Initializable {
     public void back(ActionEvent event, Callback callback)  {
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currentStage.close();
-        System.out.println("Cửa sổ đã được đóng");
         if (callback != null) {
-            System.out.println("Thực hiện callback");
             callback.execute();
         }
     }

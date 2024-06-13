@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.health;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.health.Health;
@@ -9,10 +10,13 @@ import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.model.sentence.SentenceServiceImpl;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.healthDao.HealthDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import com.example.psmsystem.service.sentenceDao.SentenceService;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +35,7 @@ import org.controlsfx.control.SearchableComboBox;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +47,7 @@ public class HealthController implements Initializable {
     private static IHealthDao<Health> healthDao;
     private ISentenceDao<Sentence> sentenceDao;
     private SentenceServiceImpl<SentenceDTO> sentenceService = new SentenceService();
+    private IUserLogDao userlogDao = new UserLogDao();
 
     @FXML
     private TableColumn<Health, String> checkupDateColumn;
@@ -418,6 +424,10 @@ public class HealthController implements Initializable {
 
         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Health created successfully.");
 
+        ApplicationState appState = ApplicationState.getInstance();
+        UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Created Health code " + healthCode);
+        userlogDao.insertUserLog(userLog);
+
         onClean(event);
     }
 
@@ -463,6 +473,10 @@ public class HealthController implements Initializable {
                 resetValue();
                 AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                         "Health deleted successfully.");
+
+                ApplicationState appState = ApplicationState.getInstance();
+                UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Health code " + selected.getHealthCode());
+                userlogDao.insertUserLog(userLog);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -527,6 +541,10 @@ public class HealthController implements Initializable {
             dataTable.refresh();
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                     "Health updated successfully.");
+
+            ApplicationState appState = ApplicationState.getInstance();
+            UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Health code " + hearthCode);
+            userlogDao.insertUserLog(userLog);
 
             onClean(event);
         } else {

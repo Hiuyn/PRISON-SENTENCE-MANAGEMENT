@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.crime;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.crime.ICrimeDao;
@@ -7,7 +8,10 @@ import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,13 +29,14 @@ import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CrimeController implements Initializable {
     private static ICrimeDao<Crime> crimeDao;
-
+    private IUserLogDao userlogDao = new UserLogDao();
     @FXML
     private TableView<Crime> dataTable;
 
@@ -88,6 +93,9 @@ public class CrimeController implements Initializable {
         dataTable.setItems(listTable);
 
         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Crime created successfully.");
+        ApplicationState appState = ApplicationState.getInstance();
+        UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Created Crime name " + crimeName);
+        userlogDao.insertUserLog(userLog);
 
         onClean(event);
     }
@@ -122,6 +130,10 @@ public class CrimeController implements Initializable {
                     resetValue();
                     AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                             "Sentence deleted successfully.");
+
+                    ApplicationState appState = ApplicationState.getInstance();
+                    UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Crime id " + visitationId);
+                    userlogDao.insertUserLog(userLog);
                 }
             }
         } catch (Exception e) {
@@ -158,6 +170,10 @@ public class CrimeController implements Initializable {
             dataTable.refresh();
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                     "Crime updated successfully.");
+
+            ApplicationState appState = ApplicationState.getInstance();
+            UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Crime id " + visitationId);
+            userlogDao.insertUserLog(userLog);
 
             onClean(event);
         } else {

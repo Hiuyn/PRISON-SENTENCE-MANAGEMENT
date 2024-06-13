@@ -1,11 +1,15 @@
 package com.example.psmsystem.controller.prisoner;
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.controller.DataStorage;
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,14 +33,18 @@ import org.controlsfx.control.CheckComboBox;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
+
 import java.time.format.DateTimeFormatter;
+
+import java.time.LocalDateTime;
+
 import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 
 public class AddPrisonerController implements Initializable {
-
+    private IUserLogDao userlogDao = new UserLogDao();
     @FXML
     private TextField txtIdentityCard;
     @FXML
@@ -145,12 +153,15 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                 //add prisoner
                 try {
                     prisonerDao.insertPrisonerDB(prisoner);
+                    //add history
+                    userlogDao.insertUserLog(new UserLog(ApplicationState.getInstance().getId(), ApplicationState.getInstance().getUsername(), LocalDateTime.now(), "Created Prisoner code: " + prisoner.getPrisonerCode()));
                 } catch (RuntimeException e) {
                     showAlert(e.getMessage());
                 }
                 //add sentence
                 try {
                     sentenceDao.addSentence(this.sentence);
+                    userlogDao.insertUserLog(new UserLog(ApplicationState.getInstance().getId(), ApplicationState.getInstance().getUsername(), LocalDateTime.now(), "Created Sentence code " + this.sentence.getSentenceCode()));
                     Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
                     alert1.setHeaderText("Add new information");
                     alert1.setContentText("Add prisoner success!");
@@ -577,9 +588,7 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
     public void back(ActionEvent event, Callback callback)  {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
-        System.out.println("Cửa sổ đã được đóng");
         if (callback != null) {
-            System.out.println("Thực hiện callback");
             callback.execute();
         }
     }
@@ -677,6 +686,7 @@ public void getSelectedCrimes() {
         rbtnOther.setToggleGroup(tgGender);
         rbtnLimited.setToggleGroup(tgSentenceType);
         rbtnUnlimited.setToggleGroup(tgSentenceType);
+
         tgSentenceType.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             RadioButton selectedRadioButton = (RadioButton) newValue;
             if (selectedRadioButton == rbtnUnlimited)
@@ -690,15 +700,14 @@ public void getSelectedCrimes() {
                 ccbCrimes.setDisable(false);
                 btnShowYearInput.setDisable(false);
             }
-//            setEndDate();
         });
         dateIn.valueProperty().addListener((observable, oldValue, newValue) -> {
             setEndDate();
         });
         LocalDate initialDate = dateOut.getValue();
         dateOut.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(initialDate)) { // Nếu giá trị mới không giống với giá trị ban đầu
-                setEndDate();// Đặt lại giá trị về giá trị ban đầu
+            if (!newValue.equals(initialDate)) {
+                setEndDate();
             }
         });
 

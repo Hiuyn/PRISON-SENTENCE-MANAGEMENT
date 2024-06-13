@@ -16,53 +16,88 @@
     -fx-background-color: #ff6f6f;
     -fx-background-radius: 0px 0px 0px 0px;
 }
+.u18:focused
+{
+    -fx-font-size: 10;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: #ec0808;
+    -fx-background-radius: 0px 0px 0px 0px;
+}
 .u40
 {
     -fx-background-color: #5c9a5c;
     -fx-background-radius: 0px 0px 0px 0px;
 }
-.u40:hover
+.u40:hover, .u40:focused
  {
+    -fx-font-size: 10;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
     -fx-background-color: #007300;
     -fx-background-radius: 0px 0px 0px 0px;
  }
-.u70
+.u60
 {
     -fx-background-color: #ffff8e;
     -fx-background-radius: 0px 0px 0px 0px;
 }
-.u70:hover
+.u60:hover, .u60:focused
  {
+    -fx-font-size: 10;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
     -fx-background-color: #8e8e00;
     -fx-background-radius: 0px 0px 0px 0px;
  }
-.over70
+.over60
 {
     -fx-background-color: #fd4545;
     -fx-background-radius: 0px 0px 0px 0px;
 }
-.over70:hover
+.over60:hover, .over60:focused
  {
+    -fx-font-size: 10;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
     -fx-background-color: #930000;
     -fx-background-radius: 0px 0px 0px 0px;
  }
 .male
 {
-    -fx-background-color: #138dff;
+    -fx-background-color: #7fbeff;
     -fx-background-radius: 0px 0px 0px 0px;
 }
-.male:hover
+.male:hover, .male:focused
 {
-    -fx-background-color: #0061bd;
+    -fx-font-size: 10;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: #0183ff;
     -fx-background-radius: 0px 0px 0px 0px;
 }
 .female
 {
-    -fx-background-color: #fb5dbc;
+    -fx-background-color: #ff96d2;
     -fx-background-radius: 0px 0px 0px 0px;
 }
-.female:hover
+.female:hover, .female:focused
 {
+    -fx-font-size: 10;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
     -fx-background-color: #ff0095;
     -fx-background-radius: 0px 0px 0px 0px;
 }
@@ -71,17 +106,22 @@
     -fx-background-radius: 0px 0px 0px 0px;
     -fx-background-color: linear-gradient(
             to right,
-            red,
-            yellow,
-            orange,
-            green,
-            blue,
-            indigo,
-            violet
+            #fd3a3a,
+            #ffff46,
+            #fbbb44,
+            #38fd38,
+            #3e3efd,
+            #ad3eff,
+            #dcbbdc
     );
 }
-.other:hover
+.other:hover, .other:focused
 {
+    -fx-font-size: 10;
+    -fx-min-height: 30px;
+    -fx-min-width: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
     -fx-background-radius: 0px 0px 0px 0px;
     -fx-background-color: linear-gradient(
             to right,
@@ -105,4 +145,33 @@
     -fx-text-fill: white;
     -fx-background-color: #4c4c4c;
     -fx-background-radius: 3px;
+}
+.buttonControl
+{
+    -fx-pref-width: 70px;
+    -fx-pref-height: 25px;
+    -fx-max-width:  70px;
+    -fx-max-height: 25px;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-background-color: #a8a8a8;
+}
+.buttonControl:hover
+{
+    -fx-pref-width:  70px;
+    -fx-pref-height: 25px;
+    -fx-max-width:  70px;
+    -fx-max-height: 25px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-text-fill: #5c5c5c;
+    -fx-border-radius: 3px;
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0.2em;
+    -fx-border-color: gray;
+    -fx-padding: 2px;
+
 }

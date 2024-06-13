@@ -1,8 +1,12 @@
 package com.example.psmsystem.controller.prisoner;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.controller.DataStorage;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,11 +27,12 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class EditPrisonerController  implements Initializable {
-
+    private IUserLogDao userlogDao = new UserLogDao();
     @FXML
     private Button btnAddImage;
 
@@ -359,6 +364,11 @@ public class EditPrisonerController  implements Initializable {
             alert.setTitle("Information");
             alert.setHeaderText(null);
             alert.setContentText("Update successfully!");
+
+            ApplicationState appState = ApplicationState.getInstance();
+            UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Prisoner code " + this.prisoner.getPrisonerCode());
+            userlogDao.insertUserLog(userLog);
+
             alert.showAndWait();
             List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
             back(actionEvent, () -> prisonerController.refreshPrisonerList(prisonerList));
