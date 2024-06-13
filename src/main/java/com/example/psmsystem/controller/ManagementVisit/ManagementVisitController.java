@@ -302,15 +302,18 @@ public class ManagementVisitController implements Initializable {
         String formattedEndTime = endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
         ManagementVisit mv = new ManagementVisit(sentenceId, sentenceCode, prisonerId, prisonerName, visitorName, cccd, relationship, date, formattedStartTime, formattedEndTime, note);
-        managementVisitDao.addManagementVisit(mv);
+        try {
+            managementVisitDao.addManagementVisit(mv);
+        }  catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    e.getMessage());
+            return;
+        }
         listTable.add(mv);
         dataTable.setItems(listTable);
 
         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Visit created successfully.");
-
-        ApplicationState appState = ApplicationState.getInstance();
-        UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Created Visit name " + visitorName);
-        userlogDao.insertUserLog(userLog);
+        userlogDao.insertUserLog(new UserLog(ApplicationState.getInstance().getId(), ApplicationState.getInstance().getUsername(), LocalDateTime.now(), "Created Visit name " + visitorName));
 
         onClean(event);
     }
@@ -411,7 +414,13 @@ public class ManagementVisitController implements Initializable {
         }
 
         ManagementVisit mv = new ManagementVisit(sentenceId, sentenceCode, prisonerId, prisonerName, visitorName, cccd, relationship, date, formattedStartTime, formattedEndTime, note);
-        managementVisitDao.updateManagementVisit(mv, visitationId);
+        try {
+            managementVisitDao.updateManagementVisit(mv, visitationId);
+        }  catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    e.getMessage());
+            return;
+        }
 
         index = dataTable.getSelectionModel().getSelectedIndex();
 

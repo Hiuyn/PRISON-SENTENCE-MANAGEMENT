@@ -363,9 +363,15 @@ public class SentenceController implements Initializable {
             ccbSentenceCode.getCheckModel().check(idx);
         }
 
-        LocalDate startDate = LocalDate.parse(startDateColumn.getCellData(index).toString());
 
-        dateStartDate.setValue(startDate);
+        try {
+            LocalDate startDate = LocalDate.parse(startDateColumn.getCellData(index).toString());
+            dateStartDate.setValue(startDate);
+
+        } catch (Exception e) {
+            dateStartDate.setValue(null);
+        }
+
 
         String endDateCellValue = endDateColumn.getCellData(index) != null ? endDateColumn.getCellData(index).toString() : null;
         if (endDateCellValue != null && !endDateCellValue.isEmpty()) {

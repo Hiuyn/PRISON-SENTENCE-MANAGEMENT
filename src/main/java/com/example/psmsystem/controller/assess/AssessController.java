@@ -371,7 +371,12 @@ public class AssessController implements Initializable {
         String processCode = getProcessCode();
 
         Assess assess = new Assess(processCode, sentenceId, sentenceCode, prisonerId, prisonerName, eventDate, eventType, levelValue, note);
-        assessDao.addAssess(assess);
+        try {
+            assessDao.addAssess(assess);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",e.getMessage());
+            return;
+        }
         listTable.add(assess);
         dataTable.setItems(listTable);
 
@@ -469,7 +474,13 @@ public class AssessController implements Initializable {
         String processCode = getProcessCode();
 
         Assess assess = new Assess(processCode, sentenceId, sentenceCode, prisonerId, prisonerName, eventDate, eventType, levelValue, note);
-        assessDao.updateAssess(assess, visitationId);
+        try {
+            assessDao.updateAssess(assess, visitationId);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    e.getMessage());
+            return;
+        }
 
         index = dataTable.getSelectionModel().getSelectedIndex();
 

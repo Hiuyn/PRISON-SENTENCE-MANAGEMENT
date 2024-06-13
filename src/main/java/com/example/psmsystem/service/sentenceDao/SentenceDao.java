@@ -104,6 +104,8 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     }
     @Override
     public void updateSentence(Sentence sentence, int id) {
+        //check crime
+        if(sentence.getCrimesCode() == null) throw new RuntimeException("Please select crimes for sentence");
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             //check start > 18years(dob)
             try (PreparedStatement checkDOBPrisonerPs = connection.prepareStatement("SELECT date_birth FROM prisoners WHERE prisoner_id = ?")){

@@ -369,7 +369,7 @@ public class HealthController implements Initializable {
             return false;
         }
         if (dateCheckupDate.getValue() == null || dateCheckupDate.getValue().isAfter(LocalDate.now())) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Check up Date is required.");
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Check up Date can't after to day");
             dateCheckupDate.requestFocus();
             return false;
         }
@@ -418,7 +418,12 @@ public class HealthController implements Initializable {
         String healthCode = getHealthCode();
 
         Health health = new Health(0,healthCode, prisonerId, sentenceId, sentenceCode, prisonerName, weight, height, date, status, levelValue);
-        healthDao.addHealth(health);
+        try {
+            healthDao.addHealth(health);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    e.getMessage());
+        }
         listTable.add(health);
         dataTable.setItems(listTable);
 
@@ -499,7 +504,6 @@ public class HealthController implements Initializable {
         String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
         Double height = Double.valueOf(txtHeight.getText());
-        Boolean status = false;
         String level = cbLevel.getValue();
 
         LocalDate selectedDate = dateCheckupDate.getValue();
@@ -521,8 +525,15 @@ public class HealthController implements Initializable {
 
         Health selectedHealth = dataTable.getItems().get(index);
         String hearthCode = healthcodeColumn.getCellData(selectedHealth);
+        boolean status = levelValue > 0 ? true : false;
         Health mv = new Health(healthId,hearthCode, prisonerId, sentenceId, sentenceCode, prisonerName, weight, height, date, status, levelValue);
-        healthDao.updateHealth(mv, healthId);
+        try {
+            healthDao.updateHealth(mv, healthId);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    e.getMessage());
+            return;
+        }
 
 
         if (index >= 0) {

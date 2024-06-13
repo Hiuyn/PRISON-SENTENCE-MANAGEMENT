@@ -8,12 +8,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HealthDao implements IHealthDao<Health> {
+    Logger LOGGER = Logger.getLogger(HealthDao.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO healths (health_code, sentence_id, prisoner_id, weight, height, checkup_date, status, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_HEALTH_QUERY = "UPDATE healths SET health_code =?,sentence_id = ?, prisoner_id = ?, weight = ?, height = ?, checkup_date = ?, status = ?, level = ? WHERE health_id = ?";
     private static final String DELETE_HEALTH_QUERY = "DELETE FROM healths WHERE health_id = ?";
@@ -35,18 +40,44 @@ public class HealthDao implements IHealthDao<Health> {
     public void addHealth(Health health) {
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
-            PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
-            ps.setString(1,health.getHealthCode());
-            ps.setString(2,health.getSentenceId());
-            ps.setInt(3,health.getPrisonerId());
-            ps.setDouble(4,health.getWeight());
-            ps.setDouble(5,health.getHeight());
-            ps.setString(6,health.getCheckupDate());
-            ps.setBoolean(7, health.getLevel() != 0);
-            ps.setInt(8,health.getLevel());
-            ps.executeUpdate();
+            //check visit date ith start end release,start,end of sentence
+            //get sentence
+            try (PreparedStatement getSentencePs = connection.prepareStatement("SELECT start_date , release_date , end_date FROM sentences WHERE sentence_id = ?")){
+                getSentencePs.setString(1, health.getSentenceId());
+                ResultSet getSentenceRs = getSentencePs.executeQuery();
+                if(!getSentenceRs.next()) throw new RuntimeException("Add Health failed: Sentence not found.");
+                //set date
+                LocalDate startDate = getSentenceRs.getDate("start_date").toLocalDate();
+                //set date for visit date
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate checkUpDate = LocalDate.parse(health.getCheckupDate(),formatter);
+                //check visit date >= start date
+                if(checkUpDate.isBefore(startDate) || checkUpDate.isAfter(LocalDate.now())) throw new RuntimeException("The Check-up Date date cannot be before the start date of the sentence.");
+                //check type limited time
+                if(getSentenceRs.getDate("end_date") != null) {
+                    LocalDate endDate = getSentenceRs.getDate("end_date").toLocalDate();
+                    //if release != null, visitDate <= release date
+                    if(getSentenceRs.getDate("release_date") != null && checkUpDate.isAfter(getSentenceRs.getDate("release_date").toLocalDate()))
+                        throw new RuntimeException("The check up date cannot be after the release  date of the sentence.");
+                    //if null,visitDate <= endDAte
+                    if(getSentenceRs.getDate("release_date") == null && checkUpDate.isAfter(endDate)) throw new RuntimeException("The check uo date cannot be after the  end date of the sentence.");
+                }
+            }
+            try (PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);){
+                ps.setString(1,health.getHealthCode());
+                ps.setString(2,health.getSentenceId());
+                ps.setInt(3,health.getPrisonerId());
+                ps.setDouble(4,health.getWeight());
+                ps.setDouble(5,health.getHeight());
+                ps.setString(6,health.getCheckupDate());
+                ps.setBoolean(7, health.getLevel() != 0);
+                ps.setInt(8,health.getLevel());
+                ps.executeUpdate();
+            }
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE,"Add health failed: ",e);
+            throw new RuntimeException("Add Health failed!");
         }
     }
 
@@ -82,13 +113,37 @@ public class HealthDao implements IHealthDao<Health> {
 
     @Override
     public void updateHealth(Health health, int id) {
+
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            //check visit date ith start end release,start,end of sentence
+            //get sentence
+            try (PreparedStatement getSentencePs = connection.prepareStatement("SELECT start_date , release_date , end_date FROM sentences WHERE sentence_id = ?")){
+                getSentencePs.setString(1, health.getSentenceId());
+                ResultSet getSentenceRs = getSentencePs.executeQuery();
+                if(!getSentenceRs.next()) throw new RuntimeException("Add Health failed: Sentence not found.");
+                //set date
+                LocalDate startDate = getSentenceRs.getDate("start_date").toLocalDate();
+                //set date for visit date
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate checkUpDate = LocalDate.parse(health.getCheckupDate(),formatter);
+                //check visit date >= start date
+                if(checkUpDate.isBefore(startDate) || checkUpDate.isAfter(LocalDate.now())) throw new RuntimeException("The Check-up Date date cannot be before the start date of the sentence.");
+                //check type limited time
+                if(getSentenceRs.getDate("end_date") != null) {
+                    LocalDate endDate = getSentenceRs.getDate("end_date").toLocalDate();
+                    //if release != null, visitDate <= release date
+                    if(getSentenceRs.getDate("release_date") != null && checkUpDate.isAfter(getSentenceRs.getDate("release_date").toLocalDate()))
+                        throw new RuntimeException("The check up date cannot be after the release  date of the sentence.");
+                    //if null,visitDate <= endDAte
+                    if(getSentenceRs.getDate("release_date") == null && checkUpDate.isAfter(endDate)) throw new RuntimeException("The check uo date cannot be after the  end date of the sentence.");
+                }
+            }
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_HEALTH_QUERY)) {
                 ps.setString(1,health.getHealthCode());
                 ps.setString(2,health.getSentenceId());
                 ps.setInt(3,health.getPrisonerId());
                 ps.setDouble(4,health.getWeight());
-                ps.setDouble(5,health.getHeight());
+                ps.setDouble(5,health.getHeight()/100);
                 ps.setString(6,health.getCheckupDate());
                 ps.setBoolean(7,health.getLevel() != 0);
                 ps.setInt(8,health.getLevel());
@@ -96,7 +151,8 @@ public class HealthDao implements IHealthDao<Health> {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE,"Update health failed: ",e);
+            throw new RuntimeException("Update health failed. ");
         }
     }
 
