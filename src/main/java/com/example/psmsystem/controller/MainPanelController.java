@@ -74,7 +74,7 @@ public class MainPanelController implements Initializable {
         idLogin.setText(user.getFullName());
         this.userId = user.getUserId();
         ApplicationState appState = ApplicationState.getInstance();
-        appState.setUsername(user.getUsername());
+        appState.setUsername(user.getFullName());
         appState.setId(user.getUserId());
 
         loadFXML("Dashboard");
