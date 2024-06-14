@@ -129,7 +129,7 @@ public class ManagementVisitController implements Initializable {
     @FXML
     private ComboBox<String> startTimeMinute;
 
-    private final int itemsPerPage = 20;
+    private final int itemsPerPage = 16;
 
     @FXML
     private Button createId;

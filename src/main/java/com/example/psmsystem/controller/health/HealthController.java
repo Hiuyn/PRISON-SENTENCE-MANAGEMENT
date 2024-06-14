@@ -99,7 +99,7 @@ public class HealthController implements Initializable {
     @FXML
     private TableColumn<Health, Double> weightColumn;
 
-    private final int itemsPerPage = 20;
+    private final int itemsPerPage = 16;
 
     @FXML
     private Button createId;

@@ -114,6 +114,8 @@ public class MainPanelController implements Initializable {
 
     @FXML
     void close(MouseEvent  event) throws IOException {
+        //set state = null
+        ApplicationState.setInstance(null);
         Stage stage = (Stage) borderPane.getScene().getWindow();
         stage.close();
 

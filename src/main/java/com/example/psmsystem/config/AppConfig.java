@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class AppConfig {
-    private final Properties properties;
     private static AppConfig instance;
     private String usernameData;
     private String passwordData;
@@ -24,7 +23,7 @@ public class AppConfig {
     }
 
     private AppConfig() {
-        properties = new Properties();
+        Properties properties = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
             if (input == null) {
                 System.out.println("failed get properties");

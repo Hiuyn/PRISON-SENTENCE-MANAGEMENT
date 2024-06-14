@@ -64,8 +64,6 @@ public class ReportController implements Initializable {
     @FXML
     private TableColumn<Consider, Integer> sentenceCodeColumn;
     @FXML
-    private TableColumn<Consider, Integer> sentenceIdColumn;
-    @FXML
     private TableColumn<Consider, String> healthColumn;
     @FXML
     private TableColumn<Consider, Integer> commendationSumColumn;
@@ -83,7 +81,7 @@ public class ReportController implements Initializable {
 
     Window window;
 
-    private final int itemsPerPage = 10;
+    private final int itemsPerPage = 6;
 
     private SentenceService sentenceService = new SentenceService();
     private HashMap<String, List<Consider>> result;
@@ -95,19 +93,26 @@ public class ReportController implements Initializable {
         ApplicationState appState = ApplicationState.getInstance();
         txtUpdate.setText("Data updated on: " + reportDao.timeUpdate(appState.getId()));
 
+        //"Court sentence classification data retrieval"
         result = sentenceService.classify();
 
-        ObservableList<String> keyList = FXCollections.observableArrayList();
+        //create observableList
+        ObservableList<String> keyList = FXCollections.observableArrayList("Select sentence classification category" );
+        //add value
         for (Map.Entry<String, List<Consider>> entry : result.entrySet()) {
             String key = entry.getKey();
             int size = entry.getValue().size();
             String label = key + ": " + size;
             keyList.add(label);
         }
+        //set value
         choiceBox.setItems(keyList);
 
+        //set value default
+        choiceBox.setValue("Select sentence classification category");
+
         choiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
+            if (newValue != null && !newValue.equals("Select sentence classification category")) {
                 String selectedKey = newValue.split(":")[0].trim();
                 updateTableView(selectedKey);
             }
@@ -116,12 +121,13 @@ public class ReportController implements Initializable {
         setUpTableView();
     }
 
+
+    //display
     private void setUpTableView() {
         imageColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getImage()));
         prisonerNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPrisonerName()));
         identityCardColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdentityCard()));
         sentenceCodeColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSentenceCode()).asObject());
-//        sentenceIdColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSentenceId()).asObject());
         healthColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHealth()));
         commendationSumColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCommendationSum()).asObject());
         disciplinarySumColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getDisciplinaryMeasureSum()).asObject());
@@ -168,15 +174,24 @@ public class ReportController implements Initializable {
     }
 
 
+    //change box
     @FXML
     private void handleChoiceBoxAction() {
-        String selectedKey = choiceBox.getSelectionModel().getSelectedItem().split(":")[0].trim();
-        if (selectedKey != null) {
-            updateTableView(selectedKey);
-            setupSearch();
+        //get item key
+        String selectedKey = choiceBox.getSelectionModel().getSelectedItem();
+        //check key: not null -> convert form key real
+        if(selectedKey != null) {
+            selectedKey = selectedKey.split(":")[0].trim();
+            //check value
+            if (!selectedKey.equals("Select sentence classification category")) {
+                updateTableView(selectedKey);
+                setupSearch();
+            }
         }
     }
 
+
+    //get sentence by category
     private void updateTableView(String key) {
 //        selectedKeyLabel.setText("Selected Key: " + key);
 //        dataTable.getItems().clear();
@@ -186,7 +201,6 @@ public class ReportController implements Initializable {
         if (considers != null && !considers.isEmpty()) {
 //            dataTable.getItems().addAll(considers);
             listTable.addAll(considers);
-
         }
         setupPagination();
     }

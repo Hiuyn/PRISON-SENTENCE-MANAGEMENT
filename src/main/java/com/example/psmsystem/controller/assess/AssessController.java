@@ -98,7 +98,7 @@ public class AssessController implements Initializable {
 
     @FXML
     private TextField txtSearch;
-    private final int itemsPerPage = 12;
+    private final int itemsPerPage = 9;
     @FXML
     private Button createId;
 

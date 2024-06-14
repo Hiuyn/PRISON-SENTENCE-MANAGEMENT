@@ -114,16 +114,13 @@ public class SentenceController implements Initializable {
     @FXML
     private DatePicker dateReleaseDate;
 
-//    @FXML
-//    private TextField txtStatus;
-
     @FXML
     private TextField txtYear;
 
     @FXML
     private Pagination pagination;
 
-    private final int itemsPerPage = 10;
+    private final int itemsPerPage = 9;
 
     Integer index;
     Window window;
@@ -160,16 +157,13 @@ public class SentenceController implements Initializable {
                     case "life imprisonment":
                         dateEndDate.setDisable(true);
                         dateReleaseDate.setDisable(true);
-//                        txtMonth.clear();
-//                        txtYear.clear();
+
                         break;
                     case "limited time":
                         dateEndDate.setDisable(false);
                         dateReleaseDate.setDisable(false);
                         break;
                     default:
-//                        txtMonth.setDisable(false);
-//                        txtYear.setDisable(false);
                         break;
                 }
             }
@@ -186,13 +180,6 @@ public class SentenceController implements Initializable {
                 return listCrime.stream().filter(crime -> crime.getSentenceCode().equals(string)).findFirst().orElse(null);
             }
         });
-
-//        setNumericTextField(txtYear);
-//        setNumericTextField(txtMonth);
-
-//        txtYear.textProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
-//        txtMonth.textProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
-//        dateStartDate.valueProperty().addListener((observable, oldValue, newValue) -> updateEndDate());
 
         loadDataTable();
         setupPagination();
