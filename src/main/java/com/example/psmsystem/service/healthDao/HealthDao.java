@@ -111,7 +111,7 @@ public class HealthDao implements IHealthDao<Health> {
                 health.setSentenceCode(rs.getInt("sentences_code"));
                 health.setPrisonerName(rs.getString("prisoner_name"));
                 health.setWeight(rs.getDouble("weight"));
-                health.setHeight(rs.getDouble("height"));
+                health.setHeight(rs.getDouble("height")*100);
                 health.setCheckupDate(rs.getString("checkup_date"));
                 health.setStatus(rs.getBoolean("status"));
                 health.setLevel(rs.getInt("level"));

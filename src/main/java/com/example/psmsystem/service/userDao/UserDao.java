@@ -2,6 +2,7 @@ package com.example.psmsystem.service.userDao;
 
 import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
+import com.example.psmsystem.model.Role;
 import com.example.psmsystem.model.user.IUserDao;
 import com.example.psmsystem.model.user.User;
 
@@ -14,38 +15,66 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserDao implements IUserDao<User> {
+    Logger LOGGER = Logger.getLogger(UserDao.class.getName());
 //    private static final String DB_URL = "jdbc:mysql://localhost:3306/prisonerms";
 //    private static final String DB_USER = "root";
 ////    private static final String DB_PASSWORD = "12345678";
 //    private static final String DB_PASSWORD = "";
-    Logger LOGGER = Logger.getLogger(UserDao.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO users (full_name, username, password) VALUES (?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE username = ?";
     private static final String SELECT_BY_USER_QUERY = "SELECT * FROM users";
 
     @Override
-    public void addUser(User user) {
-        try {
-            Connection conn = DbConnection.getDatabaseConnection().getConnection();
-            PreparedStatement stmt = conn.prepareStatement(INSERT_QUERY);
+    public void addUser(User user,List<String> roleNames) {
+        String hashPassword = hashPassword(user.getPassword());
+        try (Connection conn = DbConnection.getDatabaseConnection().getConnection()){
+            conn.setAutoCommit(false);
+            try (PreparedStatement stmt = conn.prepareStatement(INSERT_QUERY)){
 
-            String hashPassword = hashPassword(user.getPassword());
-            System.out.println(hashPassword);
-            stmt.setString(1, user.getFullName());
-            stmt.setString(2, user.getUsername());
-            stmt.setString(3, hashPassword);
-
-
-            int row = stmt.executeUpdate();
-            if(row > 0){
-                System.out.println("them thanh cong");
+                System.out.println(hashPassword);
+                stmt.setString(1, user.getFullName());
+                stmt.setString(2, user.getUsername());
+                stmt.setString(3, hashPassword);
+                stmt.executeUpdate();
             }
-            else{
-                System.out.println("khong thanh cong");
+            //get user_id
+            int id = 0;
+            try (PreparedStatement getUserPs = conn.prepareStatement("SELECT user_id FROM users WHERE username = ? AND password = ?")){
+                getUserPs.setString(1, user.getUsername());
+                getUserPs.setString(2, hashPassword);
+                ResultSet getUserRS = getUserPs.executeQuery();
+                if(!getUserRS.next()) throw new RuntimeException("add Role failed!");
+                id = getUserRS.getInt("user_id");
             }
+            if(id < 1) throw new RuntimeException("User not found.");
+            //get Roles
+            List<Role> rolesData = new ArrayList<>();
+            try (PreparedStatement getRoleIdPs = conn.prepareStatement("SELECT * FROM roles")){
+                ResultSet getRoleRs = getRoleIdPs.executeQuery();
+                while (getRoleRs.next()) {
+                    Role r = new Role();
+                    r.setId(getRoleRs.getInt("role_id"));
+                    r.setName(getRoleRs.getString("name"));
+                    rolesData.add(r);
+                }
+            }
+            //add role
+            String sql = "INSERT INTO `user_role` (`user_id`, `role_id`) VALUES (?,?)";
+            for (Role r : rolesData) {
+                if(roleNames.contains(r.getName())) {
+                    try (PreparedStatement addRolePs = conn.prepareStatement(sql)){
+                        addRolePs.setInt(1,id);
+                        addRolePs.setInt(2,r.getId());
+                        addRolePs.executeUpdate();
+                    }
+                }
+            }
+            conn.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE,"Register failed: ",e);
+            throw new RuntimeException("Register failed!");
+
         }
     }
 
@@ -53,7 +82,7 @@ public class UserDao implements IUserDao<User> {
     public User checkLogin(String username, String password) {
         User user = new User();
         try ( Connection conn = DbConnection.getDatabaseConnection().getConnection()){
-            try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_USERNAME_PASSWORD_QUERY);){
+            try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_USERNAME_PASSWORD_QUERY)){
                 String hashPassword = hashPassword(password);
 
                 stmt.setString(1, username);
@@ -103,7 +132,8 @@ public class UserDao implements IUserDao<User> {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            LOGGER.log(Level.SEVERE,"check failed: ",ex);
+            System.out.println(username);
         }
         return false;
     }

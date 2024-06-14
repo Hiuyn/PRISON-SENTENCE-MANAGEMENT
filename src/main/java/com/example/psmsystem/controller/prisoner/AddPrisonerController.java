@@ -395,7 +395,11 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                 return false;
             }
             String crimeCode = getCrimeCode();
-            if (getTimesOfCrimes() == null) {
+            if(crimeCode.isBlank())  {
+                showAlert("Select crime and input times");
+                return false;
+            }
+            if (getTimesOfCrimes().isEmpty()) {
                 showAlert("Select crime and input times");
                 return false;
             }
