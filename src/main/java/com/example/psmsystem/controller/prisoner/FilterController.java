@@ -1,6 +1,8 @@
 package com.example.psmsystem.controller.prisoner;
 import com.example.psmsystem.model.prisoner.Prisoner;
+import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
+import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,14 +10,13 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.awt.event.MouseEvent;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.sql.Date;
+import java.time.Period;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FilterController implements Initializable {
@@ -154,11 +155,41 @@ public class FilterController implements Initializable {
     }
 
     private List<Prisoner> sortByTime(List<Prisoner> prisoners) {
-        // Sử dụng logic tương tự nhưng với thời gian giam giữ
+        SentenceDao sentenceDao = new SentenceDao();
+        List<Sentence> sentenceList = sentenceDao.getSentence();
 
-        return prisoners;
+        // Map to store sentence duration for each prisoner
+        Map<String, Integer> prisonerSentenceDuration = new HashMap<>();
+
+        // Calculate sentence duration for each prisoner and store in map
+        for (Sentence sentence : sentenceList) {
+            String prisonerCode = String.valueOf(sentence.getPrisonerId());
+            int duration = calYearSentence(sentence.getStartDate(), sentence.getEndDate());
+            prisonerSentenceDuration.put(prisonerCode, duration);
+        }
+
+        if (sortTimeType == 1)
+        {
+            return prisoners.stream()
+                    .sorted(Comparator.comparingInt(prisoner -> prisonerSentenceDuration.getOrDefault(prisoner.getPrisonerCode(), 0)))
+                    .collect(Collectors.toList());
+        }
+        if (sortTimeType == 2) {
+            return prisoners.stream()
+                    .sorted(Comparator.comparingInt((Prisoner prisoner) -> prisonerSentenceDuration.getOrDefault(prisoner.getPrisonerCode(), 0)).reversed())
+                    .collect(Collectors.toList());
+        }
+            return prisoners;
     }
 
+    public static int calYearSentence(Date startDate, Date endDate) {
+        if (startDate == null || endDate == null) {
+            return 0;
+        }
+        LocalDate start = startDate.toLocalDate();
+        LocalDate end = endDate.toLocalDate();
+        return Period.between(start, end).getYears();
+    }
 
 
     public void setPrisonerController(PrisonerController prisonerController)
@@ -238,7 +269,6 @@ public class FilterController implements Initializable {
             btnTimeAsc.setDisable(!isCurrentlyDisabled);
             this.sortCheck = true;
         }
-        System.out.println("get asc des name : " + getSortNameType(clickedButton));
         this.sortNameType = getSortNameType(clickedButton);
     }
     private int getSortNameType(Button button) {
