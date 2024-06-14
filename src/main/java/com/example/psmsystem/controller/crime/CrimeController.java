@@ -87,7 +87,12 @@ public class CrimeController implements Initializable {
         }
 
         String crimeName = txtCrime.getText();
+        if(crimeName.isBlank()) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Please enter crime name");
+            return;
+        }
         Crime crime = new Crime(crimeName);
+
         try {
             crimeDao.addCrime(crime);
         } catch (RuntimeException e) {
