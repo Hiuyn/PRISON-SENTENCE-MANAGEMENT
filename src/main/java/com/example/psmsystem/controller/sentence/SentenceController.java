@@ -609,7 +609,10 @@ public class SentenceController implements Initializable {
         int sentenceCode = selectedValue.getSentence().getSentenceCode();
         String sentenceType = cbSentenceType.getValue();
         String crimeCode = listCrime();
-
+        if(crimeCode.isBlank()) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Please select crime.");
+            return;
+        }
         String prisonerName = selectedValue.getPrisonerName();
         LocalDate selectedStartDate = dateStartDate.getValue();
         LocalDate selectedEndDate = dateEndDate.getValue();

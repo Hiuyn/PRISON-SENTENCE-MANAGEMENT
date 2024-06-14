@@ -208,9 +208,9 @@ public class FilterController implements Initializable {
         {
             genderFilter = 1;
         } else if (tgGender.getSelectedToggle() == rbtnFemale) {
-            genderFilter = 0;
-        } else if (tgGender.getSelectedToggle() == rbtnOther) {
             genderFilter = 2;
+        } else if (tgGender.getSelectedToggle() == rbtnOther) {
+            genderFilter = 3;
         }
         else
         {
