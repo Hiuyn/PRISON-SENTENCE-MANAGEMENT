@@ -93,17 +93,6 @@ public class FilterController implements Initializable {
                 prisonerList = sortByTime(prisonerList);
             }
 
-
-
-            if (this.prisonerController != null)
-            {
-                System.out.println("Prisonert controller : " + prisonerController);
-            }
-            System.out.println("gender : " + genderFilter);
-            System.out.println("AgeFilter : " + ageFilter);
-            System.out.println("name : " + sortNameType);
-            System.out.println("time : " + sortTimeType);
-
             List<Prisoner> prisonerFilter = prisonerList;
             if (!prisonerFilter.isEmpty())
             {
