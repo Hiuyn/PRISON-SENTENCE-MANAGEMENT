@@ -114,15 +114,14 @@ public class AddPrisonerController implements Initializable {
 
     private String getRelativePath;
     private int userId;
-    private boolean imageSelected = false;
     private PrisonerController prisonerController;
     private List<Integer> selectedCrimesId;
+    private boolean imageSelected = false;
     private int sentenceId;
     private Prisoner prisoner;
     private Sentence sentence;
     private int prisonerId;
     private boolean checkIdentity = false;
-
 
 
 public void setBtnAddPrisonerFinal(ActionEvent event) {
@@ -192,7 +191,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
         }
     }
 }
-
 
     public static boolean isPositiveInteger(String str) {
         if (str == null || str.isEmpty()) {
@@ -268,7 +266,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                     getRelativePath=imagePath;
                      break;
                 }
-
             }
             if (!prisonerFound) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -290,12 +287,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
     public static Date convertToDate(LocalDate localDate) {
         return Date.valueOf(localDate);
     }
-//    public static Date addMonths(Date date, int months) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(date);
-//        calendar.add(Calendar.MONTH, months);
-//        return new Date(calendar.getTimeInMillis());
-//    }
     public Map<Integer,Integer> getTimesOfCrimes()
     {
         return DataStorage.getCrimesTime();
@@ -318,7 +309,7 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
             int totalTime = 0;
             if (sentenceTypeText.equals("Life imprisonment")) {
                 LocalDate startDay = dateIn.getValue();
-                LocalDate unlimitedDate = startDay.plusYears(100);
+                LocalDate unlimitedDate = startDay.plusYears(130);
                 dateOut.setValue(unlimitedDate);
             } else if (sentenceTypeText.equals("limited time")) {
                 if (getTimesOfCrimes() != null) {
@@ -346,11 +337,8 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
             // Tạo đối tượng StringBuilder để xây dựng chuỗi kết quả
             StringBuilder resultBuilder = new StringBuilder();
 
-            // Duyệt qua các cặp khóa - giá trị trong map crimesTimeMap
             for (Map.Entry<Integer, Integer> entry : crimesTimeMap.entrySet()) {
                 int crimeId = entry.getKey();
-
-                // Tìm tên tội phạm tương ứng
                 for (Crime crime : allCrimes) {
                     if (crime.getCrimeId() == crimeId) {
                         // Nếu đây không phải là tội phạm đầu tiên trong chuỗi kết quả
@@ -362,7 +350,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                     }
                 }
             }
-
             return resultBuilder.toString();
         }
 
@@ -388,7 +375,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
             Date startDate = convertToDate(dateInput);
             this.sentence = new Sentence(prisonerId, txtPrisonerFNAdd.getText(), Integer.parseInt(lbSentenceId.getText()), sentenceTypeText, "", startDate, null, null, false, "");
         }
-        // Chọn "limited time"
         else if (sentenceTypeText.equals("limited time")) {
             if (dateInput == null || dateInput.isAfter(LocalDate.now())) {
                 showAlert("Invalid start date");
@@ -422,17 +408,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
         int sentenceIdShow = sentenceDao.getMaxIdSentence();
         this.sentenceId = sentenceIdShow;
         lbSentenceId.setText(String.valueOf(sentenceIdShow));
-    }
-
-    public String convertSentenceType (String sentenceTypeText)
-    {
-        String sentenceType = sentenceTypeText.toLowerCase();
-        for (int i = 0; i < sentenceType.length(); i++) {
-            if (sentenceType.charAt(i) == ' ') {
-               sentenceType = sentenceType.replace(' ', '_');
-            }
-        }
-        return sentenceType;
     }
     public void setPrisonerId()
     {
@@ -552,37 +527,36 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
     }
 
     public String selectImageFile() {
-        if (!imageSelected) {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.gif"));
-            File selectedFile = fileChooser.showOpenDialog(new Stage());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.gif"));
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
 
-            if (selectedFile != null) {
-                // Lấy tên tệp từ đường dẫn ban đầu
-                String fileName = selectedFile.getName();
+        if (selectedFile != null) {
+            // Lấy tên tệp từ đường dẫn ban đầu
+            String fileName = selectedFile.getName();
 
-                String destinationFolderPath = "src/main/resources/com/example/psmsystem/imagesPrisoner/";
+            String destinationFolderPath = "src/main/resources/com/example/psmsystem/imagesPrisoner/";
 
-                String relativePath = destinationFolderPath + fileName;
-                File destFile = new File(relativePath);
+            String relativePath = destinationFolderPath + fileName;
+            File destFile = new File(relativePath);
 
-                try (InputStream inputStream = new FileInputStream(selectedFile)) {
-                    Files.copy(inputStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
-                System.out.println("Tệp đã chọn: " + relativePath);
-                Image image = new Image(selectedFile.toURI().toString());
-                imgPrisonerAdd.setImage(image);
-                imageSelected = true;
-                getRelativePath = relativePath;
-                return relativePath;
-            } else {
-                System.out.println("Không có tệp nào được chọn.");
+            try (InputStream inputStream = new FileInputStream(selectedFile)) {
+                Files.copy(inputStream, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
+            System.out.println("Tệp đã chọn: " + relativePath);
+            Image image = new Image(selectedFile.toURI().toString());
+            imgPrisonerAdd.setImage(image);
+            imageSelected = true;
+            getRelativePath = relativePath;
+            return relativePath;
+        } else {
+            System.out.println("Không có tệp nào được chọn.");
         }
         return null;
     }
+
 
 
     public interface Callback {
@@ -680,7 +654,7 @@ public void getSelectedCrimes() {
         setIdSentence();
         setCbCrimes();
         LocalDate currentDate = LocalDate.now();
-        LocalDate eighteenYearsAgo = currentDate.minusYears(18);
+        LocalDate eighteenYearsAgo = currentDate.minusYears(20);
         datePrisonerDOBAdd.setValue(eighteenYearsAgo);
         lbPrisonerId.setVisible(false);
         tgGender = new ToggleGroup();
@@ -693,17 +667,17 @@ public void getSelectedCrimes() {
 
         tgSentenceType.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             RadioButton selectedRadioButton = (RadioButton) newValue;
-            if (selectedRadioButton == rbtnUnlimited)
-            {
-                dateOut.setDisable(true);
-                ccbCrimes.setDisable(true);
-                btnShowYearInput.setDisable(true);
-            }else
-            {
-                dateOut.setDisable(false);
-                ccbCrimes.setDisable(false);
-                btnShowYearInput.setDisable(false);
-            }
+//            if (selectedRadioButton == rbtnUnlimited)
+//            {
+//                dateOut.setDisable(true);
+//                ccbCrimes.setDisable(true);
+//                btnShowYearInput.setDisable(true);
+//            }else
+//            {
+//                dateOut.setDisable(false);
+//                ccbCrimes.setDisable(false);
+//                btnShowYearInput.setDisable(false);
+//            }
         });
         dateIn.valueProperty().addListener((observable, oldValue, newValue) -> {
             setEndDate();

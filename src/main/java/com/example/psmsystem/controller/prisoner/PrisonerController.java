@@ -65,6 +65,9 @@ public class PrisonerController implements Initializable {
         int pageCount = (int) Math.ceil((double) prisonerList.size() / (itemsPerRow * rowsPerPage));
         pgPagination.setPageCount(pageCount);
         pgPagination.setPageFactory(this::createPage);
+//        String appDir = System.getProperty("user.dir");
+//
+//        System.out.println("Đường dẫn : " + appDir);
     }
 
     private VBox createPage(int pageIndex) {
@@ -161,6 +164,14 @@ public class PrisonerController implements Initializable {
             System.out.println("PrisonerController: " + e.getMessage());
         }
     }
+
+    @FXML
+    public  void getAllPrisoners(MouseEvent event) {
+        PrisonerDAO prisonerDAO = new PrisonerDAO();
+        this.prisonerList = prisonerDAO.getAllPrisonerInDb();
+        refreshPrisonerList(this.prisonerList);
+    }
+
 
     public void openFilterWindow() {
         try {

@@ -32,6 +32,7 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     private static final String SEARCH_PRISONER_BY_ID = "SELECT * FROM prisoners WHERE prisoner_id = ?";
 ////    private static final String INSERT_INTO_PRISONER_QUERY = "INSERT INTO  prisoner VALUES (prisonerId = ?)";
     private static final String SEARCH_PRISONER_LIKE_NAME = "SELECT * FROM prisoners WHERE prisoner_name LIKE ?";
+    private static  final String SELECT_PRISONER = "SELECT * FROM prisoners";
 
     @Override
     public List<Prisoner> getAllPrisoner() {
@@ -59,6 +60,35 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         }
         return prisonerList;
     }
+
+    public List<Prisoner> getAllPrisonerInDb()
+    {
+        List<Prisoner> prisonerList = new ArrayList<>();
+        try
+        {
+            Connection connection = DbConnection.getDatabaseConnection().getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECT_PRISONER);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next())
+            {
+                Prisoner prisoner = new Prisoner();
+                prisoner.setPrisonerCode(rs.getString("prisoner_id"));
+                prisoner.setPrisonerName(rs.getString("prisoner_name"));
+                prisoner.setDOB(rs.getString("date_birth"));
+                prisoner.setGender(rs.getInt("gender"));
+                prisoner.setIdentityCard(rs.getString("identity_card"));
+                prisoner.setContactName(rs.getString("contacter_name"));
+                prisoner.setContactPhone(rs.getString("contacter_phone"));
+                prisoner.setImagePath(rs.getString("image"));
+                prisoner.setStatus(rs.getBoolean("status"));
+                prisonerList.add(prisoner);
+            }
+        } catch (SQLException e) {
+            System.out.println("PrisonerDao getAllPrisonerInDb : " + e.getMessage());
+        }
+        return prisonerList;
+    }
+
     public List<Prisoner> getItemComboboxPrisoner() {
         List<Prisoner> prisonerList = new ArrayList<>();
         try {

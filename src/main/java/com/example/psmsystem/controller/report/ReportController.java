@@ -23,7 +23,9 @@ import javafx.fxml.Initializable;
 
 import java.io.File;
 
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -135,13 +137,18 @@ public class ReportController implements Initializable {
                     setGraphic(null);
                 } else {
                     try {
-                        Image image = new Image(item);
+//                        Image image = new Image(item);
 
-                        image.errorProperty().addListener((obs, oldError, newError) -> {
-                            if (newError) {
-                                imageView.setImage(new Image(AppConfig.getInstance().getImagePathDefault()));
-                            }
-                        });
+                        File imageFile;
+                        imageFile = new File(item);
+
+                        Image image = new Image(imageFile.toURI().toString());
+                        System.out.println("image : " + image);
+//                        image.errorProperty().addListener((obs, oldError, newError) -> {
+//                            if (newError) {
+//                                imageView.setImage(new Image(AppConfig.getInstance().getImagePathDefault()));
+//                            }
+//                        });
 
                         imageView.setImage(image);
                         imageView.setFitWidth(100);
@@ -149,6 +156,7 @@ public class ReportController implements Initializable {
                         setGraphic(imageView);
                     } catch ( Exception e) {
                         // Nếu URL không hợp lệ, sử dụng hình ảnh mặc định
+                        System.out.println("Item : " +item);
                         imageView.setImage(new Image(AppConfig.getInstance().getImagePathDefault()));
                         imageView.setFitWidth(100);
                         imageView.setFitHeight(100);
@@ -158,6 +166,7 @@ public class ReportController implements Initializable {
             }
         });
     }
+
 
     @FXML
     private void handleChoiceBoxAction() {
