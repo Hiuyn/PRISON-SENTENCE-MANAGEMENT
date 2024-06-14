@@ -19,10 +19,12 @@ import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import com.example.psmsystem.service.userLogDao.UserLogDao;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
@@ -80,6 +82,8 @@ public class DashboardController implements Initializable {
     private ScrollPane scrollPane;
 
     private VBox vBox;
+    @FXML
+    private ComboBox<Integer> fillCombobox;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -95,8 +99,20 @@ public class DashboardController implements Initializable {
         areaChartController();
         barChartController();
         pieChartController();
-        stackedAreaChartController();
+        HealthDao healthDao = new HealthDao();
+        List<Integer> years = healthDao.getListYear();
 
+        fillCombobox.setItems(FXCollections.observableArrayList(years));
+        fillCombobox.getSelectionModel().selectFirst(); // Select the first year by default
+
+        fillCombobox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                stackedAreaChartController(newValue);
+            }
+        });
+
+        // Call the stackedAreaChartController with the initially selected year
+        stackedAreaChartController(fillCombobox.getValue());
 //        userLogDao.selectAllUserLogs();
         loadDataUserLog();
 
@@ -244,9 +260,9 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void stackedAreaChartController() {
+    public void stackedAreaChartController(Integer year) {
         HealthDao healthDao = new HealthDao();
-        int year = LocalDate.now().getYear();
+//        int year = LocalDate.now().getYear();
         Map<Integer, Integer> strongHealthData = healthDao.getStrongHealthDataByMonthYear(year);
         Map<Integer, Integer> weakHealthData = healthDao.getWeakHealthDataByMonthYear(year);
 

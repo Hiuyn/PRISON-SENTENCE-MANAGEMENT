@@ -1,6 +1,5 @@
 package com.example.psmsystem.service.healthDao;
 
-import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.health.IHealthDao;
@@ -37,20 +36,10 @@ public class HealthDao implements IHealthDao<Health> {
             + "FROM healths "
             + "WHERE YEAR(checkup_date) = ? "
             + "GROUP BY month_number";
+    private static final String SELECT_DISTINCT_YEARS = "SELECT DISTINCT YEAR(checkup_date) AS year FROM healths ORDER BY year DESC";
+
     @Override
     public void addHealth(Health health) {
-        //check status role
-        boolean isRole = false;
-        //check list role
-        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
-            if (r.equals(ApplicationState.RoleName.HEALTH_EXAMINER) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
-                isRole = true;
-                break;
-            }
-        }
-        //runtime if role not equal
-        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
-
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             //check visit date ith start end release,start,end of sentence
@@ -111,7 +100,7 @@ public class HealthDao implements IHealthDao<Health> {
                 health.setSentenceCode(rs.getInt("sentences_code"));
                 health.setPrisonerName(rs.getString("prisoner_name"));
                 health.setWeight(rs.getDouble("weight"));
-                health.setHeight(rs.getDouble("height")*100);
+                health.setHeight(rs.getDouble("height"));
                 health.setCheckupDate(rs.getString("checkup_date"));
                 health.setStatus(rs.getBoolean("status"));
                 health.setLevel(rs.getInt("level"));
@@ -126,18 +115,6 @@ public class HealthDao implements IHealthDao<Health> {
 
     @Override
     public void updateHealth(Health health, int id) {
-        //check status role
-        boolean isRole = false;
-        //check list role
-        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
-            if (r.equals(ApplicationState.RoleName.HEALTH_EXAMINER) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
-                isRole = true;
-                break;
-            }
-        }
-        //runtime if role not equal
-        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
-
 
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             //check visit date ith start end release,start,end of sentence
@@ -183,26 +160,13 @@ public class HealthDao implements IHealthDao<Health> {
 
     @Override
     public void deleteHealth(int id) {
-        //check status role
-        boolean isRole = false;
-        //check list role
-        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
-            if (r.equals(ApplicationState.RoleName.HEALTH_EXAMINER) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
-                isRole = true;
-                break;
-            }
-        }
-        //runtime if role not equal
-        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
-
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(DELETE_HEALTH_QUERY)) {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE,"delete health failed!",e);
-            throw new RuntimeException("delete Health failed!");
+            throw new RuntimeException(e);
         }
     }
 
@@ -274,5 +238,19 @@ public class HealthDao implements IHealthDao<Health> {
             e.printStackTrace();
         }
         return weakHealthDataMap;
+    }
+
+    public List<Integer> getListYear() {
+        List<Integer> years = new ArrayList<>();
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_DISTINCT_YEARS)) {
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                years.add(rs.getInt("year"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle SQL exception
+        }
+        return years;
     }
 }

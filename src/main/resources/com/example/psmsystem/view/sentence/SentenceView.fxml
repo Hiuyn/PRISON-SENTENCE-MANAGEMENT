@@ -51,7 +51,7 @@
 <!--            <Label alignment="CENTER_RIGHT" layoutX="26.0" layoutY="152.0" prefHeight="40.0" prefWidth="80.0" text="Status:" />-->
 <!--            <TextField fx:id="txtStatus" layoutX="122.0" layoutY="152.0" prefHeight="40.0" prefWidth="241.0" />-->
             <Label alignment="CENTER_RIGHT" layoutX="396.0" layoutY="14.0" prefHeight="40.0" prefWidth="87.0" text="Sentence Type:" />
-            <Label alignment="CENTER_RIGHT" layoutX="18.0" layoutY="87.0" prefHeight="40.0" prefWidth="80.0" text="Month served:" />
+            <Label alignment="CENTER_RIGHT" layoutX="18.0" layoutY="87.0" prefHeight="40.0" prefWidth="80.0" text="Start Date:" />
             <Label alignment="CENTER_RIGHT" layoutX="6.0" layoutY="152.0" prefHeight="40.0" prefWidth="100.0" text="Parole Eligibility:" />
             <TextField fx:id="txtParoleEligibility" layoutX="122.0" layoutY="152.0" prefHeight="40.0" prefWidth="241.0" />
             <Label alignment="CENTER_RIGHT" layoutX="755.0" layoutY="14.0" prefHeight="40.0" prefWidth="87.0" text="Crimes:" />
