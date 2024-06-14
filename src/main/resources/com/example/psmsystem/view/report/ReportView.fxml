@@ -31,15 +31,15 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="24.0" layoutY="239.0" prefHeight="372.0" prefWidth="1222.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="250.0">
+      <AnchorPane layoutX="24.0" layoutY="250.0" prefHeight="372.0" prefWidth="1222.0" AnchorPane.bottomAnchor="24.399999999999977" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="250.0">
          <styleClass>
             <String fx:value="card" />
             <String fx:value="shadow" />
          </styleClass>
          <children>
-            <TextField fx:id="txtSearch" layoutX="620.0" layoutY="21.0" prefHeight="40.0" prefWidth="367.0" promptText="Search..." AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="10.0" />
-            <FontAwesomeIcon glyphName="SEARCH" layoutX="1121.0" layoutY="47.0" size="22" text="" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="20.0" />
-            <ChoiceBox fx:id="choiceBox" onAction="#handleChoiceBoxAction" prefHeight="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+            <TextField fx:id="txtSearch" layoutX="659.0" layoutY="14.0" prefHeight="40.0" prefWidth="367.0" promptText="Search..." AnchorPane.rightAnchor="195.79999999999995" AnchorPane.topAnchor="14.0" />
+            <FontAwesomeIcon glyphName="SEARCH" layoutX="978.0" layoutY="40.0" size="22" text="" AnchorPane.rightAnchor="223.5714282989502" AnchorPane.topAnchor="21.14285659790039" />
+            <ChoiceBox fx:id="choiceBox" layoutX="21.0" layoutY="11.0" onAction="#handleChoiceBoxAction" prefHeight="40.0" prefWidth="332.0" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="11.0" />
             <TableView fx:id="dataTable" layoutX="41.6" layoutY="136.8" prefHeight="442.0" prefWidth="1160.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
                <columns>
                   <TableColumn fx:id="imageColumn" prefWidth="172.80001986026764" styleClass="text-center" text="Image" />
@@ -53,14 +53,12 @@
                </columns>
             </TableView>
             <Pagination fx:id="pagination" layoutX="391.0" layoutY="257.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
-            <Button layoutX="1048.0" layoutY="3.0" mnemonicParsing="false" onAction="#onExport" prefHeight="40.0" prefWidth="40.0" styleClass="card" stylesheets="@../../css/prisoner.css" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-               <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../imgsApp/exportIcon.png" />
-                     </image>
-                  </ImageView>
-               </graphic></Button>
+            <Button layoutX="1101.0" layoutY="-4.0" mnemonicParsing="false" onAction="#onExport" prefHeight="70.0" prefWidth="100.0" styleClass="card" stylesheets="@../../css/prisoner.css" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="-4.0" />
+            <ImageView fitHeight="87.0" fitWidth="66.0" layoutX="1108.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../imgsApp/exportIcon.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>
