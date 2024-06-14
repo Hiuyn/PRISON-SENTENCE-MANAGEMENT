@@ -162,6 +162,14 @@ public class PrisonerController implements Initializable {
         }
     }
 
+    @FXML
+    public  void getAllPrisoners(MouseEvent event) {
+        PrisonerDAO prisonerDAO = new PrisonerDAO();
+        this.prisonerList = prisonerDAO.getAllPrisonerInDb();
+        refreshPrisonerList(this.prisonerList);
+    }
+
+
     public void openFilterWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath + "view/prisoner/FilterView.fxml"));
