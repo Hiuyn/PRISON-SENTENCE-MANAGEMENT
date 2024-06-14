@@ -28,6 +28,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
     private static final String INSERT_SENTENCE_CRIME = "INSERT INTO sentence_crimes VALUE (?, ?, ?)";
     @Override
     public boolean addSentence(Sentence sentence) {
+        if(sentence.getCrimesCode().isBlank()) throw new RuntimeException("Please select crimes");
         //check status role
         boolean isRole = false;
         //check list role
@@ -42,6 +43,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
 
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
+            connection.setAutoCommit(false);
 
             //check start > 18years(dob)
             try (PreparedStatement checkDOBPrisonerPs = connection.prepareStatement("SELECT date_birth FROM prisoners WHERE prisoner_id = ?")){
@@ -69,7 +71,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 ps.setString(4,sentence.getCrimesCode());
                 ps.setDate(5, sentence.getStartDate());
                 if(sentence.getEndDate() == null) {
-                    ps.setNull(6, Types.DATE);
+                    ps.setString(6, "9999-12-31");
                 } else {
                     ps.setDate(6, sentence.getEndDate());
                 }
@@ -89,7 +91,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 setStatusPrisonerPs.setInt(2,sentence.getPrisonerId());
                 setStatusPrisonerPs.executeUpdate();
             }
-
+            connection.commit();
             return true;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE,"add sentence failed: ",e);
@@ -161,6 +163,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
         //check crime
         if(sentence.getCrimesCode() == null) throw new RuntimeException("Please select crimes for sentence");
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            connection.setAutoCommit(false);
             //check start > 18years(dob)
             try (PreparedStatement checkDOBPrisonerPs = connection.prepareStatement("SELECT date_birth FROM prisoners WHERE prisoner_id = ?")){
                 checkDOBPrisonerPs.setInt(1,sentence.getPrisonerId());
@@ -188,12 +191,18 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 ps.setString(3,sentence.getSentenceType());
                 ps.setString(4,sentence.getCrimesCode());
                 ps.setDate(5, (Date) sentence.getStartDate());
-                ps.setDate(6, (Date) sentence.getEndDate());
-                if(sentence.getReleaseDate() != null) {
-                    ps.setDate(7, (Date) sentence.getReleaseDate());
-                    ps.setBoolean(8,true);
+                if(sentence.getSentenceType().equals("limited time")) {
+                    ps.setDate(6, (Date) sentence.getEndDate());
+                    if(sentence.getReleaseDate() != null) {
+                        ps.setDate(7, (Date) sentence.getReleaseDate());
+                        ps.setBoolean(8,true);
+                    } else {
+                        ps.setNull(7, Types.DATE);
+                        ps.setBoolean(8,false);
+                    }
                 } else {
-                    ps.setNull(7,Types.DATE);
+                    ps.setString(6,"9999-12-31");
+                    ps.setNull(7, Types.DATE);
                     ps.setBoolean(8,false);
                 }
                 ps.setString(9,sentence.getParole());
@@ -206,6 +215,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 setStatusPrisonerPs.setInt(2,sentence.getPrisonerId());
                 setStatusPrisonerPs.executeUpdate();
             }
+            connection.commit();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE,"Update sentence failed: ",e);
             throw new RuntimeException("Update sentence failed: Please try again in a few minutes.");
@@ -228,6 +238,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
 
 
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            connection.setAutoCommit(false);
             //delete commendations
             try(PreparedStatement deleteCommendationsPs = connection.prepareStatement("DELETE FROM commendations WHERE sentence_id = ?"))  {
                 deleteCommendationsPs.setInt(1,id);
@@ -257,6 +268,7 @@ public class SentenceDao implements ISentenceDao<Sentence> {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
+            connection.commit();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE,"delete sentence failed: ",e);
             throw new RuntimeException("delete failed!");

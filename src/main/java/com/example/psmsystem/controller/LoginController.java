@@ -59,6 +59,12 @@ public class LoginController implements Initializable{
     void login(ActionEvent event) throws IOException {
         if (this.isValidated()) {
             String usernameText = username.getText();
+            if(usernameText.matches("\\s")) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                        "Invalid username and password.");
+                username.requestFocus();
+                return;
+            }
             String passwordText = password.getText();
             try {
                 User user = userDao.checkLogin(usernameText, passwordText);

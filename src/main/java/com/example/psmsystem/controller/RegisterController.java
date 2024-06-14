@@ -117,29 +117,25 @@ public class RegisterController implements Initializable{
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "First name text field cannot be less than 2 and greator than 25 characters.");
             txtFullName.requestFocus();
-        } else if (txtUsername.getText().equals("")) {
+        } else if (txtUsername.getText().isBlank()) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "Last name text field cannot be blank.");
+                    "Username text field cannot be blank.");
             txtUsername.requestFocus();
-        } else if (txtUsername.getText().length() < 2 || txtUsername.getText().length() > 25) {
+        } else if (txtUsername.getText().length() < 2 || txtUsername.getText().length() > 25 ||  txtUsername.getText().contains(" ")) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "Last name text field cannot be less than 2 and greator than 25 characters.");
+                    "Username text field cannot be less than 2 and greator than 25 characters and not space character.");
             txtUsername.requestFocus();
         } else if (txtPassword.getText().equals("")) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "Email text field cannot be blank.");
+                    "Password  cannot be blank.");
             txtPassword.requestFocus();
-        } else if (txtPassword.getText().length() < 5 || txtPassword.getText().length() > 45) {
+        } else if (txtPassword.getText().length() < 5 || txtPassword.getText().length() > 10) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "Email text field cannot be less than 5 and greator than 45 characters.");
+                    "Password cannot be less than 5 and greator than 10 characters.");
             txtPassword.requestFocus();
-        } else if (txtConfirmPassword.getText().equals("")) {
+        } else if (!txtConfirmPassword.getText().equals(txtPassword.getText())) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "Username text field cannot be blank.");
-            txtConfirmPassword.requestFocus();
-        } else if (txtConfirmPassword.getText().length() < 5 || txtConfirmPassword.getText().length() > 25) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "Username text field cannot be less than 5 and greator than 25 characters.");
+                    "Confirm password and password do not match.");
             txtConfirmPassword.requestFocus();
         } else if (isAlreadyRegistered()) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",

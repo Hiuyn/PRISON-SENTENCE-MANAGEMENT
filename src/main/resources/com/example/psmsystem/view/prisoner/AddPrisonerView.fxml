@@ -75,7 +75,7 @@
                   <Font name="Agency FB Bold" size="21.0" />
                </font>
             </Label>
-            <Label layoutX="36.0" layoutY="59.0" text="ID: ">
+            <Label layoutX="36.0" layoutY="59.0" text="CODE: ">
                <font>
                   <Font size="14.0" />
                </font>

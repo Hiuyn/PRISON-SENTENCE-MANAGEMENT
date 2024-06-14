@@ -1,6 +1,7 @@
 package com.example.psmsystem.controller.prisoner;
 import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.controller.DataStorage;
+import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.Sentence;
@@ -42,6 +43,8 @@ import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
+
+import static java.awt.SystemColor.window;
 
 public class AddPrisonerController implements Initializable {
     private IUserLogDao userlogDao = new UserLogDao();
@@ -135,15 +138,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
     }
     if (getPrisoner()) {
         if (getSentence()) {
-            //get date startDate and dOB
-            LocalDate startDate = this.sentence.getStartDate().toLocalDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate dOB = LocalDate.parse(this.prisoner.getDOB(),formatter);
-            //if start Date before 18year dOb -> error message
-            if(startDate.isBefore(dOB.plusYears(18))) {
-                showAlert("Court sentence start date cannot be set before the prisoner turns 18 years old.");
-                return;
-            }
             SentenceDao sentenceDao = new SentenceDao();
             PrisonerDAO prisonerDao = new PrisonerDAO();
             if (!checkIdentity) {
@@ -333,6 +327,7 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
             List<Crime> allCrimes = crimeDao.getCrime();
 
             Map<Integer, Integer> crimesTimeMap = DataStorage.getCrimesTime();
+            if(crimesTimeMap == null) throw new RuntimeException("Please select crimes and enter time");
 
             // Tạo đối tượng StringBuilder để xây dựng chuỗi kết quả
             StringBuilder resultBuilder = new StringBuilder();
@@ -367,7 +362,7 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
         // Chọn "life"
         if (sentenceTypeText.equals("Life imprisonment")) {
             if (dateInput == null || dateInput.isAfter(LocalDate.now())) {
-                showAlert("Invalid start date");
+                showAlert("The start date cannot be in the future.");
                 return false;
             }
 
@@ -377,21 +372,26 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
         }
         else if (sentenceTypeText.equals("limited time")) {
             if (dateInput == null || dateInput.isAfter(LocalDate.now())) {
-                showAlert("Invalid start date");
+                showAlert("The start date cannot be in the future.");
                 return false;
             }
-            String crimeCode = getCrimeCode();
-            if(crimeCode.isBlank())  {
-                showAlert("Select crime and input times");
+            try {
+                String crimeCode = getCrimeCode();
+                if(crimeCode.isBlank())  {
+                    showAlert("Select crime and input times");
+                    return false;
+                }
+                if (getTimesOfCrimes().isEmpty()) {
+                    showAlert("Select crime and input times");
+                    return false;
+                }
+                Date startDate = convertToDate(dateInput);
+                Date endDate = Date.valueOf(dateOut.getValue());
+                this.sentence = new Sentence(prisonerId, txtPrisonerFNAdd.getText(), Integer.parseInt(lbSentenceId.getText()), sentenceTypeText, crimeCode, startDate, endDate, null, false, "");
+            } catch (RuntimeException e) {
+                showAlert(e.getMessage());
                 return false;
             }
-            if (getTimesOfCrimes().isEmpty()) {
-                showAlert("Select crime and input times");
-                return false;
-            }
-            Date startDate = convertToDate(dateInput);
-            Date endDate = Date.valueOf(dateOut.getValue());
-            this.sentence = new Sentence(prisonerId, txtPrisonerFNAdd.getText(), Integer.parseInt(lbSentenceId.getText()), sentenceTypeText, crimeCode, startDate, endDate, null, false, "");
         }
         return true;
     } catch (Exception e) {
