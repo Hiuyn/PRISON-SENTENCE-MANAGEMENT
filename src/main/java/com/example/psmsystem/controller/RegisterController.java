@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.example.psmsystem.model.user.IUserDao;
@@ -17,10 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -44,6 +43,15 @@ public class RegisterController implements Initializable{
     @FXML
     private TextField txtUsername;
 
+    @FXML
+    private CheckBox checkBoxHealthExaminer;
+
+    @FXML
+    private CheckBox checkBoxPrisonerManagement;
+
+    @FXML
+    private CheckBox checkBoxVisitControl;
+
     Window window;
 
     String fxmlPath = "/com/example/psmsystem/";
@@ -62,10 +70,35 @@ public class RegisterController implements Initializable{
         if (this.isValidated()) {
             String password = txtPassword.getText();
             User user = new User(txtFullName.getText(), txtUsername.getText(), password);
-            userDao.addUser(user);
-            this.clearForm();
-            AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Information",
-                            "You have registered successfully.");
+            // get list role
+            List<String> roleNames = new ArrayList<>();
+            if (checkBoxHealthExaminer.isSelected()) {
+                roleNames.add("HEALTH_EXAMINER");
+            }
+            if (checkBoxPrisonerManagement.isSelected()) {
+                roleNames.add("PRISONER_MANAGEMENT");
+            }
+            if (checkBoxVisitControl.isSelected()) {
+                roleNames.add("VISIT_CONTROL");
+            }
+
+            // check size
+            if (roleNames.size() < 1 || roleNames.size() > 2) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                        "Please select at least 1 and at most 2 roles.");
+                return;
+            }
+            try {
+                userDao.addUser(user,roleNames);
+                this.clearForm();
+                AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Information",
+                        "You have registered successfully.");
+            } catch (RuntimeException e) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                        e.getMessage());
+                return;
+            }
+
         }
     }
 
@@ -108,26 +141,6 @@ public class RegisterController implements Initializable{
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "Username text field cannot be less than 5 and greator than 25 characters.");
             txtConfirmPassword.requestFocus();
-//        } else if (password.getText().equals("")) {
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-//                    "Password text field cannot be blank.");
-//            password.requestFocus();
-//        } else if (password.getText().length() < 5 || password.getText().length() > 25) {
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-//                    "Password text field cannot be less than 5 and greator than 25 characters.");
-//            password.requestFocus();
-//        } else if (confirmPassword.getText().equals("")) {
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-//                    "Confirm password text field cannot be blank.");
-//            confirmPassword.requestFocus();
-//        } else if (confirmPassword.getText().length() < 5 || password.getText().length() > 25) {
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-//                    "Confirm password text field cannot be less than 5 and greator than 25 characters.");
-//            confirmPassword.requestFocus();
-//        } else if (!password.getText().equals(confirmPassword.getText())) {
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-//                    "Password and confirm password text fields does not match.");
-//            password.requestFocus();
         } else if (isAlreadyRegistered()) {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
                     "The username is already taken by someone else.");
