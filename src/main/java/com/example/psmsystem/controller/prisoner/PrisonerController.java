@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 
 public class PrisonerController implements Initializable {
 
-    private final int itemsPerPage = 4;
+    private final int itemsPerRow = 4;
     private final int rowsPerPage = 3;
     PrisonerDAO prisonerDAO = new PrisonerDAO();
     List<Prisoner> prisonerList;
@@ -62,19 +62,19 @@ public class PrisonerController implements Initializable {
     }
 
     private void setupPagination() {
-        int pageCount = (int) Math.ceil((double) prisonerList.size() / (itemsPerPage * rowsPerPage));
+        int pageCount = (int) Math.ceil((double) prisonerList.size() / (itemsPerRow * rowsPerPage));
         pgPagination.setPageCount(pageCount);
         pgPagination.setPageFactory(this::createPage);
     }
 
     private VBox createPage(int pageIndex) {
         VBox pageBox = new VBox(30);
-        int startIndex = pageIndex * itemsPerPage * rowsPerPage;
-        int endIndex = Math.min(startIndex + itemsPerPage * rowsPerPage, prisonerList.size());
+        int startIndex = pageIndex * itemsPerRow * rowsPerPage;
+        int endIndex = Math.min(startIndex + itemsPerRow * rowsPerPage, prisonerList.size());
 
-        for (int i = startIndex; i < endIndex; i += itemsPerPage) {
+        for (int i = startIndex; i < endIndex; i += itemsPerRow) {
             HBox rowBox = new HBox(30);
-            int rowEndIndex = Math.min(i + itemsPerPage, prisonerList.size());
+            int rowEndIndex = Math.min(i + itemsPerRow, prisonerList.size());
             for (int j = i; j < rowEndIndex; j++) {
                 Prisoner prisoner = prisonerList.get(j);
                 try {

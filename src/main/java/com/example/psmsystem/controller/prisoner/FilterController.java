@@ -53,10 +53,10 @@ public class FilterController implements Initializable {
     private ToggleGroup tgGender;
 
 
-    private int ageFilter;
+    private int ageFilter  = -1;
     private int sortNameType;
     private int sortTimeType;
-    private int genderFilter;
+    private int genderFilter = -1;
     private boolean sortCheck;
     private PrisonerController prisonerController;
 
@@ -78,19 +78,19 @@ public class FilterController implements Initializable {
             PrisonerDAO prisonerDAO = new PrisonerDAO();
 //            List<Prisoner> prisonerListByAge = prisonerDAO.getPrisonerByAge(this.ageFilter, this.genderFilter);
             List<Prisoner> prisonerList = prisonerDAO.getAllPrisoner();
-            if (genderFilter != 0) {
+            if (genderFilter != -1 ) {
                 prisonerList = filterByGender(prisonerList);
             }
 
-            if (ageFilter != 0) {
+            if (ageFilter != -1 ) {
                 prisonerList = filterByAge(prisonerList);
             }
 
-            if (sortNameType != 0 && (genderFilter == 0 || ageFilter == 0)) {
+            if (sortNameType != 0  ) {
                 prisonerList = sortByName(prisonerList);
             }
 
-            if (sortTimeType != 0 && (genderFilter == 0 || ageFilter == 0)) {
+            if (sortTimeType != 0 ) {
                 prisonerList = sortByTime(prisonerList);
             }
 
@@ -101,6 +101,8 @@ public class FilterController implements Initializable {
             }
             else
             {
+                ageFilter =-1;
+                tgGender.getSelectedToggle().setSelected(false);
                 showAlert("Not Found prisoner match the filter");
             }
 
@@ -122,17 +124,19 @@ public class FilterController implements Initializable {
         return prisoners.stream()
                 .filter(prisoner -> {
                     LocalDate birthDate = LocalDate.parse(prisoner.getDOB());
-                    Period period = Period.between(birthDate, now);
-                    int age = period.getYears();
-
+                    int age = Period.between(birthDate, now).getYears();
                     switch (ageFilter) {
                         case 1:
+//                            System.out.println("Age < 18: " + age);
                             return age < 18;
                         case 2:
-                            return   18 < age  &&  age < 40;
+//                            System.out.println("Age 18 - 40: " + age);
+                            return   18 <= age  &&  age < 40;
                         case 3:
-                            return age >= 40 && age < 60;
+//                            System.out.println("Age 40 -60 : " + age);
+                            return 40 <= age && age < 60;
                         case 4:
+//                            System.out.println("Age > 60 : " + age);
                             return age >= 60;
                         default:
                             return true;
@@ -199,13 +203,18 @@ public class FilterController implements Initializable {
 
 
     public void getGenderFilter(ActionEvent event) {
+
         if (tgGender.getSelectedToggle() == rbtnMale)
         {
             genderFilter = 1;
         } else if (tgGender.getSelectedToggle() == rbtnFemale) {
-            genderFilter = 2;
+            genderFilter = 0;
         } else if (tgGender.getSelectedToggle() == rbtnOther) {
-            genderFilter = 3;
+            genderFilter = 2;
+        }
+        else
+        {
+            genderFilter = -1;
         }
     }
 
@@ -241,10 +250,6 @@ public class FilterController implements Initializable {
             this.ageFilter =  3;
         } else if (button == btnOver60) {
             this.ageFilter = 4;
-        }
-        else
-        {
-            this.ageFilter = 0;
         }
     }
 
