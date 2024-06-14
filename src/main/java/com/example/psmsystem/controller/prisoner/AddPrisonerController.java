@@ -114,15 +114,14 @@ public class AddPrisonerController implements Initializable {
 
     private String getRelativePath;
     private int userId;
-    private boolean imageSelected = false;
     private PrisonerController prisonerController;
     private List<Integer> selectedCrimesId;
+    private boolean imageSelected = false;
     private int sentenceId;
     private Prisoner prisoner;
     private Sentence sentence;
     private int prisonerId;
     private boolean checkIdentity = false;
-
 
 
 public void setBtnAddPrisonerFinal(ActionEvent event) {
@@ -192,7 +191,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
         }
     }
 }
-
 
     public static boolean isPositiveInteger(String str) {
         if (str == null || str.isEmpty()) {
@@ -268,7 +266,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
                     getRelativePath=imagePath;
                      break;
                 }
-
             }
             if (!prisonerFound) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -290,12 +287,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
     public static Date convertToDate(LocalDate localDate) {
         return Date.valueOf(localDate);
     }
-//    public static Date addMonths(Date date, int months) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(date);
-//        calendar.add(Calendar.MONTH, months);
-//        return new Date(calendar.getTimeInMillis());
-//    }
     public Map<Integer,Integer> getTimesOfCrimes()
     {
         return DataStorage.getCrimesTime();
@@ -346,11 +337,8 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
             // Tạo đối tượng StringBuilder để xây dựng chuỗi kết quả
             StringBuilder resultBuilder = new StringBuilder();
 
-            // Duyệt qua các cặp khóa - giá trị trong map crimesTimeMap
             for (Map.Entry<Integer, Integer> entry : crimesTimeMap.entrySet()) {
                 int crimeId = entry.getKey();
-
-                // Tìm tên tội phạm tương ứng
                 for (Crime crime : allCrimes) {
                     if (crime.getCrimeId() == crimeId) {
                         // Nếu đây không phải là tội phạm đầu tiên trong chuỗi kết quả
@@ -420,17 +408,6 @@ public void setBtnAddPrisonerFinal(ActionEvent event) {
         int sentenceIdShow = sentenceDao.getMaxIdSentence();
         this.sentenceId = sentenceIdShow;
         lbSentenceId.setText(String.valueOf(sentenceIdShow));
-    }
-
-    public String convertSentenceType (String sentenceTypeText)
-    {
-        String sentenceType = sentenceTypeText.toLowerCase();
-        for (int i = 0; i < sentenceType.length(); i++) {
-            if (sentenceType.charAt(i) == ' ') {
-               sentenceType = sentenceType.replace(' ', '_');
-            }
-        }
-        return sentenceType;
     }
     public void setPrisonerId()
     {

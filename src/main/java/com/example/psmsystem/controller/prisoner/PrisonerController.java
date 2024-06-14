@@ -65,6 +65,9 @@ public class PrisonerController implements Initializable {
         int pageCount = (int) Math.ceil((double) prisonerList.size() / (itemsPerRow * rowsPerPage));
         pgPagination.setPageCount(pageCount);
         pgPagination.setPageFactory(this::createPage);
+//        String appDir = System.getProperty("user.dir");
+//
+//        System.out.println("Đường dẫn : " + appDir);
     }
 
     private VBox createPage(int pageIndex) {
