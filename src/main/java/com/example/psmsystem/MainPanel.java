@@ -39,13 +39,19 @@ public class MainPanel extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String currentDirectory = System.getProperty("user.dir");
-        System.out.println("Đường dẫn hiện tại của dự án: " + currentDirectory);
+        String sql = "SELECT ul.user_id, ul.date_update, ul.note FROM update_log ul " +
+                "JOIN user_role ur ON ur.user_id = ul.user_id " +
+                "JOIN roles r ON r.role_id = ur.role_id " +
+                "WHERE ";
+        String name = "value";
 
-        // Hoặc có thể lấy đường dẫn của một tệp cụ thể trong dự án
-        File file = new File("src/main/resources/sample.txt"); // Thay đổi thành tên tệp bạn muốn kiểm tra
-        String absolutePath = file.getAbsolutePath();
-        System.out.println("Đường dẫn tuyệt đối của tệp: " + absolutePath);
+        for (int i = 0 ;i < 3; i ++) {
+            sql += "r.name LIKE '"+name+"'";
+            if(i < 2) {
+                sql += " OR ";
+            }
+        }
+        System.out.println(sql);
         launch(args);
     }
 }

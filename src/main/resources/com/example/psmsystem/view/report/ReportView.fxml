@@ -9,18 +9,20 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="637.0" prefWidth="1270.0" stylesheets="@../../css/mainpanel.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.psmsystem.controller.report.ReportController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/mainpanel.css" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
+      <AnchorPane prefHeight="200.0" prefWidth="1117.0" stylesheets="@../../css/mainpanel.css" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="149.0" AnchorPane.topAnchor="24.0">
          <styleClass>
             <String fx:value="card" />
             <String fx:value="shadow" />
          </styleClass>
          <children>
-            <VBox alignment="CENTER" prefHeight="222.0" prefWidth="1222.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER" layoutX="128.8" layoutY="41.6" prefHeight="137.0" prefWidth="1099.0" spacing="20.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="-119.0" AnchorPane.topAnchor="31.0">
                <children>
                   <Label text="Last Update:" />
                   <Label fx:id="txtUpdate" />
@@ -29,14 +31,14 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane layoutY="239.0" prefHeight="374.0" prefWidth="1222.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="239.0">
+      <AnchorPane layoutX="24.0" layoutY="198.0" prefHeight="413.0" prefWidth="1240.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="198.0">
          <styleClass>
             <String fx:value="card" />
             <String fx:value="shadow" />
          </styleClass>
          <children>
-            <TextField fx:id="txtSearch" prefHeight="40.0" prefWidth="367.0" promptText="Search..." AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="10.0" />
-            <FontAwesomeIcon glyphName="SEARCH" layoutX="1059.0" layoutY="49.0" size="22" text="" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="18.0" />
+            <TextField fx:id="txtSearch" layoutX="620.0" layoutY="21.0" prefHeight="40.0" prefWidth="367.0" promptText="Search..." AnchorPane.rightAnchor="253.00000000000023" AnchorPane.topAnchor="21.0" />
+            <FontAwesomeIcon glyphName="SEARCH" layoutX="914.0" layoutY="48.0" size="22" text="" AnchorPane.rightAnchor="287.5714282989502" AnchorPane.topAnchor="29.14285659790039" />
             <ChoiceBox fx:id="choiceBox" onAction="#handleChoiceBoxAction" prefHeight="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
             <TableView fx:id="dataTable" layoutX="41.6" layoutY="136.8" prefHeight="442.0" prefWidth="1160.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
                <columns>
@@ -51,8 +53,17 @@
                </columns>
             </TableView>
             <Pagination fx:id="pagination" layoutX="391.0" layoutY="257.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
-            <Button layoutX="901.0" layoutY="20.0" mnemonicParsing="false" onAction="#onExport" prefHeight="40.0" prefWidth="100.0" text="XLSX" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-
+            <Button layoutX="992.0" layoutY="157.0" mnemonicParsing="false" onAction="#onExport" prefHeight="40.0" prefWidth="100.0" text="XLSX" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="157.0" />
+            <AnchorPane layoutX="572.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="101.0" prefWidth="151.0" stylesheets="@../../css/prisoner.css" AnchorPane.leftAnchor="661.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <Label layoutX="53.0" layoutY="70.0" text="EXPORT" />
+               </children></AnchorPane>
+            <Button fx:id="btnExport" layoutX="1048.0" layoutY="3.0" mnemonicParsing="false" onAction="#onExport" prefHeight="75.0" prefWidth="66.0" styleClass="card" stylesheets="@../../css/prisoner.css" />
+            <ImageView fitHeight="51.0" fitWidth="54.0" layoutX="1056.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../imgsApp/exportIcon.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>

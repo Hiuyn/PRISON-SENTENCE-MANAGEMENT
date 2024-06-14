@@ -1,10 +1,14 @@
 package com.example.psmsystem.controller.prisoner;
 
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.Sentence;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 
 import java.time.format.DateTimeFormatter;
@@ -33,7 +38,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ItemPrisonerController implements Initializable {
-
+    private IUserLogDao userlogDao = new UserLogDao();
     @FXML
     private Label lblYearSentence;
 
@@ -183,9 +188,8 @@ public class ItemPrisonerController implements Initializable {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     PrisonerDAO prisonerDAO = new PrisonerDAO();
-                    boolean isDeleted = prisonerDAO.deletePrisoner(prisonerCode);
-
-                    if (isDeleted) {
+                    try {
+                        prisonerDAO.deletePrisoner(prisonerCode);
                         // Hiển thị thông báo thành công
                         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                         successAlert.setTitle("Deletion Successful");
@@ -193,14 +197,18 @@ public class ItemPrisonerController implements Initializable {
                         successAlert.setContentText("Prisoner with code: " + prisonerCode + " has been deleted.");
                         successAlert.showAndWait();
 
+                        ApplicationState appState = ApplicationState.getInstance();
+                        UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Prisoner code " + prisonerCode);
+                        userlogDao.insertUserLog(userLog);
+
                         List<Prisoner> prisonerList = prisonerDAO.getPrisonerInItem();
-                    prisonerController.refreshPrisonerList(prisonerList);
-                    } else {
+                        prisonerController.refreshPrisonerList(prisonerList);
+                    } catch (RuntimeException e) {
                         // Hiển thị thông báo lỗi nếu không thể xóa tù nhân
                         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                         errorAlert.setTitle("Deletion Failed");
                         errorAlert.setHeaderText(null);
-                        errorAlert.setContentText("Failed to delete prisoner with code: " + prisonerCode + ".");
+                        errorAlert.setContentText(e.getMessage());
                         errorAlert.showAndWait();
                     }
                 }

@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.managementvisitDao;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.managementvisit.IManagementVisitDao;
 import com.example.psmsystem.model.managementvisit.ManagementVisit;
@@ -9,10 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> {
     private static final String INSERT_QUERY = "INSERT INTO visit_log (sentence_id,  prisoner_id, visitor_name, identity_card, relationship, visit_date, start_time, end_time, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -25,20 +25,59 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
 
     @Override
     public void addManagementVisit(ManagementVisit managementVisit) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.VISIT_CONTROL) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
+
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
-            PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
-            ps.setString(1,managementVisit.getSentenceId());
-            ps.setInt(2,managementVisit.getPrisonerId());
-            ps.setString(3,managementVisit.getVisitorName());
-            ps.setString(4,managementVisit.getIdentityCard());
-            ps.setString(5,managementVisit.getRelationship());
-            ps.setString(6,managementVisit.getVisitDate());
-            ps.setString(7,managementVisit.getStartTime());
-            ps.setString(8,managementVisit.getEndTime());
-            ps.setString(9,managementVisit.getNotes());
+            //check visit date ith start end release,start,end of sentence
+            //get sentence
+            try (PreparedStatement getSentencePs = connection.prepareStatement("SELECT start_date , release_date , end_date FROM sentences WHERE sentence_id = ?")){
+                getSentencePs.setString(1, managementVisit.getSentenceId());
+                ResultSet getSentenceRs = getSentencePs.executeQuery();
+                if(!getSentenceRs.next()) throw new RuntimeException("Add Health failed: Sentence not found.");
+                //set date
+                LocalDate startDate = getSentenceRs.getDate("start_date").toLocalDate();
+                //set date for visit date
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate checkUpDate = LocalDate.parse(managementVisit.getVisitDate(),formatter);
+                //check visit date >= start date
+                if(checkUpDate.isBefore(startDate) || checkUpDate.isAfter(LocalDate.now())) throw new RuntimeException("The Check-up Date date cannot be before the start date of the sentence.");
+                //check type limited time
+                if(getSentenceRs.getDate("end_date") != null) {
+                    LocalDate endDate = getSentenceRs.getDate("end_date").toLocalDate();
+                    //if release != null, visitDate <= release date
+                    if(getSentenceRs.getDate("release_date") != null && checkUpDate.isAfter(getSentenceRs.getDate("release_date").toLocalDate()))
+                        throw new RuntimeException("The check up date cannot be after the release  date of the sentence.");
+                    //if null,visitDate <= endDAte
+                    if(getSentenceRs.getDate("release_date") == null && checkUpDate.isAfter(endDate)) throw new RuntimeException("The check uo date cannot be after the  end date of the sentence.");
+                }
+            }
+            try (PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);){
+                ps.setString(1,managementVisit.getSentenceId());
+                ps.setInt(2,managementVisit.getPrisonerId());
+                ps.setString(3,managementVisit.getVisitorName());
+                ps.setString(4,managementVisit.getIdentityCard());
+                ps.setString(5,managementVisit.getRelationship());
+                ps.setString(6,managementVisit.getVisitDate());
+                ps.setString(7,managementVisit.getStartTime());
+                ps.setString(8,managementVisit.getEndTime());
+                ps.setString(9,managementVisit.getNotes());
 
-            ps.executeUpdate();
+                ps.executeUpdate();
+            }
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -75,7 +114,43 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
 
     @Override
     public void updateManagementVisit(ManagementVisit managementVisit, int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.VISIT_CONTROL) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
+
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
+            //check visit date ith start end release,start,end of sentence
+            //get sentence
+            try (PreparedStatement getSentencePs = connection.prepareStatement("SELECT start_date , release_date , end_date FROM sentences WHERE sentence_id = ?")){
+                getSentencePs.setString(1, managementVisit.getSentenceId());
+                ResultSet getSentenceRs = getSentencePs.executeQuery();
+                if(!getSentenceRs.next()) throw new RuntimeException("Add Health failed: Sentence not found.");
+                //set date
+                LocalDate startDate = getSentenceRs.getDate("start_date").toLocalDate();
+                //set date for visit date
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate checkUpDate = LocalDate.parse(managementVisit.getVisitDate(),formatter);
+                //check visit date >= start date
+                if(checkUpDate.isBefore(startDate) || checkUpDate.isAfter(LocalDate.now())) throw new RuntimeException("The Check-up Date date cannot be before the start date of the sentence.");
+                //check type limited time
+                if(getSentenceRs.getDate("end_date") != null) {
+                    LocalDate endDate = getSentenceRs.getDate("end_date").toLocalDate();
+                    //if release != null, visitDate <= release date
+                    if(getSentenceRs.getDate("release_date") != null && checkUpDate.isAfter(getSentenceRs.getDate("release_date").toLocalDate()))
+                        throw new RuntimeException("The check up date cannot be after the release  date of the sentence.");
+                    //if null,visitDate <= endDAte
+                    if(getSentenceRs.getDate("release_date") == null && checkUpDate.isAfter(endDate)) throw new RuntimeException("The check uo date cannot be after the  end date of the sentence.");
+                }
+            }
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_MANAGEMENTVISIT_QUERY)) {
                 ps.setString(1,managementVisit.getSentenceId());
                 ps.setInt(2,managementVisit.getPrisonerId());
@@ -96,13 +171,25 @@ public class ManagementVisitDao implements IManagementVisitDao<ManagementVisit> 
 
     @Override
     public void deleteManagementVisit(int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.VISIT_CONTROL) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(DELETE_MANAGEMENTVISIT_QUERY)) {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Delete visit failed!");
         }
     }
 

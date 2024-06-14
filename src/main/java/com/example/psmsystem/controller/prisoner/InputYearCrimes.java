@@ -100,9 +100,9 @@ public class InputYearCrimes implements Initializable {
 //        }
 //    }
 public void acceptMonthOfCrime(ActionEvent event) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
     try {
         SentenceDao sentenceDao = new SentenceDao();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         VBox vBox = new VBox(10);
         int totalMonth = 0;
         boolean anyEmpty = false;
@@ -110,26 +110,22 @@ public void acceptMonthOfCrime(ActionEvent event) {
             int crimeId = entry.getKey();
             TextField textField = entry.getValue();
             String name = textField.getPromptText();
-
-            if (textField.getText().isBlank()  || Integer.parseInt(textField.getText()) == 0) {
-//                showAlert("Please enter a value for " + name);
-                anyEmpty = true;
-                break;
-            }
             int year = Integer.parseInt(textField.getText());
+            if (year < 1) {
+//                showAlert("Please enter a value for " + name);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter positive integer.");
+                alert.showAndWait();
+                return;
+            }
+
             totalMonth += year;
             monthCrimeMap.put(crimeId, year);
             Label labelName = new Label(name + ": " + year + " tháng");
             vBox.getChildren().addAll(labelName);
         }
-
-        if (anyEmpty || totalMonth == 0  ) {
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Enter all fields correctly");
-            alert.showAndWait();
-            return;
-        }else if (totalMonth <= 3)
+        if (totalMonth <= 3)
         {
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -147,6 +143,10 @@ public void acceptMonthOfCrime(ActionEvent event) {
         alert.showAndWait();
     } catch (Exception e) {
         System.out.println("InputYearCrime - AcceptMonthOfCrime  : " + e.getMessage());
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText("Enter all fields correctly and positive integer.");
+        alert.showAndWait();
     }
 }
 

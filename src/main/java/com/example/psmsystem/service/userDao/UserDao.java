@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.userDao;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.user.IUserDao;
 import com.example.psmsystem.model.user.User;
@@ -9,12 +10,15 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserDao implements IUserDao<User> {
 //    private static final String DB_URL = "jdbc:mysql://localhost:3306/prisonerms";
 //    private static final String DB_USER = "root";
 ////    private static final String DB_PASSWORD = "12345678";
 //    private static final String DB_PASSWORD = "";
+    Logger LOGGER = Logger.getLogger(UserDao.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO users (full_name, username, password) VALUES (?, ?, ?)";
     private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
     private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE username = ?";
@@ -47,29 +51,44 @@ public class UserDao implements IUserDao<User> {
 
     @Override
     public User checkLogin(String username, String password) {
-        User user = null;
-        try {
-            Connection conn = DbConnection.getDatabaseConnection().getConnection();
-            PreparedStatement stmt = conn.prepareStatement(SELECT_BY_USERNAME_PASSWORD_QUERY);
+        User user = new User();
+        try ( Connection conn = DbConnection.getDatabaseConnection().getConnection()){
+            try (PreparedStatement stmt = conn.prepareStatement(SELECT_BY_USERNAME_PASSWORD_QUERY);){
+                String hashPassword = hashPassword(password);
 
-            String hashPassword = hashPassword(password);
-
-            stmt.setString(1, username);
-            stmt.setString(2, hashPassword);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    user = new User();
-                    user.setUserId(rs.getInt("user_id"));
-                    user.setFullName(rs.getString("full_name"));
-                    user.setUsername(rs.getString("username"));
-                    user.setPassword(rs.getString("password"));
-                }
-
+                stmt.setString(1, username);
+                stmt.setString(2, hashPassword);
+                ResultSet rs = stmt.executeQuery();
+                if(!rs.next())  throw  new RuntimeException("Invalid account");
+                user.setUserId(rs.getInt("user_id"));
+                user.setFullName(rs.getString("full_name"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
             }
+            //get roles
+            List<ApplicationState.RoleName> roles = new ArrayList<>();
+            try (PreparedStatement getRolesPs = conn.prepareStatement("SELECT r.name FROM roles r " +
+                    "JOIN user_role ur ON ur.role_id = r.role_id " +
+                    "JOIN users u ON u.user_id = ur.user_id " +
+                    "WHERE u.user_id = ?")){
+                getRolesPs.setInt(1,user.getUserId());
+                ResultSet getRolesRs = getRolesPs.executeQuery();
+                while (getRolesRs.next()) {
+                    roles.add(ApplicationState.RoleName.valueOf(getRolesRs.getString("name")));
+                }
+                ApplicationState.getInstance().setRoleName(roles);
+                for (ApplicationState.RoleName r: ApplicationState.getInstance().getRoleName()) {
+                    System.out.println(r);
+                }
+            }
+            ApplicationState.getInstance().setUsername(username);
+            ApplicationState.getInstance().setId(user.getUserId());
+            return user;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE,"login failed: ",e);
+            throw new RuntimeException("Login failed!");
         }
-        return user;
+
     }
 
     @Override

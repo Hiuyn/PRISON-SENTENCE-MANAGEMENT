@@ -1,12 +1,18 @@
 package com.example.psmsystem.controller.report;
 
+
+import com.example.psmsystem.config.AppConfig;
+
+import com.example.psmsystem.ApplicationState;
+
 import com.example.psmsystem.dto.Consider;
 import com.example.psmsystem.helper.AlertHelper;
-import com.example.psmsystem.model.report.IReportDao;
-import com.example.psmsystem.model.report.Report;
-import com.example.psmsystem.model.sentence.Sentence;
-import com.example.psmsystem.service.reportDao.ReportDao;
+
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
+
 import com.example.psmsystem.service.sentenceDao.SentenceService;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,10 +22,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import javafx.fxml.FXML;
@@ -38,7 +44,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class ReportController implements Initializable {
-    private ReportDao reportDao = new ReportDao();
+    private UserLogDao reportDao = new UserLogDao();
+    private IUserLogDao userlogDao = new UserLogDao();
     @FXML
     private TableView<Consider> dataTable;
     @FXML
@@ -83,7 +90,8 @@ public class ReportController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 //        dataTable.setFixedCellSize(37);
-        txtUpdate.setText("Data updated on: " + reportDao.timeUpdate());
+        ApplicationState appState = ApplicationState.getInstance();
+        txtUpdate.setText("Data updated on: " + reportDao.timeUpdate(appState.getId()));
 
         result = sentenceService.classify();
 
@@ -127,12 +135,11 @@ public class ReportController implements Initializable {
                     setGraphic(null);
                 } else {
                     try {
-                        URL imageUrl = getClass().getClassLoader().getResource(item);
-                        Image image = new Image(imageUrl.toExternalForm());
+                        Image image = new Image(item);
 
                         image.errorProperty().addListener((obs, oldError, newError) -> {
                             if (newError) {
-                                imageView.setImage(new Image("/static/images.png"));
+                                imageView.setImage(new Image(AppConfig.getInstance().getImagePathDefault()));
                             }
                         });
 
@@ -142,7 +149,7 @@ public class ReportController implements Initializable {
                         setGraphic(imageView);
                     } catch ( Exception e) {
                         // Nếu URL không hợp lệ, sử dụng hình ảnh mặc định
-                        imageView.setImage(new Image("/static/images.png"));
+                        imageView.setImage(new Image(AppConfig.getInstance().getImagePathDefault()));
                         imageView.setFitWidth(100);
                         imageView.setFitHeight(100);
                         setGraphic(imageView);
@@ -185,11 +192,31 @@ public class ReportController implements Initializable {
         String formattedDate = sdf.format(currentDate);
 
         txtUpdate.setText("Data updated on: " + formattedDate);
-        reportDao.updateUpdateLog(currentDate);
+//        reportDao.updateUpdateLog(currentDate);
+
+        ApplicationState appState = ApplicationState.getInstance();
+        UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated the latest data: " + formattedDate);
+        userlogDao.deleteUserLogUpdateDate(userLog);
+        userlogDao.insertUserLog(userLog);
     }
 
     @FXML
     private void onExport(ActionEvent event) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if ( r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Warning", "You do not have permission to perform this operation.");
+            return;
+        }
+
         String selectedKey = choiceBox.getValue();
         if (selectedKey == null || selectedKey.isEmpty()) {
             AlertHelper.showAlert(Alert.AlertType.WARNING, window, "Warning", "Please select a key from the ChoiceBox.");
@@ -235,6 +262,10 @@ public class ReportController implements Initializable {
             try (FileOutputStream outputStream = new FileOutputStream(new File(directory, fileName))) {
                 workbook.write(outputStream);
                 AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Exported successfully. Please check: " + System.getProperty("user.dir") + "\\" + directory + "\\" + fileName);
+
+                ApplicationState appState = ApplicationState.getInstance();
+                UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Exported file name " + fileName);
+                userlogDao.insertUserLog(userLog);
             } catch (IOException e) {
                 e.printStackTrace();
                 AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "An error occurred while exporting data.");

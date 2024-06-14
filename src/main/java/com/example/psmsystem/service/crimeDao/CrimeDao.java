@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.crimeDao;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.crime.Crime;
 import com.example.psmsystem.model.crime.ICrimeDao;
@@ -11,8 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CrimeDao implements ICrimeDao<Crime> {
+    Logger LOGGER = Logger.getLogger(CrimeDao.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO crimes (crime_name) VALUES (?)";
     private static final String UPDATE_CRIME_QUERY = "UPDATE crimes SET crime_name = ? WHERE crime_id = ?";
     private static final String DELETE_CRIME_QUERY = "DELETE FROM crimes WHERE crime_id = ?";
@@ -22,6 +26,17 @@ public class CrimeDao implements ICrimeDao<Crime> {
 
     @Override
     public void addCrime(Crime crime) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
@@ -29,7 +44,8 @@ public class CrimeDao implements ICrimeDao<Crime> {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE,"Add Crime failed: ",e);
+            throw new RuntimeException("Add crime failed!");
         }
     }
 
@@ -56,6 +72,18 @@ public class CrimeDao implements ICrimeDao<Crime> {
 
     @Override
     public void updateCrime(Crime crime, int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(UPDATE_CRIME_QUERY)) {
                 ps.setString(1,crime.getSentenceCode());
@@ -69,13 +97,26 @@ public class CrimeDao implements ICrimeDao<Crime> {
 
     @Override
     public void deleteCrime(int id) {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try (Connection connection = DbConnection.getDatabaseConnection().getConnection()) {
             try(PreparedStatement ps = connection.prepareStatement(DELETE_CRIME_QUERY)) {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE,"delete crime failed: ",e);
+            throw new RuntimeException("Add crime failed: ");
         }
     }
 

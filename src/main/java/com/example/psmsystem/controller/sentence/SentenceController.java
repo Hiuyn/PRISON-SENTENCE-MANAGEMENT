@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.sentence;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.crime.Crime;
@@ -9,10 +10,13 @@ import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.model.sentence.SentenceServiceImpl;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.crimeDao.CrimeDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import com.example.psmsystem.service.sentenceDao.SentenceService;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +44,7 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -50,6 +55,7 @@ public class SentenceController implements Initializable {
     private ICrimeDao<Crime> crimeDao;
     private ISentenceDao<Sentence> sentenceDao;
     private SentenceServiceImpl<SentenceDTO> sentenceService = new SentenceService();
+    private IUserLogDao userlogDao = new UserLogDao();
 
     @FXML
     private ComboBox<String> cbSentenceType;
@@ -357,9 +363,15 @@ public class SentenceController implements Initializable {
             ccbSentenceCode.getCheckModel().check(idx);
         }
 
-        LocalDate startDate = LocalDate.parse(startDateColumn.getCellData(index).toString());
 
-        dateStartDate.setValue(startDate);
+        try {
+            LocalDate startDate = LocalDate.parse(startDateColumn.getCellData(index).toString());
+            dateStartDate.setValue(startDate);
+
+        } catch (Exception e) {
+            dateStartDate.setValue(null);
+        }
+
 
         String endDateCellValue = endDateColumn.getCellData(index) != null ? endDateColumn.getCellData(index).toString() : null;
         if (endDateCellValue != null && !endDateCellValue.isEmpty()) {
@@ -523,21 +535,32 @@ public class SentenceController implements Initializable {
                     LocalDate releaseDate = Instant.ofEpochMilli(releaseTimeMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                     LocalDate today = LocalDate.now();
 
-                    System.out.println(selected.isStatus());
-                    System.out.println((releaseDate != null) + ""+ releaseDate);
-                    System.out.println((releaseDate.plusYears(20).isBefore(today)));
+//                    System.out.println(selected.isStatus());
+//                    System.out.println((releaseDate != null) + ""+ releaseDate);
+//                    System.out.println((releaseDate.plusYears(20).isBefore(today)));
 
 //                    if (endDate == null) {
 //                        AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
 //                                "Cannot delete record because the prisoner is life imprisonment.");
 //                    }
-                     if (selected.isStatus() && releaseDate != null && releaseDate.plusYears(20).isBefore(today)) {
-                        sentenceDao.deleteSentence(visitationId);
+                     if (selected.isStatus() && releaseDate != null && releaseDate.plusYears(1).isBefore(today)) {
+                         try {
+                             sentenceDao.deleteSentence(visitationId);
+                         } catch (RuntimeException e) {
+                             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                                     "An error occurred while deleting the sentence.");
+                             return;
+                         }
+
                         listTable.remove(selected);
                         dataTable.setItems(listTable);
                         resetValue();
                         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                                 "Sentence deleted successfully.");
+
+                         ApplicationState appState = ApplicationState.getInstance();
+                         UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Sentence code " + selected.getSentenceCode());
+                         userlogDao.insertUserLog(userLog);
                     }
                     else {
                         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Warning",
@@ -591,8 +614,40 @@ public class SentenceController implements Initializable {
         LocalDate selectedStartDate = dateStartDate.getValue();
         LocalDate selectedEndDate = dateEndDate.getValue();
         LocalDate selectedReleaseDate = dateReleaseDate.getValue();
+        //check startDate must not null
+        if(selectedStartDate == null || selectedStartDate.isAfter(LocalDate.now())) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "The sentence must have a start date, and it must be either today or a past date.");
+            return;
+        }
+        boolean status = false;
 
-        Boolean status = false;
+        //check sentenceType
+        if(sentenceType.equals("limited time")) {
+
+            //end Date must not null
+            if(selectedEndDate == null ) {
+                AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "A fixed-term prison sentence must have an expected release date.");
+                return;
+            } else { //end date not null
+                //end date must be < 30years(start)
+                if(selectedEndDate.isAfter(selectedStartDate.plusYears(30))) {
+                    AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "The sentence is a maximum of 30 years.");
+                    return;
+                }
+                if(selectedReleaseDate != null) {  //release not null
+                    status = true;
+                    if(selectedReleaseDate.isAfter(selectedEndDate) || selectedReleaseDate.isBefore(selectedStartDate.plusMonths(3))) {
+                        AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "The actual release date must be before the end date of the sentence and at least 3 months after the start date.");
+                        return;
+                    }
+                }
+            }
+
+        } else { // life: endDate and releaseDate must null
+            selectedEndDate = null;
+            selectedReleaseDate = null;
+        }
+
         String paroleEligibility = txtParoleEligibility.getText();
 
         if (visitationId == -1) {
@@ -605,9 +660,14 @@ public class SentenceController implements Initializable {
         java.sql.Date endDate = selectedEndDate != null ? java.sql.Date.valueOf(selectedEndDate) : null;
         java.sql.Date releaseDate = selectedReleaseDate != null ? java.sql.Date.valueOf(selectedReleaseDate) : null;
 
-
         Sentence sentence = new Sentence(prisonerId, prisonerName, sentenceCode, sentenceType, crimeCode, startDate, endDate, releaseDate, status, paroleEligibility);
-        sentenceDao.updateSentence(sentence, visitationId);
+        try {
+            sentenceDao.updateSentence(sentence, visitationId);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    "Update sentence failed: " + e.getMessage());
+            return;
+        }
 
         index = dataTable.getSelectionModel().getSelectedIndex();
 
@@ -629,10 +689,14 @@ public class SentenceController implements Initializable {
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                     "Sentence updated successfully.");
 
+            ApplicationState appState = ApplicationState.getInstance();
+            UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Sentence code " + sentenceCode);
+            userlogDao.insertUserLog(userLog);
             onClean(event);
+
         } else {
             AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
-                    "No health selected.");
+                    "No sentence selected.");
         }
     }
 

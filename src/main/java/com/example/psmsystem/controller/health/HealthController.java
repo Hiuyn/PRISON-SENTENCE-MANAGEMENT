@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller.health;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.dto.SentenceDTO;
 import com.example.psmsystem.helper.AlertHelper;
 import com.example.psmsystem.model.health.Health;
@@ -9,10 +10,13 @@ import com.example.psmsystem.model.prisoner.Prisoner;
 import com.example.psmsystem.model.sentence.ISentenceDao;
 import com.example.psmsystem.model.sentence.Sentence;
 import com.example.psmsystem.model.sentence.SentenceServiceImpl;
+import com.example.psmsystem.model.userlog.IUserLogDao;
+import com.example.psmsystem.model.userlog.UserLog;
 import com.example.psmsystem.service.healthDao.HealthDao;
 import com.example.psmsystem.service.prisonerDAO.PrisonerDAO;
 import com.example.psmsystem.service.sentenceDao.SentenceDao;
 import com.example.psmsystem.service.sentenceDao.SentenceService;
+import com.example.psmsystem.service.userLogDao.UserLogDao;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +35,7 @@ import org.controlsfx.control.SearchableComboBox;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +47,7 @@ public class HealthController implements Initializable {
     private static IHealthDao<Health> healthDao;
     private ISentenceDao<Sentence> sentenceDao;
     private SentenceServiceImpl<SentenceDTO> sentenceService = new SentenceService();
+    private IUserLogDao userlogDao = new UserLogDao();
 
     @FXML
     private TableColumn<Health, String> checkupDateColumn;
@@ -363,7 +369,7 @@ public class HealthController implements Initializable {
             return false;
         }
         if (dateCheckupDate.getValue() == null || dateCheckupDate.getValue().isAfter(LocalDate.now())) {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Check up Date is required.");
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error", "Check up Date can't after to day");
             dateCheckupDate.requestFocus();
             return false;
         }
@@ -412,11 +418,21 @@ public class HealthController implements Initializable {
         String healthCode = getHealthCode();
 
         Health health = new Health(0,healthCode, prisonerId, sentenceId, sentenceCode, prisonerName, weight, height, date, status, levelValue);
-        healthDao.addHealth(health);
+        try {
+            healthDao.addHealth(health);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    e.getMessage());
+            return;
+        }
         listTable.add(health);
         dataTable.setItems(listTable);
 
         AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success", "Health created successfully.");
+
+        ApplicationState appState = ApplicationState.getInstance();
+        UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Created Health code " + healthCode);
+        userlogDao.insertUserLog(userLog);
 
         onClean(event);
     }
@@ -456,13 +472,22 @@ public class HealthController implements Initializable {
             Optional<ButtonType> result = confirmationDialog.showAndWait();
 
             if (result.isPresent() && result.get() == okButton) {
-                healthDao.deleteHealth(healthId);
-                Health selected = dataTable.getSelectionModel().getSelectedItem();
-                listTable.remove(selected);
-                dataTable.setItems(listTable);
-                resetValue();
-                AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
-                        "Health deleted successfully.");
+                try {
+                    healthDao.deleteHealth(healthId);
+                    Health selected = dataTable.getSelectionModel().getSelectedItem();
+                    listTable.remove(selected);
+                    dataTable.setItems(listTable);
+                    resetValue();
+                    AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
+                            "Health deleted successfully.");
+                    ApplicationState appState = ApplicationState.getInstance();
+                    UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Deleted Health code " + selected.getHealthCode());
+                    userlogDao.insertUserLog(userLog);
+                } catch (RuntimeException e) {
+                    AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                            "An error occurred while deleting the health.");
+                    return;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -485,7 +510,6 @@ public class HealthController implements Initializable {
         String prisonerName = selectedValue.getPrisonerName();
         Double weight = Double.valueOf(txtWeight.getText());
         Double height = Double.valueOf(txtHeight.getText());
-        Boolean status = false;
         String level = cbLevel.getValue();
 
         LocalDate selectedDate = dateCheckupDate.getValue();
@@ -507,8 +531,15 @@ public class HealthController implements Initializable {
 
         Health selectedHealth = dataTable.getItems().get(index);
         String hearthCode = healthcodeColumn.getCellData(selectedHealth);
+        boolean status = levelValue > 0 ? true : false;
         Health mv = new Health(healthId,hearthCode, prisonerId, sentenceId, sentenceCode, prisonerName, weight, height, date, status, levelValue);
-        healthDao.updateHealth(mv, healthId);
+        try {
+            healthDao.updateHealth(mv, healthId);
+        } catch (RuntimeException e) {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, window, "Error",
+                    e.getMessage());
+            return;
+        }
 
 
         if (index >= 0) {
@@ -527,6 +558,10 @@ public class HealthController implements Initializable {
             dataTable.refresh();
             AlertHelper.showAlert(Alert.AlertType.INFORMATION, window, "Success",
                     "Health updated successfully.");
+
+            ApplicationState appState = ApplicationState.getInstance();
+            UserLog userLog = new UserLog(appState.getId(), appState.getUsername(), LocalDateTime.now(), "Updated Health code " + hearthCode);
+            userlogDao.insertUserLog(userLog);
 
             onClean(event);
         } else {

@@ -1,5 +1,6 @@
 package com.example.psmsystem.service.prisonerDAO;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.database.DbConnection;
 import com.example.psmsystem.model.health.Health;
 import com.example.psmsystem.model.prisoner.IPrisonerDao;
@@ -18,20 +19,12 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
     Logger LOGGER = Logger.getLogger(PrisonerDAO.class.getName());
     private static final String INSERT_QUERY = "INSERT INTO prisoners (prisoner_id, prisoner_name, date_birth, gender, identity_card, contacter_name, contacter_phone, image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_QUERY = "UPDATE prisoners SET prisoner_name = ?, date_birth = ?, gender = ?, identity_card = ?, contacter_name = ?, contacter_phone = ?, image = ?, status = ? WHERE prisoner_id = ?";
-    private static final String SELECT_BY_USERNAME_PASSWORD_QUERY = "SELECT * FROM users WHERE username = ? and password = ?";
-    private static final String SELECT_BY_USERNAME_QUERY = "SELECT * FROM users WHERE user_name = ?";
     private static final String SELECT_BY_PRISONER_QUERY = "SELECT * FROM prisoners WHERE status = ? ";
     //    private static final String SELECT_MIN_EMPTY_PRISONER_CODE = "SELECT prisoner_id FROM prisoners WHERE status = ? ORDER BY prisoner_id ASC LIMIT 1";
-    private  static final String DELETE_PRISONER_BY_ID = "DELETE FROM prisoners WHERE prisoner_id = ?";
-    private  static final String DELETE_SENTENCE_BY_ID = "DELETE FROM sentences WHERE prisoner_id = ?";
-    private  static final String UPDATE_PRISONER_STATUS = "UPDATE prisoners SET status = 1 WHERE prisoner_id = ?";
-
     private static final String SELECT_PRISONER_BY_AGE = "SELECT * FROM prisoners " +
             "WHERE TIMESTAMPDIFF(YEAR, date_birth, CURDATE()) BETWEEN ? AND ? " +
             "AND gender = ?";
     private static final String SELECT_MAX_VALUES_PRISONER_ID ="SELECT MAX(prisoner_id) AS max_prisoner_id FROM prisoners";
-    private static final String SELECT_YEAR_SENTENCE = "SELECT * FROM sentences ";
-    private static final String SELECT_BY_CRIMES = "SELECT * FROM crimes";
     private static final String SELECT_BY_PRISONER_QUERY_COMBOBOX = "SELECT * FROM prisoners";
     private static final String COUNT_PRISONER_QUERY = "SELECT COUNT(*) FROM prisoners";
     private static final String COUNT_GENDER_QUERY = "SELECT gender, COUNT(*) as count FROM prisoners GROUP BY gender";
@@ -211,6 +204,19 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
 
     public boolean insertPrisonerDB(Prisoner prisoner)
     {
+        if (prisoner.getImagePath() == null) throw new RuntimeException("Please add a photo of the prisoner.");
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try(Connection connection = DbConnection.getDatabaseConnection().getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
@@ -229,13 +235,25 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
                 return true;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("An Error in System. Please try again in a few minutes.",e.getCause());
         }
         return false;
     }
 
     public boolean updatePrisoner(Prisoner prisoner)
     {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
+
         try{
             Connection conn = DbConnection.getDatabaseConnection().getConnection();
             PreparedStatement ps = conn.prepareStatement(UPDATE_QUERY);
@@ -309,19 +327,36 @@ public class PrisonerDAO implements IPrisonerDao<Prisoner> {
         return genderCount;
     }
 
-    public boolean deletePrisoner(String prisonerCode)
+    public void deletePrisoner(String prisonerCode)
     {
+        //check status role
+        boolean isRole = false;
+        //check list role
+        for (ApplicationState.RoleName r : ApplicationState.getInstance().getRoleName()) {
+            if (r.equals(ApplicationState.RoleName.PRISONER_MANAGEMENT) || r.equals(ApplicationState.RoleName.ULTIMATE_AUTHORITY)) {
+                isRole = true;
+                break;
+            }
+        }
+        //runtime if role not equal
+        if(!isRole) throw new RuntimeException("You do not have permission to perform this operation.");
 
-        try {
-            Connection connection = DbConnection.getDatabaseConnection().getConnection();
-            PreparedStatement ps = connection.prepareStatement(UPDATE_PRISONER_STATUS);
-//            ps.setInt(1, 1);
-            ps.setString(1, prisonerCode);
-            int rowsUpdated = ps.executeUpdate();
-            return rowsUpdated > 0;
+        try (Connection connection = DbConnection.getDatabaseConnection().getConnection()){
+            //check sentence
+            try (PreparedStatement isSentences = connection.prepareStatement("SELECT * FROM sentences WHERE prisoner_id = ?")){
+                isSentences.setString(1,prisonerCode);
+                ResultSet isSentencesRs = isSentences.executeQuery();
+                //if have sentence -> cannot delete
+                if(isSentencesRs.next()) throw new RuntimeException("Please delete this prisoner's sentence first.");
+            }
+            //delete prisoner
+            try (PreparedStatement delPrisonerPs = connection.prepareStatement("DELETE FROM prisoners WHERE prisoner_id = ?")){
+                delPrisonerPs.setString(1,prisonerCode);
+                delPrisonerPs.executeUpdate();
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            LOGGER.log(Level.SEVERE,"Delete prisoner failed: ",e);
+            throw new RuntimeException("Delete failed: An error in System. Please try again in few minutes");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.psmsystem.controller;
 
+import com.example.psmsystem.ApplicationState;
 import com.example.psmsystem.controller.prisoner.AddPrisonerController;
 import com.example.psmsystem.controller.prisoner.PrisonerController;
 import com.example.psmsystem.model.user.User;
@@ -72,6 +73,10 @@ public class MainPanelController implements Initializable {
     public void initData(User user) {
         idLogin.setText(user.getFullName());
         this.userId = user.getUserId();
+        ApplicationState appState = ApplicationState.getInstance();
+        appState.setUsername(user.getFullName());
+        appState.setId(user.getUserId());
+
         loadFXML("Dashboard");
     }
     private void loadFXML(String fileName) {
